@@ -7,8 +7,9 @@ import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
 import { PackedItem, Container, Item, PackingInput } from "@/types/packing";
-import { Box as BoxIcon, PlayCircle } from "lucide-react";
+import { Box as BoxIcon, PlayCircle, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
@@ -93,8 +94,9 @@ const Index = () => {
           {/* Left Column - Input & Stats */}
           <div className="space-y-6">
             <Tabs defaultValue="visual" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="visual">Visual Editor</TabsTrigger>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="json">JSON Import</TabsTrigger>
               </TabsList>
               
@@ -119,6 +121,27 @@ const Index = () => {
                   {isProcessing ? "Processing..." : "Run Packing Algorithm"}
                 </Button>
               </TabsContent>
+
+              <TabsContent value="overview" className="space-y-4 mt-4">
+                <div className="h-[400px]">
+                  {result ? (
+                    <ItemPanel
+                      packedItems={result.packedItems}
+                      unpackedItems={result.unpackedItems}
+                      hoveredItem={hoveredItem}
+                    />
+                  ) : (
+                    <Card className="h-full flex items-center justify-center">
+                      <div className="text-center text-muted-foreground">
+                        <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">No packing results yet</p>
+                        <p className="text-xs">Run the algorithm to see packed items</p>
+                      </div>
+                    </Card>
+                  )}
+                </div>
+                <StatsPanel result={result} />
+              </TabsContent>
               
               <TabsContent value="json" className="mt-4">
                 <JsonInput
@@ -128,12 +151,10 @@ const Index = () => {
                 />
               </TabsContent>
             </Tabs>
-            
-            <StatsPanel result={result} />
           </div>
 
           {/* Middle Column - 3D Visualization */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2">
             <div className="h-[600px]">
               {result ? (
                 <Scene3D
@@ -153,17 +174,6 @@ const Index = () => {
                 </div>
               )}
             </div>
-
-            {/* Item List Panel */}
-            {result && (
-              <div className="h-[400px]">
-                <ItemPanel
-                  packedItems={result.packedItems}
-                  unpackedItems={result.unpackedItems}
-                  hoveredItem={hoveredItem}
-                />
-              </div>
-            )}
           </div>
         </div>
       </main>
