@@ -98,7 +98,7 @@ const Index = () => {
                 <TabsTrigger value="json">JSON Import</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="visual" className="space-y-4 mt-4">
+              <TabsContent value="visual" className="space-y-6 mt-4">
                 <ContainerForm container={container} onUpdate={setContainer} />
                 <div className="h-[500px]">
                   <ItemManager
