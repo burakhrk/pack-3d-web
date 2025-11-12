@@ -117,7 +117,11 @@ const Index = () => {
               
               <TabsContent value="visual" className="space-y-6 mt-4">
                 <ContainerForm container={container} onUpdate={setContainer} />
-                <div className="grid grid-cols-2 gap-4 h-[500px]">
+                <ItemPrefabs
+                  currentItem={currentItemForm}
+                  onLoadPrefab={handleLoadPrefab}
+                />
+                <div className="h-[400px]">
                   <ItemManager
                     items={items}
                     onAdd={handleAddItem}
@@ -128,10 +132,6 @@ const Index = () => {
                     onLoadPrefab={(fn) => {
                       loadPrefabRef.current = fn;
                     }}
-                  />
-                  <ItemPrefabs
-                    currentItem={currentItemForm}
-                    onLoadPrefab={handleLoadPrefab}
                   />
                 </div>
                 <Button
