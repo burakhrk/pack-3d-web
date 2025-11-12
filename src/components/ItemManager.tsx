@@ -34,6 +34,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
     height: 1,
     depth: 1,
     quantity: 1,
+    weight: 0,
   });
 
   const handleAdd = () => {
@@ -63,6 +64,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
         width: newItem.width,
         height: newItem.height,
         depth: newItem.depth,
+        weight: newItem.weight > 0 ? newItem.weight : undefined,
       };
       itemsToAdd.push(item);
     }
@@ -72,7 +74,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
 
     const itemsText = newItem.quantity === 1 ? "item" : "items";
     toast.success(`Added ${newItem.quantity} ${itemsText}`);
-    setNewItem({ name: "", width: 1, height: 1, depth: 1, quantity: 1 });
+    setNewItem({ name: "", width: 1, height: 1, depth: 1, quantity: 1, weight: 0 });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -145,7 +147,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
             />
           </div>
 
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <div className="space-y-2">
               <Label htmlFor="item-width" className="text-xs text-muted-foreground">
                 Width
@@ -198,6 +200,23 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="item-weight" className="text-xs text-muted-foreground">
+                Weight (kg)
+              </Label>
+              <Input
+                id="item-weight"
+                type="number"
+                min="0"
+                step="0.1"
+                value={newItem.weight}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, weight: parseFloat(e.target.value) || 0 })
+                }
+                disabled={disabled}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="item-quantity" className="text-xs text-muted-foreground">
                 Quantity
               </Label>
@@ -242,6 +261,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                     <p className="font-medium text-sm truncate">{item.name}</p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {item.width} × {item.height} × {item.depth}
+                      {item.weight && ` • ${item.weight}kg`}
                     </p>
                   </div>
                   <Button

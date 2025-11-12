@@ -55,6 +55,7 @@ export function ItemPanel({
                       <p className="font-medium text-sm truncate">{item.name}</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {item.width} × {item.height} × {item.depth}
+                        {item.weight && ` • ${item.weight}kg`}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         Position: ({item.position.x.toFixed(1)}, {item.position.y.toFixed(1)},{" "}
@@ -84,6 +85,7 @@ export function ItemPanel({
                   <p className="font-medium text-sm">{item.name}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {item.width} × {item.height} × {item.depth}
+                    {item.weight && ` • ${item.weight}kg`}
                   </p>
                 </div>
               ))}

@@ -1,7 +1,7 @@
 import { PackingResult } from "@/types/packing";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { BarChart3, Box, Package } from "lucide-react";
+import { BarChart3, Box, Package, Weight } from "lucide-react";
 
 interface StatsPanelProps {
   result: PackingResult | null;
@@ -20,6 +20,14 @@ export function StatsPanel({ result }: StatsPanelProps) {
   }
 
   const { utilization, packedItems, unpackedItems, totalVolume, usedVolume } = result;
+
+  // Calculate weight statistics
+  const totalWeight = [...packedItems, ...unpackedItems].reduce(
+    (sum, item) => sum + (item.weight || 0),
+    0
+  );
+  const packedWeight = packedItems.reduce((sum, item) => sum + (item.weight || 0), 0);
+  const hasWeightData = totalWeight > 0;
 
   return (
     <Card className="p-6">
@@ -64,6 +72,26 @@ export function StatsPanel({ result }: StatsPanelProps) {
             </div>
             <p className="text-lg font-semibold text-foreground">{usedVolume.toFixed(1)}</p>
           </div>
+
+          {hasWeightData && (
+            <>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Weight className="h-4 w-4" />
+                  <span className="text-sm">Total Weight</span>
+                </div>
+                <p className="text-lg font-semibold text-foreground">{totalWeight.toFixed(1)} kg</p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Weight className="h-4 w-4" />
+                  <span className="text-sm">Packed Weight</span>
+                </div>
+                <p className="text-lg font-semibold text-success">{packedWeight.toFixed(1)} kg</p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Card>
