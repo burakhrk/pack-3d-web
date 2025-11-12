@@ -1,15 +1,62 @@
 import { useState } from "react";
 import { JsonInput } from "@/components/JsonInput";
+import { ContainerForm } from "@/components/ContainerForm";
+import { ItemManager } from "@/components/ItemManager";
 import { Scene3D } from "@/components/Scene3D";
 import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
-import { PackedItem } from "@/types/packing";
-import { Box as BoxIcon } from "lucide-react";
+import { PackedItem, Container, Item, PackingInput } from "@/types/packing";
+import { Box as BoxIcon, PlayCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 const Index = () => {
   const { runPacking, isProcessing, result } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
+  
+  // State for container and items
+  const [container, setContainer] = useState<Container>({
+    id: "container-1",
+    width: 10,
+    height: 10,
+    depth: 10,
+  });
+  
+  const [items, setItems] = useState<Item[]>([
+    { id: "item-1", name: "Box A", width: 3, height: 3, depth: 3 },
+    { id: "item-2", name: "Box B", width: 2, height: 4, depth: 2 },
+    { id: "item-3", name: "Box C", width: 5, height: 2, depth: 3 },
+    { id: "item-4", name: "Box D", width: 2, height: 2, depth: 2 },
+    { id: "item-5", name: "Box E", width: 4, height: 3, depth: 2 },
+  ]);
+
+  const handleAddItem = (item: Item) => {
+    setItems([...items, item]);
+  };
+
+  const handleRemoveItem = (itemId: string) => {
+    setItems(items.filter((item) => item.id !== itemId));
+    toast.success("Item removed");
+  };
+
+  const handleImportJson = (data: PackingInput) => {
+    setContainer(data.container);
+    setItems(data.items);
+  };
+
+  const handleExportJson = (): PackingInput => {
+    return { container, items };
+  };
+
+  const handleRunPacking = () => {
+    if (items.length === 0) {
+      toast.error("Please add at least one item to pack");
+      return;
+    }
+    runPacking({ container, items });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,7 +84,42 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Input & Stats */}
           <div className="space-y-6">
-            <JsonInput onSubmit={runPacking} isProcessing={isProcessing} />
+            <Tabs defaultValue="visual" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="visual">Visual Editor</TabsTrigger>
+                <TabsTrigger value="json">JSON Import</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="visual" className="space-y-4 mt-4">
+                <ContainerForm container={container} onUpdate={setContainer} />
+                <div className="h-[400px]">
+                  <ItemManager
+                    items={items}
+                    onAdd={handleAddItem}
+                    onRemove={handleRemoveItem}
+                    disabled={isProcessing}
+                  />
+                </div>
+                <Button
+                  onClick={handleRunPacking}
+                  disabled={isProcessing}
+                  className="w-full"
+                  size="lg"
+                >
+                  <PlayCircle className="mr-2 h-5 w-5" />
+                  {isProcessing ? "Processing..." : "Run Packing Algorithm"}
+                </Button>
+              </TabsContent>
+              
+              <TabsContent value="json" className="mt-4">
+                <JsonInput
+                  onImport={handleImportJson}
+                  onExport={handleExportJson}
+                  isProcessing={isProcessing}
+                />
+              </TabsContent>
+            </Tabs>
+            
             <StatsPanel result={result} />
           </div>
 

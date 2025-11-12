@@ -4,10 +4,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { PackingInput } from "@/types/packing";
-import { PlayCircle, FileJson } from "lucide-react";
+import { FileJson, Upload, Download } from "lucide-react";
 
 interface JsonInputProps {
-  onSubmit: (data: PackingInput) => void;
+  onImport: (data: PackingInput) => void;
+  onExport: () => PackingInput;
   isProcessing: boolean;
 }
 
@@ -31,10 +32,10 @@ const DEFAULT_JSON = JSON.stringify(
   2
 );
 
-export function JsonInput({ onSubmit, isProcessing }: JsonInputProps) {
+export function JsonInput({ onImport, onExport, isProcessing }: JsonInputProps) {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
 
-  const handleSubmit = () => {
+  const handleImport = () => {
     try {
       const data = JSON.parse(jsonInput);
 
@@ -56,13 +57,20 @@ export function JsonInput({ onSubmit, isProcessing }: JsonInputProps) {
         }
       }
 
-      toast.success("JSON validated successfully!");
-      onSubmit(data);
+      toast.success("JSON imported successfully!");
+      onImport(data);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Invalid JSON format"
       );
     }
+  };
+
+  const handleExport = () => {
+    const currentData = onExport();
+    const jsonString = JSON.stringify(currentData, null, 2);
+    setJsonInput(jsonString);
+    toast.success("Current data exported to JSON");
   };
 
   const loadExample = () => {
@@ -76,15 +84,29 @@ export function JsonInput({ onSubmit, isProcessing }: JsonInputProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileJson className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">Container & Items JSON</h2>
+            <h2 className="text-lg font-semibold text-foreground">Import / Export JSON</h2>
           </div>
+        </div>
+
+        <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={loadExample}
             disabled={isProcessing}
+            className="flex-1"
           >
             Load Example
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            disabled={isProcessing}
+            className="flex-1"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export Current
           </Button>
         </div>
 
@@ -97,13 +119,13 @@ export function JsonInput({ onSubmit, isProcessing }: JsonInputProps) {
         />
 
         <Button
-          onClick={handleSubmit}
+          onClick={handleImport}
           disabled={isProcessing}
           className="w-full"
           size="lg"
         >
-          <PlayCircle className="mr-2 h-5 w-5" />
-          {isProcessing ? "Processing..." : "Run Packing Algorithm"}
+          <Upload className="mr-2 h-5 w-5" />
+          Import JSON Data
         </Button>
       </div>
     </Card>
