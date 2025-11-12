@@ -154,7 +154,7 @@ const Index = () => {
           </div>
 
           {/* Middle Column - 3D Visualization */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <div className="h-[600px]">
               {result ? (
                 <Scene3D
@@ -174,6 +174,17 @@ const Index = () => {
                 </div>
               )}
             </div>
+
+            {/* Item List Panel below 3D canvas */}
+            {result && (
+              <div className="h-[400px]">
+                <ItemPanel
+                  packedItems={result.packedItems}
+                  unpackedItems={result.unpackedItems}
+                  hoveredItem={hoveredItem}
+                />
+              </div>
+            )}
           </div>
         </div>
       </main>

@@ -84,8 +84,8 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
   };
 
   return (
-    <Card className="flex flex-col h-full">
-      <div className="p-4 border-b border-border">
+    <Card className="flex flex-col h-full overflow-hidden">
+      <div className="p-4 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-2">
           <Package className="h-5 w-5 text-primary" />
           <h3 className="font-semibold text-foreground">Manage Items</h3>
@@ -131,8 +131,8 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
       </div>
 
       {/* Add Item Form */}
-      <div className="p-4 border-b border-border bg-muted/30">
-        <div className="space-y-3">
+      <div className="p-4 border-b border-border bg-muted/30 flex-shrink-0">
+        <div className="space-y-2">
           <div className="space-y-2">
             <Label htmlFor="item-name" className="text-xs text-muted-foreground">
               Item Name
@@ -147,8 +147,8 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
             />
           </div>
 
-          <div className="space-y-3">
-            <div className="space-y-2">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-1">
               <Label htmlFor="item-width" className="text-xs text-muted-foreground">
                 Width
               </Label>
@@ -165,7 +165,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="item-height" className="text-xs text-muted-foreground">
                 Height
               </Label>
@@ -182,7 +182,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="item-depth" className="text-xs text-muted-foreground">
                 Depth
               </Label>
@@ -198,8 +198,10 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 disabled={disabled}
               />
             </div>
+          </div>
 
-            <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
               <Label htmlFor="item-weight" className="text-xs text-muted-foreground">
                 Weight (kg)
               </Label>
@@ -216,7 +218,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="item-quantity" className="text-xs text-muted-foreground">
                 Quantity
               </Label>
@@ -242,7 +244,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
       </div>
 
       {/* Items List */}
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 min-h-0">
         <div className="p-4 space-y-2">
           {items.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
