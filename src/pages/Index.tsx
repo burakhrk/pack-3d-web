@@ -100,7 +100,7 @@ const Index = () => {
               
               <TabsContent value="visual" className="space-y-4 mt-4">
                 <ContainerForm container={container} onUpdate={setContainer} />
-                <div className="h-[400px]">
+                <div className="h-[500px]">
                   <ItemManager
                     items={items}
                     onAdd={handleAddItem}

@@ -147,7 +147,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-3">
             <div className="space-y-2">
               <Label htmlFor="item-width" className="text-xs text-muted-foreground">
                 Width
