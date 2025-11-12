@@ -121,7 +121,7 @@ const Index = () => {
                   currentItem={currentItemForm}
                   onLoadPrefab={handleLoadPrefab}
                 />
-                <div className="h-[400px]">
+                <div className="h-[600px]">
                   <ItemManager
                     items={items}
                     onAdd={handleAddItem}
