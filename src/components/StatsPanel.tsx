@@ -1,0 +1,71 @@
+import { PackingResult } from "@/types/packing";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { BarChart3, Box, Package } from "lucide-react";
+
+interface StatsPanelProps {
+  result: PackingResult | null;
+}
+
+export function StatsPanel({ result }: StatsPanelProps) {
+  if (!result) {
+    return (
+      <Card className="p-6">
+        <div className="text-center text-muted-foreground">
+          <BarChart3 className="h-12 w-12 mx-auto mb-2 opacity-50" />
+          <p>Run the packing algorithm to see statistics</p>
+        </div>
+      </Card>
+    );
+  }
+
+  const { utilization, packedItems, unpackedItems, totalVolume, usedVolume } = result;
+
+  return (
+    <Card className="p-6">
+      <div className="space-y-6">
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-muted-foreground">Container Utilization</h3>
+            <span className="text-2xl font-bold text-foreground">{utilization.toFixed(1)}%</span>
+          </div>
+          <Progress value={utilization} className="h-3" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Package className="h-4 w-4" />
+              <span className="text-sm">Packed Items</span>
+            </div>
+            <p className="text-2xl font-bold text-success">{packedItems.length}</p>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Package className="h-4 w-4" />
+              <span className="text-sm">Unpacked Items</span>
+            </div>
+            <p className="text-2xl font-bold text-destructive">{unpackedItems.length}</p>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Box className="h-4 w-4" />
+              <span className="text-sm">Total Volume</span>
+            </div>
+            <p className="text-lg font-semibold text-foreground">{totalVolume.toFixed(1)}</p>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Box className="h-4 w-4" />
+              <span className="text-sm">Used Volume</span>
+            </div>
+            <p className="text-lg font-semibold text-foreground">{usedVolume.toFixed(1)}</p>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
