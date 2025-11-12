@@ -45,6 +45,10 @@ const Index = () => {
     toast.success("Item removed");
   };
 
+  const handleClearAllItems = () => {
+    setItems([]);
+  };
+
   const handleImportJson = (data: PackingInput) => {
     setContainer(data.container);
     setItems(data.items);
@@ -101,6 +105,7 @@ const Index = () => {
                     items={items}
                     onAdd={handleAddItem}
                     onRemove={handleRemoveItem}
+                    onClearAll={handleClearAllItems}
                     disabled={isProcessing}
                   />
                 </div>

@@ -4,18 +4,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Item } from "@/types/packing";
-import { Package, Plus, Trash2 } from "lucide-react";
+import { Package, Plus, Trash2, Trash } from "lucide-react";
 import { toast } from "sonner";
 
 interface ItemManagerProps {
   items: Item[];
   onAdd: (items: Item | Item[]) => void;
   onRemove: (itemId: string) => void;
+  onClearAll: () => void;
   disabled?: boolean;
 }
 
-export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerProps) {
+export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: ItemManagerProps) {
   const [newItem, setNewItem] = useState({
     name: "",
     width: 1,
@@ -78,6 +90,41 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
           <span className="ml-auto text-sm text-muted-foreground">
             {items.length} item{items.length !== 1 ? "s" : ""}
           </span>
+          {items.length > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={disabled}
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Clear all items?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will remove all {items.length} item{items.length !== 1 ? "s" : ""} from the
+                    list. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      onClearAll();
+                      toast.success("All items cleared");
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Clear All
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </div>
 
