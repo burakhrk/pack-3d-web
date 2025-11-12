@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { JsonInput } from "@/components/JsonInput";
 import { ContainerForm } from "@/components/ContainerForm";
 import { ItemManager } from "@/components/ItemManager";
+import { ItemPrefabs } from "@/components/ItemPrefabs";
 import { Scene3D } from "@/components/Scene3D";
 import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
@@ -16,6 +17,14 @@ import { toast } from "sonner";
 const Index = () => {
   const { runPacking, isProcessing, result } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
+  const [currentItemForm, setCurrentItemForm] = useState({
+    name: "",
+    width: 1,
+    height: 1,
+    depth: 1,
+    weight: 0,
+  });
+  const loadPrefabRef = useRef<((prefab: any) => void) | null>(null);
   
   // State for container and items
   const [container, setContainer] = useState<Container>({
@@ -67,6 +76,12 @@ const Index = () => {
     runPacking({ container, items });
   };
 
+  const handleLoadPrefab = (prefab: any) => {
+    if (loadPrefabRef.current) {
+      loadPrefabRef.current(prefab);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -102,13 +117,21 @@ const Index = () => {
               
               <TabsContent value="visual" className="space-y-6 mt-4">
                 <ContainerForm container={container} onUpdate={setContainer} />
-                <div className="h-[500px]">
+                <div className="grid grid-cols-2 gap-4 h-[500px]">
                   <ItemManager
                     items={items}
                     onAdd={handleAddItem}
                     onRemove={handleRemoveItem}
                     onClearAll={handleClearAllItems}
                     disabled={isProcessing}
+                    onItemFormChange={setCurrentItemForm}
+                    onLoadPrefab={(fn) => {
+                      loadPrefabRef.current = fn;
+                    }}
+                  />
+                  <ItemPrefabs
+                    currentItem={currentItemForm}
+                    onLoadPrefab={handleLoadPrefab}
                   />
                 </div>
                 <Button

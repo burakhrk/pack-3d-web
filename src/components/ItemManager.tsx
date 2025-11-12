@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,9 +25,23 @@ interface ItemManagerProps {
   onRemove: (itemId: string) => void;
   onClearAll: () => void;
   disabled?: boolean;
+  onItemFormChange?: (item: {
+    name: string;
+    width: number;
+    height: number;
+    depth: number;
+    weight: number;
+  }) => void;
+  onLoadPrefab?: (fn: (prefab: {
+    name: string;
+    width: number;
+    height: number;
+    depth: number;
+    weight?: number;
+  }) => void) => void;
 }
 
-export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: ItemManagerProps) {
+export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onItemFormChange, onLoadPrefab }: ItemManagerProps) {
   const [newItem, setNewItem] = useState({
     name: "",
     width: 1,
@@ -36,6 +50,40 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
     quantity: 1,
     weight: 0,
   });
+
+  // Notify parent when item form changes
+  const updateNewItem = (updates: Partial<typeof newItem>) => {
+    const updated = { ...newItem, ...updates };
+    setNewItem(updated);
+    onItemFormChange?.(updated);
+  };
+
+  // Load prefab into form
+  const loadPrefab = (prefab: {
+    name: string;
+    width: number;
+    height: number;
+    depth: number;
+    weight?: number;
+  }) => {
+    const updated = {
+      name: prefab.name,
+      width: prefab.width,
+      height: prefab.height,
+      depth: prefab.depth,
+      weight: prefab.weight || 0,
+      quantity: 1,
+    };
+    setNewItem(updated);
+    onItemFormChange?.(updated);
+  };
+
+  // Expose load prefab function on mount
+  React.useEffect(() => {
+    if (onLoadPrefab) {
+      onLoadPrefab(loadPrefab);
+    }
+  }, [onLoadPrefab]);
 
   const handleAdd = () => {
     if (!newItem.name.trim()) {
@@ -141,7 +189,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
               id="item-name"
               placeholder="e.g., Box A"
               value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+              onChange={(e) => updateNewItem({ name: e.target.value })}
               onKeyPress={handleKeyPress}
               disabled={disabled}
             />
@@ -159,7 +207,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 step="0.5"
                 value={newItem.width}
                 onChange={(e) =>
-                  setNewItem({ ...newItem, width: parseFloat(e.target.value) || 0 })
+                  updateNewItem({ width: parseFloat(e.target.value) || 0 })
                 }
                 disabled={disabled}
               />
@@ -176,7 +224,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 step="0.5"
                 value={newItem.height}
                 onChange={(e) =>
-                  setNewItem({ ...newItem, height: parseFloat(e.target.value) || 0 })
+                  updateNewItem({ height: parseFloat(e.target.value) || 0 })
                 }
                 disabled={disabled}
               />
@@ -193,7 +241,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 step="0.5"
                 value={newItem.depth}
                 onChange={(e) =>
-                  setNewItem({ ...newItem, depth: parseFloat(e.target.value) || 0 })
+                  updateNewItem({ depth: parseFloat(e.target.value) || 0 })
                 }
                 disabled={disabled}
               />
@@ -212,7 +260,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 step="0.1"
                 value={newItem.weight}
                 onChange={(e) =>
-                  setNewItem({ ...newItem, weight: parseFloat(e.target.value) || 0 })
+                  updateNewItem({ weight: parseFloat(e.target.value) || 0 })
                 }
                 disabled={disabled}
               />
@@ -229,7 +277,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled }: It
                 step="1"
                 value={newItem.quantity}
                 onChange={(e) =>
-                  setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 1 })
+                  updateNewItem({ quantity: parseInt(e.target.value) || 1 })
                 }
                 disabled={disabled}
               />
