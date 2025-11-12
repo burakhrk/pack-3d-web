@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 interface ItemManagerProps {
   items: Item[];
-  onAdd: (item: Item) => void;
+  onAdd: (items: Item | Item[]) => void;
   onRemove: (itemId: string) => void;
   disabled?: boolean;
 }
@@ -40,17 +40,23 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
       return;
     }
 
-    // Add multiple items based on quantity
+    // Create all items at once based on quantity
+    const itemsToAdd: Item[] = [];
+    const timestamp = Date.now();
+    
     for (let i = 0; i < newItem.quantity; i++) {
       const item: Item = {
-        id: `item-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `item-${timestamp}-${i}-${Math.random().toString(36).substr(2, 9)}`,
         name: newItem.quantity > 1 ? `${newItem.name.trim()} #${i + 1}` : newItem.name.trim(),
         width: newItem.width,
         height: newItem.height,
         depth: newItem.depth,
       };
-      onAdd(item);
+      itemsToAdd.push(item);
     }
+
+    // Add all items at once
+    onAdd(itemsToAdd);
 
     const itemsText = newItem.quantity === 1 ? "item" : "items";
     toast.success(`Added ${newItem.quantity} ${itemsText}`);

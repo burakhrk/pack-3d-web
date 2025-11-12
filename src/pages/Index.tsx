@@ -32,8 +32,12 @@ const Index = () => {
     { id: "item-5", name: "Box E", width: 4, height: 3, depth: 2 },
   ]);
 
-  const handleAddItem = (item: Item) => {
-    setItems([...items, item]);
+  const handleAddItem = (itemOrItems: Item | Item[]) => {
+    if (Array.isArray(itemOrItems)) {
+      setItems([...items, ...itemOrItems]);
+    } else {
+      setItems([...items, itemOrItems]);
+    }
   };
 
   const handleRemoveItem = (itemId: string) => {
