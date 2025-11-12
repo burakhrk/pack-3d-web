@@ -21,6 +21,7 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
     width: 1,
     height: 1,
     depth: 1,
+    quantity: 1,
   });
 
   const handleAdd = () => {
@@ -34,17 +35,26 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
       return;
     }
 
-    const item: Item = {
-      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      name: newItem.name.trim(),
-      width: newItem.width,
-      height: newItem.height,
-      depth: newItem.depth,
-    };
+    if (newItem.quantity <= 0) {
+      toast.error("Quantity must be at least 1");
+      return;
+    }
 
-    onAdd(item);
-    setNewItem({ name: "", width: 1, height: 1, depth: 1 });
-    toast.success(`Added "${item.name}"`);
+    // Add multiple items based on quantity
+    for (let i = 0; i < newItem.quantity; i++) {
+      const item: Item = {
+        id: `item-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+        name: newItem.quantity > 1 ? `${newItem.name.trim()} #${i + 1}` : newItem.name.trim(),
+        width: newItem.width,
+        height: newItem.height,
+        depth: newItem.depth,
+      };
+      onAdd(item);
+    }
+
+    const itemsText = newItem.quantity === 1 ? "item" : "items";
+    toast.success(`Added ${newItem.quantity} ${itemsText}`);
+    setNewItem({ name: "", width: 1, height: 1, depth: 1, quantity: 1 });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -82,7 +92,7 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             <div className="space-y-2">
               <Label htmlFor="item-width" className="text-xs text-muted-foreground">
                 Width
@@ -129,6 +139,23 @@ export function ItemManager({ items, onAdd, onRemove, disabled }: ItemManagerPro
                 value={newItem.depth}
                 onChange={(e) =>
                   setNewItem({ ...newItem, depth: parseFloat(e.target.value) || 0 })
+                }
+                disabled={disabled}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="item-quantity" className="text-xs text-muted-foreground">
+                Quantity
+              </Label>
+              <Input
+                id="item-quantity"
+                type="number"
+                min="1"
+                step="1"
+                value={newItem.quantity}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 1 })
                 }
                 disabled={disabled}
               />
