@@ -7,6 +7,7 @@ import { Scene3D } from "@/components/Scene3D";
 import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
+import { ComparisonPanel } from "@/components/ComparisonPanel";
 import { PackedItem, Container, Item, PackingInput } from "@/types/packing";
 import { Box as BoxIcon, PlayCircle, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const Index = () => {
-  const { runPacking, isProcessing, result } = usePackingWorker();
+  const { runPacking, runComparison, isProcessing, result, comparison } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
   const [currentItemForm, setCurrentItemForm] = useState({
     name: "",
@@ -76,6 +77,14 @@ const Index = () => {
     runPacking({ container, items });
   };
 
+  const handleRunComparison = () => {
+    if (items.length === 0) {
+      toast.error("Please add at least one item to pack");
+      return;
+    }
+    runComparison({ container, items }, ['ffd', 'bestfit', 'genetic']);
+  };
+
   const handleLoadPrefab = (prefab: any) => {
     if (loadPrefabRef.current) {
       loadPrefabRef.current(prefab);
@@ -134,36 +143,54 @@ const Index = () => {
                     }}
                   />
                 </div>
-                <Button
-                  onClick={handleRunPacking}
-                  disabled={isProcessing}
-                  className="w-full"
-                  size="lg"
-                >
-                  <PlayCircle className="mr-2 h-5 w-5" />
-                  {isProcessing ? "Processing..." : "Run Packing Algorithm"}
-                </Button>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    onClick={handleRunPacking}
+                    disabled={isProcessing}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <PlayCircle className="mr-2 h-5 w-5" />
+                    {isProcessing ? "Processing..." : "Run Single Algorithm"}
+                  </Button>
+                  <Button
+                    onClick={handleRunComparison}
+                    disabled={isProcessing}
+                    className="w-full"
+                    size="lg"
+                    variant="secondary"
+                  >
+                    <Package className="mr-2 h-5 w-5" />
+                    {isProcessing ? "Comparing..." : "Compare All Algorithms"}
+                  </Button>
+                </div>
               </TabsContent>
 
               <TabsContent value="overview" className="space-y-4 mt-4">
-                <div className="h-[400px]">
-                  {result ? (
-                    <ItemPanel
-                      packedItems={result.packedItems}
-                      unpackedItems={result.unpackedItems}
-                      hoveredItem={hoveredItem}
-                    />
-                  ) : (
-                    <Card className="h-full flex items-center justify-center">
-                      <div className="text-center text-muted-foreground">
-                        <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                        <p className="text-sm">No packing results yet</p>
-                        <p className="text-xs">Run the algorithm to see packed items</p>
-                      </div>
-                    </Card>
-                  )}
-                </div>
-                <StatsPanel result={result} />
+                {comparison ? (
+                  <ComparisonPanel comparison={comparison} />
+                ) : (
+                  <>
+                    <div className="h-[400px]">
+                      {result ? (
+                        <ItemPanel
+                          packedItems={result.packedItems}
+                          unpackedItems={result.unpackedItems}
+                          hoveredItem={hoveredItem}
+                        />
+                      ) : (
+                        <Card className="h-full flex items-center justify-center">
+                          <div className="text-center text-muted-foreground">
+                            <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">No packing results yet</p>
+                            <p className="text-xs">Run the algorithm to see packed items</p>
+                          </div>
+                        </Card>
+                      )}
+                    </div>
+                    <StatsPanel result={result} />
+                  </>
+                )}
               </TabsContent>
               
               <TabsContent value="json" className="mt-4">

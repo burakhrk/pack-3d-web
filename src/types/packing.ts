@@ -31,6 +31,12 @@ export interface PackingResult {
   utilization: number;
   totalVolume: number;
   usedVolume: number;
+  algorithmName?: string;
+}
+
+export interface ComparisonResult {
+  results: PackingResult[];
+  bestAlgorithm: string;
 }
 
 export interface PackingInput {
