@@ -10,24 +10,30 @@ interface WorkerInput extends PackingInput {
 
 // Web Worker message handler
 self.onmessage = (event: MessageEvent<WorkerInput>) => {
-  const { container, items, mode = 'single', algorithms = ['ffd'] } = event.data;
+  const { container, items, mode = 'single', algorithms = ['ffd'], parameters } = event.data;
 
   try {
     if (mode === 'compare') {
       const results: PackingResult[] = [];
       
       if (algorithms.includes('ffd')) {
-        const result = packItems(container, items);
+        const result = packItems(container, items, parameters?.gridResolution);
         results.push({ ...result, algorithmName: 'First-Fit Decreasing' });
       }
       
       if (algorithms.includes('bestfit')) {
-        const result = packItemsBestFit(container, items);
+        const result = packItemsBestFit(container, items, parameters?.gridResolution);
         results.push({ ...result, algorithmName: 'Best-Fit' });
       }
       
       if (algorithms.includes('genetic')) {
-        const result = packItemsGenetic(container, items);
+        const result = packItemsGenetic(
+          container, 
+          items, 
+          parameters?.gridResolution,
+          parameters?.geneticGenerations,
+          parameters?.mutationRate
+        );
         results.push({ ...result, algorithmName: 'Genetic Algorithm' });
       }
       
@@ -40,7 +46,7 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
       
       self.postMessage({ success: true, comparison: comparisonResult });
     } else {
-      const result: PackingResult = packItems(container, items);
+      const result: PackingResult = packItems(container, items, parameters?.gridResolution);
       self.postMessage({ success: true, result });
     }
   } catch (error) {

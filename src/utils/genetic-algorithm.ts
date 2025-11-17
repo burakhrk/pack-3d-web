@@ -20,28 +20,32 @@ interface Chromosome {
  * Genetic Algorithm for bin packing
  * Uses evolution to find optimal item ordering
  */
-export function packItemsGenetic(container: Container, items: Item[]): PackingResult {
+export function packItemsGenetic(
+  container: Container, 
+  items: Item[],
+  gridResolution: number = 0.5,
+  generations: number = 30,
+  mutationRate: number = 0.1
+): PackingResult {
   const POPULATION_SIZE = 20;
-  const GENERATIONS = 30;
-  const MUTATION_RATE = 0.1;
 
   let population = initializePopulation(items.length, POPULATION_SIZE);
 
-  for (let gen = 0; gen < GENERATIONS; gen++) {
+  for (let gen = 0; gen < generations; gen++) {
     // Evaluate fitness
     population.forEach(chromosome => {
-      chromosome.fitness = evaluateFitness(chromosome, items, container);
+      chromosome.fitness = evaluateFitness(chromosome, items, container, gridResolution);
     });
 
     // Selection and reproduction
-    population = evolvePopulation(population, MUTATION_RATE);
+    population = evolvePopulation(population, mutationRate);
   }
 
   // Get best solution
   population.sort((a, b) => b.fitness - a.fitness);
   const bestSequence = population[0].sequence;
   
-  return packWithSequence(container, items, bestSequence);
+  return packWithSequence(container, items, bestSequence, gridResolution);
 }
 
 function initializePopulation(itemCount: number, populationSize: number): Chromosome[] {
@@ -60,8 +64,8 @@ function initializePopulation(itemCount: number, populationSize: number): Chromo
   return population;
 }
 
-function evaluateFitness(chromosome: Chromosome, items: Item[], container: Container): number {
-  const result = packWithSequence(container, items, chromosome.sequence);
+function evaluateFitness(chromosome: Chromosome, items: Item[], container: Container, gridResolution: number): number {
+  const result = packWithSequence(container, items, chromosome.sequence, gridResolution);
   return result.utilization;
 }
 
@@ -130,10 +134,10 @@ function mutate(chromosome: Chromosome): Chromosome {
   return { sequence, fitness: 0 };
 }
 
-function packWithSequence(container: Container, items: Item[], sequence: number[]): PackingResult {
+function packWithSequence(container: Container, items: Item[], sequence: number[], gridResolution: number = 0.5): PackingResult {
   const packedItems: PackedItem[] = [];
   const unpackedItems: Item[] = [];
-  const step = 0.5;
+  const step = gridResolution;
 
   sequence.forEach((idx, colorIdx) => {
     const item = items[idx];

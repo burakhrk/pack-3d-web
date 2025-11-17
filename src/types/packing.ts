@@ -39,7 +39,14 @@ export interface ComparisonResult {
   bestAlgorithm: string;
 }
 
+export interface AlgorithmParameters {
+  gridResolution?: number;
+  geneticGenerations?: number;
+  mutationRate?: number;
+}
+
 export interface PackingInput {
   container: Container;
   items: Item[];
+  parameters?: AlgorithmParameters;
 }

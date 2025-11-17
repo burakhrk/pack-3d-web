@@ -15,7 +15,7 @@ const ITEM_COLORS = [
  * Best-Fit Algorithm
  * For each item, find the position that minimizes wasted space
  */
-export function packItemsBestFit(container: Container, items: Item[]): PackingResult {
+export function packItemsBestFit(container: Container, items: Item[], gridResolution: number = 0.5): PackingResult {
   const packedItems: PackedItem[] = [];
   const unpackedItems: Item[] = [];
 
@@ -26,7 +26,7 @@ export function packItemsBestFit(container: Container, items: Item[]): PackingRe
 
   for (let i = 0; i < sortedItems.length; i++) {
     const item = sortedItems[i];
-    const position = findBestFitPosition(item, container, packedItems);
+    const position = findBestFitPosition(item, container, packedItems, gridResolution);
 
     if (position) {
       packedItems.push({
@@ -62,9 +62,10 @@ export function packItemsBestFit(container: Container, items: Item[]): PackingRe
 function findBestFitPosition(
   item: Item,
   container: Container,
-  packedItems: PackedItem[]
+  packedItems: PackedItem[],
+  gridResolution: number = 0.5
 ): { x: number; y: number; z: number } | null {
-  const step = 0.5;
+  const step = gridResolution;
   let bestPosition: { x: number; y: number; z: number } | null = null;
   let minWaste = Infinity;
 
