@@ -6,6 +6,7 @@ import { ItemPrefabs } from "@/components/ItemPrefabs";
 import { Scene3D } from "@/components/Scene3D";
 import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
+import { AlgorithmSettings } from "@/components/AlgorithmSettings";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
 import { ComparisonPanel } from "@/components/ComparisonPanel";
 import { PackedItem, Container, Item, PackingInput } from "@/types/packing";
@@ -43,6 +44,11 @@ const Index = () => {
     { id: "item-5", name: "Box E", width: 4, height: 3, depth: 2 },
   ]);
 
+  // Algorithm parameters
+  const [gridResolution, setGridResolution] = useState(0.5);
+  const [geneticGenerations, setGeneticGenerations] = useState(30);
+  const [mutationRate, setMutationRate] = useState(0.1);
+
   const handleAddItem = (itemOrItems: Item | Item[]) => {
     if (Array.isArray(itemOrItems)) {
       setItems([...items, ...itemOrItems]);
@@ -74,7 +80,11 @@ const Index = () => {
       toast.error("Please add at least one item to pack");
       return;
     }
-    runPacking({ container, items });
+    runPacking({ 
+      container, 
+      items, 
+      parameters: { gridResolution, geneticGenerations, mutationRate } 
+    });
   };
 
   const handleRunComparison = () => {
@@ -82,7 +92,14 @@ const Index = () => {
       toast.error("Please add at least one item to pack");
       return;
     }
-    runComparison({ container, items }, ['ffd', 'bestfit', 'genetic']);
+    runComparison(
+      { 
+        container, 
+        items, 
+        parameters: { gridResolution, geneticGenerations, mutationRate } 
+      }, 
+      ['ffd', 'bestfit', 'genetic']
+    );
   };
 
   const handleLoadPrefab = (prefab: any) => {
@@ -143,6 +160,14 @@ const Index = () => {
                     }}
                   />
                 </div>
+                <AlgorithmSettings
+                  gridResolution={gridResolution}
+                  geneticGenerations={geneticGenerations}
+                  mutationRate={mutationRate}
+                  onGridResolutionChange={setGridResolution}
+                  onGeneticGenerationsChange={setGeneticGenerations}
+                  onMutationRateChange={setMutationRate}
+                />
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     onClick={handleRunPacking}

@@ -25,7 +25,7 @@ const ITEM_COLORS = [
  * Sort items by volume (largest first), then try to place each item
  * at the first available position that doesn't collide
  */
-export function packItems(container: Container, items: Item[]): PackingResult {
+export function packItems(container: Container, items: Item[], gridResolution: number = 0.5): PackingResult {
   const packedItems: PackedItem[] = [];
   const unpackedItems: Item[] = [];
 
@@ -39,7 +39,7 @@ export function packItems(container: Container, items: Item[]): PackingResult {
   // Try to pack each item
   for (let i = 0; i < sortedItems.length; i++) {
     const item = sortedItems[i];
-    const position = findFirstFitPosition(item, container, packedItems);
+    const position = findFirstFitPosition(item, container, packedItems, gridResolution);
 
     if (position) {
       packedItems.push({
@@ -77,9 +77,10 @@ export function packItems(container: Container, items: Item[]): PackingResult {
 function findFirstFitPosition(
   item: Item,
   container: Container,
-  packedItems: PackedItem[]
+  packedItems: PackedItem[],
+  gridResolution: number = 0.5
 ): { x: number; y: number; z: number } | null {
-  const step = 0.5; // Grid resolution for position searching
+  const step = gridResolution; // Grid resolution for position searching
 
   // Start from bottom (y=0), try positions layer by layer
   for (let y = 0; y <= container.height - item.height; y += step) {
