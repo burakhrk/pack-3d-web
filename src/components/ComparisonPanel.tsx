@@ -44,47 +44,47 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">
+                    <span className="font-semibold text-sm">
                       {result.algorithmName}
                     </span>
                     {isBest && (
-                      <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white border-0">
+                      <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white border-0 text-[10px] px-1.5 py-0">
                         Best
                       </Badge>
                     )}
                   </div>
-                  <span className="text-2xl font-bold text-primary">
-                    {result.utilization}%
+                  <span className="text-lg font-bold text-primary">
+                    {result.utilization.toFixed(2)}%
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 text-sm mb-4">
+                <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                   <div>
-                    <div className="flex items-center gap-1 text-muted-foreground mb-1">
+                    <div className="flex items-center gap-1 text-muted-foreground mb-0.5">
                       <Package className="w-3 h-3" />
-                      <span>Packed</span>
+                      <span>Count</span>
                     </div>
-                    <p className="font-semibold">{result.packedItems.length}</p>
+                    <p className="font-medium">{result.packedItems.length}</p>
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-1 text-muted-foreground mb-1">
+                    <div className="flex items-center gap-1 text-muted-foreground mb-0.5">
                       <AlertCircle className="w-3 h-3" />
-                      <span>Unpacked</span>
+                      <span>Left</span>
                     </div>
-                    <p className="font-semibold">{result.unpackedItems.length}</p>
+                    <p className="font-medium">{result.unpackedItems.length}</p>
                   </div>
 
-                  <div>
-                    <div className="text-muted-foreground mb-1">Volume Used</div>
-                    <p className="font-semibold">
-                      {result.usedVolume.toFixed(1)} / {result.totalVolume.toFixed(1)}
+                  <div className="col-span-1">
+                    <div className="text-muted-foreground mb-0.5">Vol. Used</div>
+                    <p className="font-medium truncate" title={`${result.usedVolume.toFixed(0)} / ${result.totalVolume.toFixed(0)}`}>
+                      {Math.round((result.usedVolume / result.totalVolume) * 100)}%
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="bg-muted rounded-full h-2 overflow-hidden">
+                <div className="space-y-2">
+                  <div className="bg-muted rounded-full h-1.5 overflow-hidden">
                     <div
                       className={`h-full transition-all ${isBest ? "bg-primary" : "bg-muted-foreground"
                         }`}
@@ -94,11 +94,10 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
 
                   <Button
                     variant={isSelected ? "default" : "outline"}
-                    className="w-full"
+                    className="w-full h-7 text-xs"
                     onClick={() => onShowResult?.(result)}
-                    size="sm"
                   >
-                    {isSelected ? "Currently Viewing" : "View 3D Result"}
+                    {isSelected ? "Viewing" : "View Result"}
                   </Button>
                 </div>
               </div>
@@ -106,10 +105,10 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
           })}
         </div>
 
-        <div className="pt-4 border-t">
-          <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">{comparison.bestAlgorithm}</strong> achieved the highest utilization rate of{" "}
-            <strong className="text-foreground">{comparison.results[0].utilization}%</strong>
+        <div className="pt-3 border-t">
+          <p className="text-xs text-muted-foreground">
+            <strong className="text-foreground">{comparison.bestAlgorithm}</strong> is most efficient at{" "}
+            <strong className="text-foreground">{comparison.results[0].utilization.toFixed(2)}%</strong>
           </p>
         </div>
       </div>
