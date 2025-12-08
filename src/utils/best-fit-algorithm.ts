@@ -17,7 +17,7 @@ const ITEM_COLORS = [
  * Best-Fit Algorithm
  * For each item, find the position that minimizes wasted space
  */
-export function packItemsBestFit(container: Container, items: Item[], gridResolution: number = 0.5): PackingResult {
+export function packItemsBestFit(container: Container, items: Item[], gridResolution: number = 5): PackingResult {
   const packedItems: PackedItem[] = [];
   const unpackedItems: Item[] = [];
 

@@ -15,38 +15,88 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
   try {
     if (mode === 'compare') {
       const results: PackingResult[] = [];
-      
+      const totalAlgos = algorithms.length;
+      let completedAlgos = 0;
+
+      const updateProgress = (algoProgress: number) => {
+        // overarching progress: (completedAlgos / total) * 100 + (currentAlgo / total)
+        const base = (completedAlgos / totalAlgos) * 100;
+        const current = algoProgress / totalAlgos;
+        self.postMessage({ success: true, progress: Math.round(base + current) });
+      };
+
       if (algorithms.includes('ffd')) {
+        updateProgress(0);
         const result = packItems(container, items, parameters?.gridResolution);
         results.push({ ...result, algorithmName: 'First-Fit Decreasing' });
+        completedAlgos++;
+        updateProgress(100);
       }
-      
+
       if (algorithms.includes('bestfit')) {
+        updateProgress(0);
         const result = packItemsBestFit(container, items, parameters?.gridResolution);
         results.push({ ...result, algorithmName: 'Best-Fit' });
+        completedAlgos++;
+        updateProgress(100);
       }
-      
+
       if (algorithms.includes('genetic')) {
         const result = packItemsGenetic(
-          container, 
-          items, 
+          container,
+          items,
           parameters?.gridResolution,
           parameters?.geneticGenerations,
-          parameters?.mutationRate
+          parameters?.mutationRate,
+          (p) => updateProgress(p) // Forward genetic progress
         );
         results.push({ ...result, algorithmName: 'Genetic Algorithm' });
+        completedAlgos++;
       }
-      
+
       results.sort((a, b) => b.utilization - a.utilization);
-      
+
       const comparisonResult: ComparisonResult = {
         results,
         bestAlgorithm: results[0]?.algorithmName || 'Unknown'
       };
-      
-      self.postMessage({ success: true, comparison: comparisonResult });
+
+      self.postMessage({ success: true, comparison: comparisonResult, progress: 100 });
     } else {
-      const result: PackingResult = packItems(container, items, parameters?.gridResolution);
+      // Single mode
+      const algo = parameters?.algorithm || 'ffd'; // Use parameter or default
+      const onProgress = (p: number) => {
+        self.postMessage({ success: true, progress: p });
+      };
+
+      const config = parameters || {};
+      const res = config.gridResolution || 5;
+
+      self.postMessage({ success: true, progress: 10 });
+
+      let result: PackingResult;
+
+      if (algo === 'genetic') {
+        result = packItemsGenetic(
+          container,
+          items,
+          res,
+          config.geneticGenerations || 30,
+          config.mutationRate || 0.1,
+          onProgress
+        );
+      } else if (algo === 'bestfit') {
+        result = packItemsBestFit(container, items, res);
+        self.postMessage({ success: true, progress: 100 });
+      } else {
+        // Default FFD
+        result = packItems(container, items, res);
+        self.postMessage({ success: true, progress: 100 });
+      }
+
+      // Add algorithm name to result
+      result.algorithmName = algo === 'genetic' ? 'Genetic Algorithm' : algo === 'bestfit' ? 'Best-Fit' : 'First-Fit Decreasing';
+
       self.postMessage({ success: true, result });
     }
   } catch (error) {

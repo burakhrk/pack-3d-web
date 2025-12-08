@@ -43,15 +43,15 @@ export function AlgorithmSettings({
           <Input
             id="gridResolution"
             type="number"
-            min="0.1"
-            max="5"
-            step="0.1"
+            min="1"
+            max="50"
+            step="1"
             value={gridResolution}
             onChange={(e) => onGridResolutionChange(parseFloat(e.target.value))}
             className="w-full"
           />
           <p className="text-xs text-muted-foreground">
-            Smaller values = more precise but slower (0.1-5)
+            Smaller values = more precise but slower (1-50)
           </p>
         </div>
 

@@ -6,6 +6,7 @@ export function usePackingWorker() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<PackingResult | null>(null);
   const [comparison, setComparison] = useState<ComparisonResult | null>(null);
+  const [progress, setProgress] = useState(0);
   const workerRef = useRef<Worker | null>(null);
 
   useEffect(() => {
@@ -21,22 +22,31 @@ export function usePackingWorker() {
         success: boolean;
         result?: PackingResult;
         comparison?: ComparisonResult;
-        error?: string
+        error?: string;
+        progress?: number;
       }>
     ) => {
-      setIsProcessing(false);
+      // Don't set isProcessing to false until result/error comes
+      if (event.data.progress !== undefined) {
+        setProgress(event.data.progress);
+      }
 
       if (event.data.success) {
         if (event.data.result) {
           setResult(event.data.result);
           setComparison(null);
+          setIsProcessing(false);
+          setProgress(100);
           toast.success("Packing completed successfully!");
         } else if (event.data.comparison) {
           setComparison(event.data.comparison);
           setResult(event.data.comparison.results[0]);
+          setIsProcessing(false);
+          setProgress(100);
           toast.success(`Best algorithm: ${event.data.comparison.bestAlgorithm}`);
         }
-      } else {
+      } else if (event.data.error) {
+        setIsProcessing(false);
         toast.error(`Packing failed: ${event.data.error}`);
       }
     };
@@ -54,6 +64,7 @@ export function usePackingWorker() {
     }
 
     setIsProcessing(true);
+    setProgress(0);
     setResult(null);
     setComparison(null);
     workerRef.current.postMessage(input);
@@ -66,6 +77,7 @@ export function usePackingWorker() {
     }
 
     setIsProcessing(true);
+    setProgress(0);
     setResult(null);
     setComparison(null);
     workerRef.current.postMessage({
@@ -75,5 +87,5 @@ export function usePackingWorker() {
     });
   }, []);
 
-  return { runPacking, runComparison, isProcessing, result, comparison, setResult };
+  return { runPacking, runComparison, isProcessing, progress, result, comparison, setResult };
 }

@@ -26,7 +26,7 @@ const ITEM_COLORS = [
  * Sort items by volume (largest first), then try to place each item
  * at the first available position that doesn't collide
  */
-export function packItems(container: Container, items: Item[], gridResolution: number = 0.5): PackingResult {
+export function packItems(container: Container, items: Item[], gridResolution: number = 5): PackingResult {
   const packedItems: PackedItem[] = [];
   const unpackedItems: Item[] = [];
 

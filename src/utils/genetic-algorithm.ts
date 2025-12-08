@@ -24,15 +24,22 @@ interface Chromosome {
 export function packItemsGenetic(
   container: Container,
   items: Item[],
-  gridResolution: number = 0.5,
+  gridResolution: number = 5,
   generations: number = 30,
-  mutationRate: number = 0.1
+  mutationRate: number = 0.1,
+  onProgress?: (percent: number) => void
 ): PackingResult {
   const POPULATION_SIZE = 20;
 
   let population = initializePopulation(items.length, POPULATION_SIZE);
 
   for (let gen = 0; gen < generations; gen++) {
+    // Report progress
+    if (onProgress) {
+      // Calculate percentage (0 to 100)
+      onProgress(Math.round((gen / generations) * 100));
+    }
+
     // Evaluate fitness
     population.forEach(chromosome => {
       chromosome.fitness = evaluateFitness(chromosome, items, container, gridResolution);
@@ -41,6 +48,8 @@ export function packItemsGenetic(
     // Selection and reproduction
     population = evolvePopulation(population, mutationRate);
   }
+
+  if (onProgress) onProgress(100);
 
   // Get best solution
   population.sort((a, b) => b.fitness - a.fitness);

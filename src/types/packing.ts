@@ -43,6 +43,7 @@ export interface AlgorithmParameters {
   gridResolution?: number;
   geneticGenerations?: number;
   mutationRate?: number;
+  algorithm?: string;
 }
 
 export interface PackingInput {

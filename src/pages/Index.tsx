@@ -16,10 +16,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
 const Index = () => {
-  const { runPacking, runComparison, isProcessing, result, comparison, setResult } = usePackingWorker();
+  const { runPacking, runComparison, isProcessing, progress, result, comparison, setResult } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
   const [currentItemForm, setCurrentItemForm] = useState({
     name: "",
@@ -32,24 +34,19 @@ const Index = () => {
 
   // State for container and items
   const [container, setContainer] = useState<Container>({
-    id: "container-1",
-    width: 10,
-    height: 10,
-    depth: 10,
+    id: "container-default",
+    width: 590,
+    height: 239,
+    depth: 235,
   });
 
-  const [items, setItems] = useState<Item[]>([
-    { id: "item-1", name: "Box A", width: 3, height: 3, depth: 3 },
-    { id: "item-2", name: "Box B", width: 2, height: 4, depth: 2 },
-    { id: "item-3", name: "Box C", width: 5, height: 2, depth: 3 },
-    { id: "item-4", name: "Box D", width: 2, height: 2, depth: 2 },
-    { id: "item-5", name: "Box E", width: 4, height: 3, depth: 2 },
-  ]);
+  const [items, setItems] = useState<Item[]>([]);
 
   // Algorithm parameters
-  const [gridResolution, setGridResolution] = useState(0.5);
+  const [gridResolution, setGridResolution] = useState(10);
   const [geneticGenerations, setGeneticGenerations] = useState(30);
   const [mutationRate, setMutationRate] = useState(0.1);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("ffd");
 
   const handleAddItem = (itemOrItems: Item | Item[]) => {
     if (Array.isArray(itemOrItems)) {
@@ -82,10 +79,18 @@ const Index = () => {
       toast.error("Please add at least one item to pack");
       return;
     }
+
+    // Safety check for performance
+    const maxDim = Math.max(container.width, container.height, container.depth);
+    if (maxDim > 100 && gridResolution < 1) {
+      toast.error("Grid resolution is too low for this container size! Please increase it to at least 1 or 5 to prevent freezing.");
+      return;
+    }
+
     runPacking({
       container,
       items,
-      parameters: { gridResolution, geneticGenerations, mutationRate }
+      parameters: { gridResolution, geneticGenerations, mutationRate, algorithm: selectedAlgorithm }
     });
   };
 
@@ -202,15 +207,36 @@ const Index = () => {
                   </ScrollArea>
 
                   <div className="p-4 border-t border-border bg-background z-10 space-y-2 flex-none">
+                    <Select value={selectedAlgorithm} onValueChange={setSelectedAlgorithm}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Algorithm" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ffd">First-Fit Decreasing (Fast)</SelectItem>
+                        <SelectItem value="bestfit">Best-Fit (Balanced)</SelectItem>
+                        <SelectItem value="genetic">Genetic Algorithm (Slow, High Quality)</SelectItem>
+                      </SelectContent>
+                    </Select>
+
                     <Button
                       onClick={handleRunPacking}
                       disabled={isProcessing}
-                      className="w-full shadow-md"
+                      className="w-full shadow-md mt-2"
                       size="lg"
                     >
                       <PlayCircle className="mr-2 h-5 w-5" />
                       {isProcessing ? "Processing..." : "Run Packing"}
                     </Button>
+
+                    {isProcessing && (
+                      <div className="space-y-1 animate-in fade-in zoom-in duration-300">
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Calculating...</span>
+                          <span>{progress}%</span>
+                        </div>
+                        <Progress value={progress} className="h-2" />
+                      </div>
+                    )}
                     <Button
                       onClick={handleRunComparison}
                       disabled={isProcessing}
