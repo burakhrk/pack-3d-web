@@ -38,12 +38,7 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
   });
   const [preset, setPreset] = useState("custom");
 
-  const handleUpdate = () => {
-    onUpdate({
-      ...container,
-      ...dimensions,
-    });
-  };
+
 
   const handlePresetChange = (value: string) => {
     setPreset(value);
@@ -127,8 +122,10 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
               step="0.5"
               value={dimensions.width}
               onChange={(e) => {
-                setDimensions({ ...dimensions, width: parseFloat(e.target.value) || 0 });
+                const val = parseFloat(e.target.value) || 0;
+                setDimensions({ ...dimensions, width: val });
                 setPreset("custom");
+                onUpdate({ ...container, ...dimensions, width: val });
               }}
             />
           </div>
@@ -144,8 +141,10 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
               step="0.5"
               value={dimensions.height}
               onChange={(e) => {
-                setDimensions({ ...dimensions, height: parseFloat(e.target.value) || 0 });
+                const val = parseFloat(e.target.value) || 0;
+                setDimensions({ ...dimensions, height: val });
                 setPreset("custom");
+                onUpdate({ ...container, ...dimensions, height: val });
               }}
             />
           </div>
@@ -161,16 +160,14 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
               step="0.5"
               value={dimensions.depth}
               onChange={(e) => {
-                setDimensions({ ...dimensions, depth: parseFloat(e.target.value) || 0 });
+                const val = parseFloat(e.target.value) || 0;
+                setDimensions({ ...dimensions, depth: val });
                 setPreset("custom");
+                onUpdate({ ...container, ...dimensions, depth: val });
               }}
             />
           </div>
         </div>
-
-        <Button onClick={handleUpdate} className="w-full" size="sm">
-          Update Manual Dimensions
-        </Button>
       </div>
     </Card>
   );

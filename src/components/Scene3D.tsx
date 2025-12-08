@@ -200,7 +200,9 @@ export function Scene3D({ container, packedItems, onItemHover, highlightedTypes 
           <AxisLabels container={container} />
           {packedItems.map((item, idx) => {
             const hasHighlight = highlightedTypes.length > 0;
-            const isHighlighted = hasHighlight ? highlightedTypes.includes(item.name) : false;
+            // Remove suffix like " #1", " #2" to match the base type logic in Index.tsx
+            const itemBaseName = item.name.replace(/ #\d+$/, '');
+            const isHighlighted = hasHighlight ? highlightedTypes.includes(itemBaseName) : false;
             const isDimmed = hasHighlight ? !isHighlighted : false;
 
             return (
