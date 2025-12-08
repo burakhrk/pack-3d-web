@@ -47,6 +47,7 @@ const Index = () => {
   const [geneticGenerations, setGeneticGenerations] = useState(30);
   const [mutationRate, setMutationRate] = useState(0.1);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("ffd");
+  const [highlightedType, setHighlightedType] = useState<string | null>(null);
 
   const handleAddItem = (itemOrItems: Item | Item[]) => {
     if (Array.isArray(itemOrItems)) {
@@ -281,6 +282,7 @@ const Index = () => {
                   container={result.container}
                   packedItems={result.packedItems}
                   onItemHover={setHoveredItem}
+                  highlightedType={highlightedType}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -318,6 +320,24 @@ const Index = () => {
                   </span>
                 )}
               </div>
+
+              {/* Type Filters */}
+              {result && !comparison && (
+                <div className="p-2 border-b border-border bg-muted/20 overflow-x-auto whitespace-nowrap flex gap-2">
+                  {Array.from(new Set([...result.packedItems, ...result.unpackedItems].map(i => i.name))).map(type => (
+                    <Button
+                      key={type}
+                      variant={highlightedType === type ? "default" : "outline"}
+                      size="sm"
+                      className="h-6 text-xs px-2"
+                      onClick={() => setHighlightedType(highlightedType === type ? null : type)}
+                    >
+                      {type}
+                    </Button>
+                  ))}
+                </div>
+              )}
+
               <div className="flex-1 min-h-0 bg-background/50">
                 {comparison ? (
                   <ScrollArea className="h-full">

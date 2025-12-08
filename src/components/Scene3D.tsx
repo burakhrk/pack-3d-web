@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Text, Environment, ContactShadows } from "@react-three/drei";
+import { useRef, useState, useEffect } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { OrbitControls, Text, Environment, ContactShadows, Edges } from "@react-three/drei";
 import { PackedItem, Container } from "@/types/packing";
 import * as THREE from "three";
 
@@ -8,6 +8,7 @@ interface Scene3DProps {
   container: Container;
   packedItems: PackedItem[];
   onItemHover: (item: PackedItem | null) => void;
+  highlightedType?: string | null;
 }
 
 function Box({
@@ -18,6 +19,8 @@ function Box({
   wireframe = false,
   onPointerOver,
   onPointerOut,
+  isHighlighted,
+  isDimmed,
 }: {
   position: [number, number, number];
   dimensions: [number, number, number];
@@ -26,6 +29,8 @@ function Box({
   wireframe?: boolean;
   onPointerOver?: () => void;
   onPointerOut?: () => void;
+  isHighlighted?: boolean;
+  isDimmed?: boolean;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
@@ -48,14 +53,15 @@ function Box({
       <boxGeometry args={dimensions} />
       <meshStandardMaterial
         color={color}
-        transparent={opacity < 1}
-        opacity={opacity}
+        transparent={opacity < 1 || isDimmed}
+        opacity={isDimmed ? 0.1 : opacity}
         wireframe={wireframe}
-        emissive={hovered ? color : "#000000"}
-        emissiveIntensity={hovered ? 0.5 : 0}
+        emissive={hovered && !isDimmed ? color : "#000000"}
+        emissiveIntensity={hovered && !isDimmed ? 0.5 : 0}
         roughness={0.4}
         metalness={0.1}
       />
+      {isHighlighted && <Edges color="black" threshold={15} />}
     </mesh>
   );
 }
@@ -117,45 +123,31 @@ function PackedBox({
   item,
   onHover,
   onHoverEnd,
+  isHighlighted,
+  isDimmed,
 }: {
   item: PackedItem;
   onHover: () => void;
   onHoverEnd: () => void;
+  isHighlighted?: boolean;
+  isDimmed?: boolean;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <mesh
+    <Box
       position={[
         item.position.x + item.width / 2,
         item.position.y + item.height / 2,
         item.position.z + item.depth / 2,
       ]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        setHovered(true);
-        onHover();
-      }}
-      onPointerOut={(e) => {
-        e.stopPropagation();
-        setHovered(false);
-        onHoverEnd();
-      }}
-    >
-      <boxGeometry args={[item.width, item.height, item.depth]} />
-      <meshStandardMaterial
-        color={item.color}
-        emissive={hovered ? item.color : "#000000"}
-        emissiveIntensity={hovered ? 0.5 : 0}
-        roughness={0.4}
-        metalness={0.1}
-      />
-    </mesh>
+      dimensions={[item.width, item.height, item.depth]}
+      color={item.color}
+      onPointerOver={onHover}
+      onPointerOut={onHoverEnd}
+      isHighlighted={isHighlighted}
+      isDimmed={isDimmed}
+    />
   );
 }
-
-import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
 
 function CameraUpdater({ container }: { container: Container }) {
   const { camera, controls } = useThree();
@@ -180,7 +172,7 @@ function CameraUpdater({ container }: { container: Container }) {
   return null;
 }
 
-export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
+export function Scene3D({ container, packedItems, onItemHover, highlightedType }: Scene3DProps) {
   const maxDimension = Math.max(container.width, container.height, container.depth);
   const cameraDistance = maxDimension * 2;
 
@@ -188,11 +180,10 @@ export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
     <div className="w-full h-full bg-visualization rounded-lg overflow-hidden shadow-lg border border-border relative">
       <Canvas
         shadows
-        // We set initial camera here, but CameraUpdater will handle updates
         camera={{
           position: [cameraDistance, cameraDistance, cameraDistance],
           fov: 50,
-          far: 100000 // Ensure we can see large containers
+          far: 100000
         }}
         className="bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-900 dark:to-slate-950"
       >
@@ -207,14 +198,21 @@ export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
         <group position={[-container.width / 2, -container.height / 2, -container.depth / 2]}>
           <ContainerWireframe container={container} />
           <AxisLabels container={container} />
-          {packedItems.map((item, idx) => (
-            <PackedBox
-              key={item.id}
-              item={item}
-              onHover={() => onItemHover(item)}
-              onHoverEnd={() => onItemHover(null)}
-            />
-          ))}
+          {packedItems.map((item, idx) => {
+            const isHighlighted = highlightedType ? item.name === highlightedType : false;
+            const isDimmed = highlightedType ? item.name !== highlightedType : false;
+
+            return (
+              <PackedBox
+                key={item.id}
+                item={item}
+                onHover={() => onItemHover(item)}
+                onHoverEnd={() => onItemHover(null)}
+                isHighlighted={isHighlighted}
+                isDimmed={isDimmed}
+              />
+            );
+          })}
         </group>
 
         <ContactShadows
