@@ -47,7 +47,7 @@ const Index = () => {
   const [geneticGenerations, setGeneticGenerations] = useState(30);
   const [mutationRate, setMutationRate] = useState(0.1);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("ffd");
-  const [highlightedType, setHighlightedType] = useState<string | null>(null);
+  const [highlightedTypes, setHighlightedTypes] = useState<string[]>([]);
 
   const handleAddItem = (itemOrItems: Item | Item[]) => {
     if (Array.isArray(itemOrItems)) {
@@ -282,7 +282,7 @@ const Index = () => {
                   container={result.container}
                   packedItems={result.packedItems}
                   onItemHover={setHoveredItem}
-                  highlightedType={highlightedType}
+                  highlightedTypes={highlightedTypes}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -327,10 +327,16 @@ const Index = () => {
                   {Array.from(new Set([...result.packedItems, ...result.unpackedItems].map(i => i.name))).map(type => (
                     <Button
                       key={type}
-                      variant={highlightedType === type ? "default" : "outline"}
+                      variant={highlightedTypes.includes(type) ? "default" : "outline"}
                       size="sm"
                       className="h-6 text-xs px-2"
-                      onClick={() => setHighlightedType(highlightedType === type ? null : type)}
+                      onClick={() => {
+                        setHighlightedTypes(prev =>
+                          prev.includes(type)
+                            ? prev.filter(t => t !== type)
+                            : [...prev, type]
+                        );
+                      }}
                     >
                       {type}
                     </Button>

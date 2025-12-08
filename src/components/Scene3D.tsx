@@ -8,7 +8,7 @@ interface Scene3DProps {
   container: Container;
   packedItems: PackedItem[];
   onItemHover: (item: PackedItem | null) => void;
-  highlightedType?: string | null;
+  highlightedTypes?: string[];
 }
 
 function Box({
@@ -172,7 +172,7 @@ function CameraUpdater({ container }: { container: Container }) {
   return null;
 }
 
-export function Scene3D({ container, packedItems, onItemHover, highlightedType }: Scene3DProps) {
+export function Scene3D({ container, packedItems, onItemHover, highlightedTypes = [] }: Scene3DProps) {
   const maxDimension = Math.max(container.width, container.height, container.depth);
   const cameraDistance = maxDimension * 2;
 
@@ -199,8 +199,9 @@ export function Scene3D({ container, packedItems, onItemHover, highlightedType }
           <ContainerWireframe container={container} />
           <AxisLabels container={container} />
           {packedItems.map((item, idx) => {
-            const isHighlighted = highlightedType ? item.name === highlightedType : false;
-            const isDimmed = highlightedType ? item.name !== highlightedType : false;
+            const hasHighlight = highlightedTypes.length > 0;
+            const isHighlighted = hasHighlight ? highlightedTypes.includes(item.name) : false;
+            const isDimmed = hasHighlight ? !isHighlighted : false;
 
             return (
               <PackedBox
