@@ -107,6 +107,15 @@ export function ItemPrefabs({ onLoadPrefab, currentItem }: ItemPrefabsProps) {
     toast.success(`Loaded prefab "${prefab.name}"`);
   };
 
+  const STANDARD_PREFABS: Omit<ItemPrefab, "id">[] = [
+    { name: "Small Parcel", width: 30, height: 20, depth: 20, weight: 2 },
+    { name: "Medium Box", width: 50, height: 40, depth: 40, weight: 10 },
+    { name: "Large Move Box", width: 60, height: 50, depth: 50, weight: 20 },
+    { name: "Euro Pallet", width: 120, height: 14, depth: 80, weight: 25 },
+    { name: "US Pallet", width: 122, height: 15, depth: 102, weight: 30 },
+    { name: "Shipping Drum", width: 60, height: 90, depth: 60, weight: 15 },
+  ];
+
   return (
     <Card className="flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-border flex-shrink-0">
@@ -114,7 +123,7 @@ export function ItemPrefabs({ onLoadPrefab, currentItem }: ItemPrefabsProps) {
           <BookmarkPlus className="h-5 w-5 text-primary" />
           <h3 className="font-semibold text-foreground">Box Prefabs</h3>
           <span className="ml-auto text-sm text-muted-foreground">
-            {prefabs.length} saved
+            {prefabs.length} user
           </span>
         </div>
       </div>
@@ -146,18 +155,17 @@ export function ItemPrefabs({ onLoadPrefab, currentItem }: ItemPrefabsProps) {
 
       {/* Prefabs List */}
       <ScrollArea className="flex-1 min-h-0">
-        <div className="p-4 space-y-2">
-          {prefabs.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <BookmarkPlus className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No prefabs saved</p>
-              <p className="text-xs">Save frequently used box sizes for quick access</p>
-            </div>
-          ) : (
-            prefabs.map((prefab) => (
+        <div className="p-4 space-y-4">
+
+          {/* STANDARD PREFABS SECTION */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Industry Standards
+            </h4>
+            {STANDARD_PREFABS.map((prefab, idx) => (
               <div
-                key={prefab.id}
-                className="p-3 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors"
+                key={`std-${idx}`}
+                className="p-3 rounded-lg border border-border bg-secondary/5 hover:border-primary/50 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
@@ -167,48 +175,87 @@ export function ItemPrefabs({ onLoadPrefab, currentItem }: ItemPrefabsProps) {
                       {prefab.weight && ` • ${prefab.weight}kg`}
                     </p>
                   </div>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleLoadPrefab(prefab)}
-                      className="text-primary hover:text-primary hover:bg-primary/10"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete prefab?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently delete the "{prefab.name}" prefab. This action
-                            cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeletePrefab(prefab.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onLoadPrefab(prefab)}
+                    className="text-primary hover:text-primary hover:bg-primary/10"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
-            ))
+            ))}
+          </div>
+
+          {/* USER PREFABS SECTION */}
+          {prefabs.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                My Saved
+              </h4>
+              {prefabs.map((prefab) => (
+                <div
+                  key={prefab.id}
+                  className="p-3 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{prefab.name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {prefab.width} × {prefab.height} × {prefab.depth}
+                        {prefab.weight && ` • ${prefab.weight}kg`}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleLoadPrefab(prefab)}
+                        className="text-primary hover:text-primary hover:bg-primary/10"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete prefab?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will permanently delete the "{prefab.name}" prefab. This action
+                              cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeletePrefab(prefab.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {prefabs.length === 0 && (
+            <div className="text-center py-4 text-muted-foreground border-t border-border mt-4 pt-4">
+              <p className="text-xs">No user prefabs saved</p>
+            </div>
           )}
         </div>
       </ScrollArea>
