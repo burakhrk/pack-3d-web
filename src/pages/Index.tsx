@@ -216,6 +216,7 @@ const Index = () => {
                         <SelectItem value="ffd">First-Fit Decreasing (Fast)</SelectItem>
                         <SelectItem value="bestfit">Best-Fit (Balanced)</SelectItem>
                         <SelectItem value="genetic">Genetic Algorithm (Slow, High Quality)</SelectItem>
+                        <SelectItem value="sa">Simulated Annealing (Experimental)</SelectItem>
                       </SelectContent>
                     </Select>
 

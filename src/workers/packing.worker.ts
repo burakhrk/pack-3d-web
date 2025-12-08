@@ -1,6 +1,7 @@
 import { PackingInput, PackingResult, ComparisonResult } from "@/types/packing";
 import { packItems } from "@/utils/packing-algorithm";
 import { packItemsBestFit } from "@/utils/best-fit-algorithm";
+import { packItemsSimulatedAnnealing } from "@/utils/simulated-annealing";
 import { packItemsGenetic } from "@/utils/genetic-algorithm";
 
 interface WorkerInput extends PackingInput {
@@ -88,14 +89,34 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
       } else if (algo === 'bestfit') {
         result = packItemsBestFit(container, items, res);
         self.postMessage({ success: true, progress: 100 });
+      } else if (algo === 'sa') {
+        // Reuse geneticGenerations as iterations count for SA
+        const iterations = config.geneticGenerations ? config.geneticGenerations * 10 : 1000;
+
+        result = packItemsSimulatedAnnealing(
+          container,
+          items,
+          {
+            initialTemperature: 1000,
+            coolingRate: 0.995,
+            iterations: iterations,
+            gridResolution: res
+          },
+          onProgress
+        );
       } else {
-        // Default FFD
+        // Default ffd
         result = packItems(container, items, res);
         self.postMessage({ success: true, progress: 100 });
       }
 
       // Add algorithm name to result
-      result.algorithmName = algo === 'genetic' ? 'Genetic Algorithm' : algo === 'bestfit' ? 'Best-Fit' : 'First-Fit Decreasing';
+      let algoName = 'First-Fit Decreasing';
+      if (algo === 'genetic') algoName = 'Genetic Algorithm';
+      if (algo === 'bestfit') algoName = 'Best-Fit';
+      if (algo === 'sa') algoName = 'Simulated Annealing';
+
+      result.algorithmName = algoName;
 
       self.postMessage({ success: true, result });
     }

@@ -57,7 +57,7 @@ export function AlgorithmSettings({
 
         <div className="space-y-2">
           <Label htmlFor="geneticGenerations" className="text-sm font-medium">
-            Genetic Algorithm Generations
+            GA Generations / SA Iterations
           </Label>
           <Input
             id="geneticGenerations"
