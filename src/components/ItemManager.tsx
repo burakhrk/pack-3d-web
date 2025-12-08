@@ -219,7 +219,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
         <div className="grid grid-cols-3 gap-3">
           <div className="space-y-1.5">
             <Label htmlFor="item-width" className="text-xs font-medium text-muted-foreground">
-              Width
+              Width (cm)
             </Label>
             <Input
               id="item-width"
@@ -235,7 +235,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
 
           <div className="space-y-1.5">
             <Label htmlFor="item-height" className="text-xs font-medium text-muted-foreground">
-              Height
+              Height (cm)
             </Label>
             <Input
               id="item-height"
@@ -251,7 +251,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
 
           <div className="space-y-1.5">
             <Label htmlFor="item-depth" className="text-xs font-medium text-muted-foreground">
-              Depth
+              Depth (cm)
             </Label>
             <Input
               id="item-depth"

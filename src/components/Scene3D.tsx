@@ -195,6 +195,32 @@ function AnimatedPackedBox({
   );
 }
 
+import { useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+
+function CameraUpdater({ container }: { container: Container }) {
+  const { camera, controls } = useThree();
+
+  useEffect(() => {
+    const maxDim = Math.max(container.width, container.height, container.depth);
+    const distance = maxDim * 2;
+    // Position camera to view the whole container
+    camera.position.set(distance, distance, distance);
+    camera.far = 100000;
+    camera.updateProjectionMatrix();
+
+    // @ts-ignore
+    if (controls) {
+      // @ts-ignore
+      controls.target.set(0, 0, 0);
+      // @ts-ignore
+      controls.update();
+    }
+  }, [container, camera, controls]);
+
+  return null;
+}
+
 export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
   const maxDimension = Math.max(container.width, container.height, container.depth);
   const cameraDistance = maxDimension * 2;
@@ -203,17 +229,21 @@ export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
     <div className="w-full h-full bg-visualization rounded-lg overflow-hidden shadow-lg border border-border relative">
       <Canvas
         shadows
+        // We set initial camera here, but CameraUpdater will handle updates
         camera={{
           position: [cameraDistance, cameraDistance, cameraDistance],
           fov: 50,
+          far: 100000 // Ensure we can see large containers
         }}
         className="bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-900 dark:to-slate-950"
       >
         <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} />
+        <spotLight position={[maxDimension, maxDimension * 2, maxDimension]} angle={0.3} penumbra={1} intensity={1} castShadow />
+        <pointLight position={[-maxDimension, -maxDimension, -maxDimension]} intensity={0.5} />
 
         <Environment preset="city" />
+
+        <CameraUpdater container={container} />
 
         <group position={[-container.width / 2, -container.height / 2, -container.depth / 2]}>
           <ContainerWireframe container={container} />
@@ -233,9 +263,9 @@ export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
         <ContactShadows
           position={[0, -container.height / 2 - 0.1, 0]}
           opacity={0.4}
-          scale={50}
+          scale={maxDimension * 2}
           blur={2.5}
-          far={10}
+          far={maxDimension}
         />
 
         <OrbitControls makeDefault enableDamping dampingFactor={0.05} rotateSpeed={0.5} zoomSpeed={0.8} />
