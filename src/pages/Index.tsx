@@ -9,6 +9,7 @@ import { StatsPanel } from "@/components/StatsPanel";
 import { AlgorithmSettings } from "@/components/AlgorithmSettings";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
 import { ComparisonPanel } from "@/components/ComparisonPanel";
+import { ScenarioSelector } from "@/components/ScenarioSelector";
 import { PackedItem, Container, Item, PackingInput } from "@/types/packing";
 import { Box as BoxIcon, PlayCircle, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -108,6 +109,8 @@ const Index = () => {
     }
   };
 
+  const [activeTab, setActiveTab] = useState("visual");
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -127,9 +130,6 @@ const Index = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {/* GitHub button removed */}
-            </div>
           </div>
         </div>
       </header>
@@ -139,9 +139,10 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Input & Stats */}
           <div className="space-y-6">
-            <Tabs defaultValue="visual" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="visual">Visual Editor</TabsTrigger>
+                <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="json">JSON Import</TabsTrigger>
               </TabsList>
@@ -194,6 +195,14 @@ const Index = () => {
                     {isProcessing ? "Comparing..." : "Compare All Algorithms"}
                   </Button>
                 </div>
+              </TabsContent>
+
+              <TabsContent value="scenarios" className="h-[600px] mt-4">
+                <ScenarioSelector onLoadScenario={(data) => {
+                  handleImportJson(data);
+                  setActiveTab("visual");
+                  toast.success("Scenario loaded! Switched to Visual Editor.");
+                }} />
               </TabsContent>
 
               <TabsContent value="overview" className="space-y-4 mt-4">

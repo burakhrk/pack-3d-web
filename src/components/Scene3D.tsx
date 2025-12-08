@@ -113,34 +113,85 @@ function AxisLabels({ container }: { container: Container }) {
   );
 }
 
-function PackedBox({
+import { useFrame } from "@react-three/fiber";
+
+function AnimatedPackedBox({
   item,
+  index,
+  totalItems,
   onHover,
   onHoverEnd,
 }: {
   item: PackedItem;
+  index: number;
+  totalItems: number;
   onHover: () => void;
   onHoverEnd: () => void;
 }) {
-  const position: [number, number, number] = [
-    item.position.x + item.width / 2,
-    item.position.y + item.height / 2,
-    item.position.z + item.depth / 2,
-  ];
-  const dimensions: [number, number, number] = [
-    item.width,
-    item.height,
-    item.depth,
-  ];
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
+  const [mountTime] = useState(() => performance.now());
+
+  useFrame(() => {
+    if (!meshRef.current) return;
+
+    const now = performance.now();
+    const elapsed = now - mountTime;
+
+    // Animation constants
+    const TOTAL_DURATION = 2000;
+    const FALL_DURATION = 500;
+    const START_HEIGHT_OFFSET = 50; // Start high up
+
+    // Calculate delay ensuring last item finishes exactly at 2 seconds (if possible)
+    const maxStartDelay = Math.max(0, TOTAL_DURATION - FALL_DURATION);
+    const delayPerItem = totalItems > 1 ? maxStartDelay / (totalItems - 1) : 0;
+    const myDelay = index * delayPerItem;
+
+    if (elapsed < myDelay) {
+      meshRef.current.visible = false;
+    } else {
+      meshRef.current.visible = true;
+      const animationProgress = Math.min(1, (elapsed - myDelay) / FALL_DURATION);
+
+      // Cubic ease out
+      const ease = 1 - Math.pow(1 - animationProgress, 3);
+
+      const targetY = item.position.y + item.height / 2;
+      const startY = targetY + START_HEIGHT_OFFSET;
+      const currentY = startY + (targetY - startY) * ease;
+
+      meshRef.current.position.set(
+        item.position.x + item.width / 2,
+        currentY,
+        item.position.z + item.depth / 2
+      );
+    }
+  });
 
   return (
-    <Box
-      position={position}
-      dimensions={dimensions}
-      color={item.color}
-      onPointerOver={onHover}
-      onPointerOut={onHoverEnd}
-    />
+    <mesh
+      ref={meshRef}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        onHover();
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        setHovered(false);
+        onHoverEnd();
+      }}
+    >
+      <boxGeometry args={[item.width, item.height, item.depth]} />
+      <meshStandardMaterial
+        color={item.color}
+        emissive={hovered ? item.color : "#000000"}
+        emissiveIntensity={hovered ? 0.5 : 0}
+        roughness={0.4}
+        metalness={0.1}
+      />
+    </mesh>
   );
 }
 
@@ -168,9 +219,11 @@ export function Scene3D({ container, packedItems, onItemHover }: Scene3DProps) {
           <ContainerWireframe container={container} />
           <AxisLabels container={container} />
           {packedItems.map((item, idx) => (
-            <PackedBox
-              key={`${item.id}-${idx}`}
+            <AnimatedPackedBox
+              key={`${item.id}-${idx}-animated`}
               item={item}
+              index={idx}
+              totalItems={packedItems.length}
               onHover={() => onItemHover(item)}
               onHoverEnd={() => onItemHover(null)}
             />
