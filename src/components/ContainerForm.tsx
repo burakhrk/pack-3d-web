@@ -20,9 +20,13 @@ interface ContainerFormProps {
 
 const PRESETS = {
   custom: { name: "Custom Size", width: 10, height: 10, depth: 10 },
+  "sprinter": { name: "Sprinter Van", width: 427, height: 173, depth: 191 },
+  "truck10": { name: "10ft Box Truck", width: 305, height: 190, depth: 185 },
+  "truck16": { name: "16ft Box Truck", width: 488, height: 231, depth: 213 },
+  "truck24": { name: "24ft Box Truck", width: 732, height: 244, depth: 244 },
   "20ft": { name: "20ft Container (Standard)", width: 590, height: 239, depth: 235 },
   "40ft": { name: "40ft Container (Standard)", width: 1203, height: 239, depth: 235 },
-  "truck": { name: "Delivery Truck", width: 420, height: 220, depth: 210 },
+  "semi": { name: "53ft Semi Trailer", width: 1615, height: 249, depth: 270 },
   "pallet": { name: "Euro Pallet Load", width: 120, height: 180, depth: 80 },
 };
 
@@ -67,6 +71,26 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="custom">Custom Size</SelectItem>
+              <SelectItem value="sprinter">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" /> Sprinter Van
+                </div>
+              </SelectItem>
+              <SelectItem value="truck10">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" /> 10ft Box Truck
+                </div>
+              </SelectItem>
+              <SelectItem value="truck16">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" /> 16ft Box Truck
+                </div>
+              </SelectItem>
+              <SelectItem value="truck24">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" /> 24ft Box Truck
+                </div>
+              </SelectItem>
               <SelectItem value="20ft">
                 <div className="flex items-center gap-2">
                   <ContainerIcon className="h-4 w-4" /> 20ft ISO Container
@@ -77,9 +101,9 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
                   <ContainerIcon className="h-4 w-4" /> 40ft ISO Container
                 </div>
               </SelectItem>
-              <SelectItem value="truck">
+              <SelectItem value="semi">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> Delivery Truck
+                  <Truck className="h-4 w-4" /> 53ft Semi Trailer
                 </div>
               </SelectItem>
               <SelectItem value="pallet">
