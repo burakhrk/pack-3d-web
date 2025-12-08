@@ -8,35 +8,36 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    /* Deep Blue Theme Light Mode */
+    --background: 210 40% 98%; /* Very light blue-grey */
+    --foreground: 222 47% 11%; /* Deep Navy */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 222 47% 11%; /* Deep Blue as Primary */
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 215 20% 92%;
-    --secondary-foreground: 215 25% 15%;
+    --secondary: 24 95% 53%; /* Vibrant Orange */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 215 20% 92%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 217 91% 60%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222 47% 11%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly more rounded */
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -47,66 +48,46 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Custom design tokens */
-    --visualization-bg: 212 20% 96%;
-    --panel-bg: 0 0% 100%;
-    --success: 142 76% 36%;
+    /* Custom tokens */
+    --success: 142 71% 45%; /* Emerald Green */
     --warning: 38 92% 50%;
-    --info: 217 91% 60%;
+    --info: 221 83% 53%;
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    
-    /* Transitions */
-    --transition-base: all 0.2s ease-in-out;
+    --visualization-bg: 210 40% 95%; /* Slightly darker than bg for contrast */
   }
 
   .dark {
-    --background: 215 28% 12%;
-    --foreground: 210 20% 95%;
+    --background: 222 47% 11%; /* Deep Blue Background */
+    --foreground: 210 40% 98%;
 
-    --card: 215 25% 15%;
-    --card-foreground: 210 20% 95%;
+    --card: 217 33% 17%; /* Lighter Blue for cards */
+    --card-foreground: 210 40% 98%;
 
-    --popover: 215 25% 15%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 210 40% 98%; /* White/Light text on dark */
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 215 25% 20%;
-    --secondary-foreground: 210 20% 95%;
+    --secondary: 24 95% 53%; /* Orange stays vibrant */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 215 25% 20%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 215 25% 22%;
-    --input: 215 25% 22%;
-    --ring: 217 91% 60%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Custom design tokens */
-    --visualization-bg: 215 28% 14%;
-    --panel-bg: 215 25% 15%;
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
-    --info: 217 91% 60%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 212.7 26.8% 83.9%;
+    
+    --success: 142 71% 45%;
+    
+    --visualization-bg: 220 40% 8%; /* Very dark for 3D bg */
   }
 }
 

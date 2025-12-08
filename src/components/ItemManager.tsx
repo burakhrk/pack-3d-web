@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,20 +42,33 @@ interface ItemManagerProps {
 }
 
 export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onItemFormChange, onLoadPrefab }: ItemManagerProps) {
+  // Use strings for inputs to handle "empty" and "decimal" states correctly
   const [newItem, setNewItem] = useState({
     name: "",
-    width: 1,
-    height: 1,
-    depth: 1,
-    quantity: 1,
-    weight: 0,
+    width: "1",
+    height: "1",
+    depth: "1",
+    quantity: "1",
+    weight: "0",
   });
 
-  // Notify parent when item form changes
+  // Notify parent when item form changes (converting strings to numbers)
+  const notifyParent = (state: typeof newItem) => {
+    if (onItemFormChange) {
+      onItemFormChange({
+        name: state.name,
+        width: parseFloat(state.width) || 0,
+        height: parseFloat(state.height) || 0,
+        depth: parseFloat(state.depth) || 0,
+        weight: parseFloat(state.weight) || 0,
+      });
+    }
+  };
+
   const updateNewItem = (updates: Partial<typeof newItem>) => {
     const updated = { ...newItem, ...updates };
     setNewItem(updated);
-    onItemFormChange?.(updated);
+    notifyParent(updated);
   };
 
   // Load prefab into form
@@ -68,18 +81,18 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
   }) => {
     const updated = {
       name: prefab.name,
-      width: prefab.width,
-      height: prefab.height,
-      depth: prefab.depth,
-      weight: prefab.weight || 0,
-      quantity: 1,
+      width: prefab.width.toString(),
+      height: prefab.height.toString(),
+      depth: prefab.depth.toString(),
+      weight: (prefab.weight || 0).toString(),
+      quantity: "1",
     };
     setNewItem(updated);
-    onItemFormChange?.(updated);
+    notifyParent(updated);
   };
 
   // Expose load prefab function on mount
-  React.useEffect(() => {
+  useEffect(() => {
     if (onLoadPrefab) {
       onLoadPrefab(loadPrefab);
     }
@@ -91,12 +104,18 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
       return;
     }
 
-    if (newItem.width <= 0 || newItem.height <= 0 || newItem.depth <= 0) {
+    const width = parseFloat(newItem.width);
+    const height = parseFloat(newItem.height);
+    const depth = parseFloat(newItem.depth);
+    const quantity = parseInt(newItem.quantity);
+    const weight = parseFloat(newItem.weight);
+
+    if (isNaN(width) || width <= 0 || isNaN(height) || height <= 0 || isNaN(depth) || depth <= 0) {
       toast.error("Dimensions must be greater than 0");
       return;
     }
 
-    if (newItem.quantity <= 0) {
+    if (isNaN(quantity) || quantity <= 0) {
       toast.error("Quantity must be at least 1");
       return;
     }
@@ -105,14 +124,14 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
     const itemsToAdd: Item[] = [];
     const timestamp = Date.now();
 
-    for (let i = 0; i < newItem.quantity; i++) {
+    for (let i = 0; i < quantity; i++) {
       const item: Item = {
         id: `item-${timestamp}-${i}-${Math.random().toString(36).substr(2, 9)}`,
-        name: newItem.quantity > 1 ? `${newItem.name.trim()} #${i + 1}` : newItem.name.trim(),
-        width: newItem.width,
-        height: newItem.height,
-        depth: newItem.depth,
-        weight: newItem.weight > 0 ? newItem.weight : undefined,
+        name: quantity > 1 ? `${newItem.name.trim()} #${i + 1}` : newItem.name.trim(),
+        width,
+        height,
+        depth,
+        weight: weight > 0 ? weight : undefined,
       };
       itemsToAdd.push(item);
     }
@@ -120,9 +139,10 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
     // Add all items at once
     onAdd(itemsToAdd);
 
-    const itemsText = newItem.quantity === 1 ? "item" : "items";
-    toast.success(`Added ${newItem.quantity} ${itemsText}`);
-    setNewItem({ name: "", width: 1, height: 1, depth: 1, quantity: 1, weight: 0 });
+    const itemsText = quantity === 1 ? "item" : "items";
+    toast.success(`Added ${quantity} ${itemsText}`);
+    // Reset form to defaults
+    setNewItem({ name: "", width: "1", height: "1", depth: "1", quantity: "1", weight: "0" });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -132,32 +152,33 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
   };
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden">
-      <div className="p-4 border-b border-border flex-shrink-0">
+    <Card className="flex flex-col h-full overflow-hidden border-border/50 shadow-sm">
+      <div className="p-4 border-b border-border/50 flex-shrink-0 bg-secondary/5">
         <div className="flex items-center gap-2">
-          <Package className="h-5 w-5 text-primary" />
+          <div className="p-1.5 bg-secondary/10 rounded-md">
+            <Package className="h-4 w-4 text-secondary" />
+          </div>
           <h3 className="font-semibold text-foreground">Manage Items</h3>
-          <span className="ml-auto text-sm text-muted-foreground">
-            {items.length} item{items.length !== 1 ? "s" : ""}
+          <span className="ml-auto text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+            {items.length}
           </span>
           {items.length > 0 && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   disabled={disabled}
-                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-1"
                 >
-                  <Trash className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Clear all items?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will remove all {items.length} item{items.length !== 1 ? "s" : ""} from the
-                    list. This action cannot be undone.
+                    This will remove all {items.length} items from the list. This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -179,149 +200,151 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
       </div>
 
       {/* Add Item Form */}
-      <div className="p-4 border-b border-border bg-muted/30 flex-shrink-0">
+      <div className="p-4 border-b border-border/50 bg-card/50 flex-shrink-0 space-y-4">
         <div className="space-y-2">
-          <div className="space-y-2">
-            <Label htmlFor="item-name" className="text-xs text-muted-foreground">
-              Item Name
+          <Label htmlFor="item-name" className="text-xs font-medium text-muted-foreground">
+            Item Name
+          </Label>
+          <Input
+            id="item-name"
+            placeholder="e.g., Box A"
+            value={newItem.name}
+            onChange={(e) => updateNewItem({ name: e.target.value })}
+            onKeyPress={handleKeyPress}
+            disabled={disabled}
+            className="h-8"
+          />
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="item-width" className="text-xs font-medium text-muted-foreground">
+              Width
             </Label>
             <Input
-              id="item-name"
-              placeholder="e.g., Box A"
-              value={newItem.name}
-              onChange={(e) => updateNewItem({ name: e.target.value })}
-              onKeyPress={handleKeyPress}
+              id="item-width"
+              type="number"
+              min="0.1"
+              step="0.5"
+              value={newItem.width}
+              onChange={(e) => updateNewItem({ width: e.target.value })}
               disabled={disabled}
+              className="h-8"
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            <div className="space-y-1">
-              <Label htmlFor="item-width" className="text-xs text-muted-foreground">
-                Width
-              </Label>
-              <Input
-                id="item-width"
-                type="number"
-                min="0.1"
-                step="0.5"
-                value={newItem.width}
-                onChange={(e) =>
-                  updateNewItem({ width: parseFloat(e.target.value) || 0 })
-                }
-                disabled={disabled}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="item-height" className="text-xs text-muted-foreground">
-                Height
-              </Label>
-              <Input
-                id="item-height"
-                type="number"
-                min="0.1"
-                step="0.5"
-                value={newItem.height}
-                onChange={(e) =>
-                  updateNewItem({ height: parseFloat(e.target.value) || 0 })
-                }
-                disabled={disabled}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="item-depth" className="text-xs text-muted-foreground">
-                Depth
-              </Label>
-              <Input
-                id="item-depth"
-                type="number"
-                min="0.1"
-                step="0.5"
-                value={newItem.depth}
-                onChange={(e) =>
-                  updateNewItem({ depth: parseFloat(e.target.value) || 0 })
-                }
-                disabled={disabled}
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="item-height" className="text-xs font-medium text-muted-foreground">
+              Height
+            </Label>
+            <Input
+              id="item-height"
+              type="number"
+              min="0.1"
+              step="0.5"
+              value={newItem.height}
+              onChange={(e) => updateNewItem({ height: e.target.value })}
+              disabled={disabled}
+              className="h-8"
+            />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <Label htmlFor="item-weight" className="text-xs text-muted-foreground">
-                Weight (kg)
-              </Label>
-              <Input
-                id="item-weight"
-                type="number"
-                min="0"
-                step="0.1"
-                value={newItem.weight}
-                onChange={(e) =>
-                  updateNewItem({ weight: parseFloat(e.target.value) || 0 })
-                }
-                disabled={disabled}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="item-quantity" className="text-xs text-muted-foreground">
-                Quantity
-              </Label>
-              <Input
-                id="item-quantity"
-                type="number"
-                min="1"
-                step="1"
-                value={newItem.quantity}
-                onChange={(e) =>
-                  updateNewItem({ quantity: parseInt(e.target.value) || 1 })
-                }
-                disabled={disabled}
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="item-depth" className="text-xs font-medium text-muted-foreground">
+              Depth
+            </Label>
+            <Input
+              id="item-depth"
+              type="number"
+              min="0.1"
+              step="0.5"
+              value={newItem.depth}
+              onChange={(e) => updateNewItem({ depth: e.target.value })}
+              disabled={disabled}
+              className="h-8"
+            />
           </div>
-
-          <Button onClick={handleAdd} className="w-full" size="sm" disabled={disabled}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Item
-          </Button>
         </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="item-weight" className="text-xs font-medium text-muted-foreground">
+              Weight (kg)
+            </Label>
+            <Input
+              id="item-weight"
+              type="number"
+              min="0"
+              step="0.1"
+              value={newItem.weight}
+              onChange={(e) => updateNewItem({ weight: e.target.value })}
+              disabled={disabled}
+              className="h-8"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="item-quantity" className="text-xs font-medium text-muted-foreground">
+              Quantity
+            </Label>
+            <Input
+              id="item-quantity"
+              type="number"
+              min="1"
+              step="1"
+              value={newItem.quantity}
+              onChange={(e) => updateNewItem({ quantity: e.target.value })}
+              disabled={disabled}
+              className="h-8"
+            />
+          </div>
+        </div>
+
+        <Button onClick={handleAdd} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="sm" disabled={disabled}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Item
+        </Button>
       </div>
 
       {/* Items List */}
-      <ScrollArea className="flex-1 min-h-0">
-        <div className="p-4 space-y-2">
+      <ScrollArea className="flex-1 min-h-0 bg-muted/10">
+        <div className="p-3 space-y-2">
           {items.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No items yet</p>
-              <p className="text-xs">Add items to pack in the container</p>
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+              <div className="p-3 bg-muted rounded-full mb-3">
+                <Package className="h-6 w-6 opacity-50" />
+              </div>
+              <p className="text-sm font-medium">No items yet</p>
+              <p className="text-xs opacity-70">Add items to start packing</p>
             </div>
           ) : (
             items.map((item) => (
               <div
                 key={item.id}
-                className="p-3 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors"
+                className="group p-3 rounded-lg border border-border/60 bg-card hover:border-primary/50 transition-all hover:shadow-sm"
               >
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{item.name}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {item.width} × {item.height} × {item.depth}
-                      {item.weight && ` • ${item.weight}kg`}
-                    </p>
+                    <p className="font-medium text-sm truncate text-foreground">{item.name}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs font-mono bg-secondary/10 text-secondary-foreground px-1.5 py-0.5 rounded">
+                        {item.width} × {item.height} × {item.depth}
+                      </span>
+                      {item.weight && (
+                        <span className="text-xs text-muted-foreground">
+                          {item.weight}kg
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="icon"
                     onClick={() => onRemove(item.id)}
                     disabled={disabled}
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </div>

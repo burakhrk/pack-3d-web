@@ -17,15 +17,15 @@ export function usePackingWorker() {
 
     // Handle worker messages
     workerRef.current.onmessage = (
-      event: MessageEvent<{ 
-        success: boolean; 
-        result?: PackingResult; 
+      event: MessageEvent<{
+        success: boolean;
+        result?: PackingResult;
         comparison?: ComparisonResult;
-        error?: string 
+        error?: string
       }>
     ) => {
       setIsProcessing(false);
-      
+
       if (event.data.success) {
         if (event.data.result) {
           setResult(event.data.result);
@@ -68,12 +68,12 @@ export function usePackingWorker() {
     setIsProcessing(true);
     setResult(null);
     setComparison(null);
-    workerRef.current.postMessage({ 
-      ...input, 
+    workerRef.current.postMessage({
+      ...input,
       mode: 'compare',
-      algorithms 
+      algorithms
     });
   }, []);
 
-  return { runPacking, runComparison, isProcessing, result, comparison };
+  return { runPacking, runComparison, isProcessing, result, comparison, setResult };
 }

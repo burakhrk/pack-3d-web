@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const Index = () => {
-  const { runPacking, runComparison, isProcessing, result, comparison } = usePackingWorker();
+  const { runPacking, runComparison, isProcessing, result, comparison, setResult } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
   const [currentItemForm, setCurrentItemForm] = useState({
     name: "",
@@ -111,19 +111,24 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <BoxIcon className="h-6 w-6 text-primary" />
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary rounded-lg shadow-sm">
+                <BoxIcon className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground tracking-tight">
+                  3D Packer
+                </h1>
+                <p className="text-xs text-muted-foreground font-medium">
+                  Advanced Bin Packing Algorithms
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                3D Container Packing Visualizer
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                First-Fit Decreasing Algorithm with Interactive 3D View
-              </p>
+            <div className="flex items-center gap-2">
+              {/* GitHub button removed */}
             </div>
           </div>
         </div>
@@ -193,7 +198,11 @@ const Index = () => {
 
               <TabsContent value="overview" className="space-y-4 mt-4">
                 {comparison ? (
-                  <ComparisonPanel comparison={comparison} />
+                  <ComparisonPanel
+                    comparison={comparison}
+                    onShowResult={setResult}
+                    selectedAlgorithm={result?.algorithmName}
+                  />
                 ) : (
                   <>
                     <div className="h-[400px]">
