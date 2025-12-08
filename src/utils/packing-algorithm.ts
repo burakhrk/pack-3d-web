@@ -6,7 +6,8 @@ import {
   calculateUtilization,
 } from "./collision";
 
-// Generate vibrant colors for visualization
+import { getAllOrientations } from "./rotation";
+
 const ITEM_COLORS = [
   "#3B82F6", // blue
   "#10B981", // green
@@ -39,12 +40,12 @@ export function packItems(container: Container, items: Item[], gridResolution: n
   // Try to pack each item
   for (let i = 0; i < sortedItems.length; i++) {
     const item = sortedItems[i];
-    const position = findFirstFitPosition(item, container, packedItems, gridResolution);
+    const result = findFirstFitPosition(item, container, packedItems, gridResolution);
 
-    if (position) {
+    if (result) {
       packedItems.push({
-        ...item,
-        position,
+        ...result.item, // Use dimensions from the fitted permutation
+        position: result.position,
         color: ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
@@ -72,27 +73,31 @@ export function packItems(container: Container, items: Item[], gridResolution: n
 
 /**
  * Find the first position where an item can fit without collision
- * Using a grid-based search starting from bottom-left-front corner
+ * Checks all 6 possible orientations
  */
 function findFirstFitPosition(
   item: Item,
   container: Container,
   packedItems: PackedItem[],
   gridResolution: number = 0.5
-): { x: number; y: number; z: number } | null {
-  const step = gridResolution; // Grid resolution for position searching
+): { position: { x: number; y: number; z: number }; item: Item } | null {
+  const step = gridResolution;
+  const orientations = getAllOrientations(item);
 
-  // Start from bottom (y=0), try positions layer by layer
-  for (let y = 0; y <= container.height - item.height; y += step) {
-    for (let z = 0; z <= container.depth - item.depth; z += step) {
-      for (let x = 0; x <= container.width - item.width; x += step) {
-        const position = { x, y, z };
+  // Try each orientation
+  for (const orientation of orientations) {
+    // Start from bottom (y=0), try positions layer by layer
+    for (let y = 0; y <= container.height - orientation.height; y += step) {
+      for (let z = 0; z <= container.depth - orientation.depth; z += step) {
+        for (let x = 0; x <= container.width - orientation.width; x += step) {
+          const position = { x, y, z };
 
-        if (
-          fitsInContainer(item, position, container) &&
-          !hasCollision(item, position, packedItems)
-        ) {
-          return position;
+          if (
+            fitsInContainer(orientation, position, container) &&
+            !hasCollision(orientation, position, packedItems)
+          ) {
+            return { position, item: orientation };
+          }
         }
       }
     }

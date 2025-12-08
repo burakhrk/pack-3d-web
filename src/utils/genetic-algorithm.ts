@@ -5,6 +5,7 @@ import {
   calculateVolume,
   calculateUtilization,
 } from "./collision";
+import { getAllOrientations } from "./rotation";
 
 const ITEM_COLORS = [
   "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
@@ -21,7 +22,7 @@ interface Chromosome {
  * Uses evolution to find optimal item ordering
  */
 export function packItemsGenetic(
-  container: Container, 
+  container: Container,
   items: Item[],
   gridResolution: number = 0.5,
   generations: number = 30,
@@ -44,13 +45,13 @@ export function packItemsGenetic(
   // Get best solution
   population.sort((a, b) => b.fitness - a.fitness);
   const bestSequence = population[0].sequence;
-  
+
   return packWithSequence(container, items, bestSequence, gridResolution);
 }
 
 function initializePopulation(itemCount: number, populationSize: number): Chromosome[] {
   const population: Chromosome[] = [];
-  
+
   for (let i = 0; i < populationSize; i++) {
     const sequence = Array.from({ length: itemCount }, (_, idx) => idx);
     // Shuffle
@@ -60,7 +61,7 @@ function initializePopulation(itemCount: number, populationSize: number): Chromo
     }
     population.push({ sequence, fitness: 0 });
   }
-  
+
   return population;
 }
 
@@ -71,26 +72,26 @@ function evaluateFitness(chromosome: Chromosome, items: Item[], container: Conta
 
 function evolvePopulation(population: Chromosome[], mutationRate: number): Chromosome[] {
   const newPopulation: Chromosome[] = [];
-  
+
   // Keep best 20%
   population.sort((a, b) => b.fitness - a.fitness);
   const eliteCount = Math.floor(population.length * 0.2);
   newPopulation.push(...population.slice(0, eliteCount));
-  
+
   // Crossover and mutation
   while (newPopulation.length < population.length) {
     const parent1 = selectParent(population);
     const parent2 = selectParent(population);
-    
+
     let child = crossover(parent1, parent2);
-    
+
     if (Math.random() < mutationRate) {
       child = mutate(child);
     }
-    
+
     newPopulation.push(child);
   }
-  
+
   return newPopulation;
 }
 
@@ -98,29 +99,29 @@ function selectParent(population: Chromosome[]): Chromosome {
   // Tournament selection
   const tournamentSize = 3;
   let best = population[Math.floor(Math.random() * population.length)];
-  
+
   for (let i = 1; i < tournamentSize; i++) {
     const candidate = population[Math.floor(Math.random() * population.length)];
     if (candidate.fitness > best.fitness) {
       best = candidate;
     }
   }
-  
+
   return best;
 }
 
 function crossover(parent1: Chromosome, parent2: Chromosome): Chromosome {
   const length = parent1.sequence.length;
   const point = Math.floor(Math.random() * length);
-  
+
   const childSequence = [...parent1.sequence.slice(0, point)];
-  
+
   parent2.sequence.forEach(gene => {
     if (!childSequence.includes(gene)) {
       childSequence.push(gene);
     }
   });
-  
+
   return { sequence: childSequence, fitness: 0 };
 }
 
@@ -128,9 +129,9 @@ function mutate(chromosome: Chromosome): Chromosome {
   const sequence = [...chromosome.sequence];
   const i = Math.floor(Math.random() * sequence.length);
   const j = Math.floor(Math.random() * sequence.length);
-  
+
   [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
-  
+
   return { sequence, fitness: 0 };
 }
 
@@ -142,22 +143,28 @@ function packWithSequence(container: Container, items: Item[], sequence: number[
   sequence.forEach((idx, colorIdx) => {
     const item = items[idx];
     let placed = false;
+    const orientations = getAllOrientations(item);
 
-    for (let y = 0; y <= container.height - item.height && !placed; y += step) {
-      for (let z = 0; z <= container.depth - item.depth && !placed; z += step) {
-        for (let x = 0; x <= container.width - item.width && !placed; x += step) {
-          const position = { x, y, z };
+    // Try each orientation
+    for (const orientation of orientations) {
+      if (placed) break; // Skip other orientations if already placed
 
-          if (
-            fitsInContainer(item, position, container) &&
-            !hasCollision(item, position, packedItems)
-          ) {
-            packedItems.push({
-              ...item,
-              position,
-              color: ITEM_COLORS[colorIdx % ITEM_COLORS.length],
-            });
-            placed = true;
+      for (let y = 0; y <= container.height - orientation.height && !placed; y += step) {
+        for (let z = 0; z <= container.depth - orientation.depth && !placed; z += step) {
+          for (let x = 0; x <= container.width - orientation.width && !placed; x += step) {
+            const position = { x, y, z };
+
+            if (
+              fitsInContainer(orientation, position, container) &&
+              !hasCollision(orientation, position, packedItems)
+            ) {
+              packedItems.push({
+                ...orientation,
+                position,
+                color: ITEM_COLORS[colorIdx % ITEM_COLORS.length],
+              });
+              placed = true;
+            }
           }
         }
       }

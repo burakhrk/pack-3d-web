@@ -104,7 +104,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
     // Create all items at once based on quantity
     const itemsToAdd: Item[] = [];
     const timestamp = Date.now();
-    
+
     for (let i = 0; i < newItem.quantity; i++) {
       const item: Item = {
         id: `item-${timestamp}-${i}-${Math.random().toString(36).substr(2, 9)}`,

@@ -27,7 +27,7 @@ const Index = () => {
     weight: 0,
   });
   const loadPrefabRef = useRef<((prefab: any) => void) | null>(null);
-  
+
   // State for container and items
   const [container, setContainer] = useState<Container>({
     id: "container-1",
@@ -35,7 +35,7 @@ const Index = () => {
     height: 10,
     depth: 10,
   });
-  
+
   const [items, setItems] = useState<Item[]>([
     { id: "item-1", name: "Box A", width: 3, height: 3, depth: 3 },
     { id: "item-2", name: "Box B", width: 2, height: 4, depth: 2 },
@@ -80,10 +80,10 @@ const Index = () => {
       toast.error("Please add at least one item to pack");
       return;
     }
-    runPacking({ 
-      container, 
-      items, 
-      parameters: { gridResolution, geneticGenerations, mutationRate } 
+    runPacking({
+      container,
+      items,
+      parameters: { gridResolution, geneticGenerations, mutationRate }
     });
   };
 
@@ -93,11 +93,11 @@ const Index = () => {
       return;
     }
     runComparison(
-      { 
-        container, 
-        items, 
-        parameters: { gridResolution, geneticGenerations, mutationRate } 
-      }, 
+      {
+        container,
+        items,
+        parameters: { gridResolution, geneticGenerations, mutationRate }
+      },
       ['ffd', 'bestfit', 'genetic']
     );
   };
@@ -140,7 +140,7 @@ const Index = () => {
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="json">JSON Import</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="visual" className="space-y-6 mt-4">
                 <ContainerForm container={container} onUpdate={setContainer} />
                 <ItemPrefabs
@@ -217,7 +217,7 @@ const Index = () => {
                   </>
                 )}
               </TabsContent>
-              
+
               <TabsContent value="json" className="mt-4">
                 <JsonInput
                   onImport={handleImportJson}

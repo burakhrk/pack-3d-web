@@ -6,6 +6,8 @@ import {
   calculateUtilization,
 } from "./collision";
 
+import { getAllOrientations } from "./rotation";
+
 const ITEM_COLORS = [
   "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
   "#EC4899", "#14B8A6", "#F97316", "#6366F1", "#84CC16",
@@ -26,12 +28,12 @@ export function packItemsBestFit(container: Container, items: Item[], gridResolu
 
   for (let i = 0; i < sortedItems.length; i++) {
     const item = sortedItems[i];
-    const position = findBestFitPosition(item, container, packedItems, gridResolution);
+    const result = findBestFitPosition(item, container, packedItems, gridResolution);
 
-    if (position) {
+    if (result) {
       packedItems.push({
-        ...item,
-        position,
+        ...result.item, // Use rotated dimensions
+        position: result.position,
         color: ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
@@ -58,39 +60,44 @@ export function packItemsBestFit(container: Container, items: Item[], gridResolu
 
 /**
  * Find position that minimizes wasted space (best fit)
+ * Checks all 6 orientations
  */
 function findBestFitPosition(
   item: Item,
   container: Container,
   packedItems: PackedItem[],
   gridResolution: number = 0.5
-): { x: number; y: number; z: number } | null {
+): { position: { x: number; y: number; z: number }; item: Item } | null {
   const step = gridResolution;
-  let bestPosition: { x: number; y: number; z: number } | null = null;
+  let bestFit: { position: { x: number; y: number; z: number }; item: Item } | null = null;
   let minWaste = Infinity;
 
-  for (let y = 0; y <= container.height - item.height; y += step) {
-    for (let z = 0; z <= container.depth - item.depth; z += step) {
-      for (let x = 0; x <= container.width - item.width; x += step) {
-        const position = { x, y, z };
+  const orientations = getAllOrientations(item);
 
-        if (
-          fitsInContainer(item, position, container) &&
-          !hasCollision(item, position, packedItems)
-        ) {
-          // Calculate wasted space (distance from edges and other items)
-          const waste = calculateWaste(item, position, container, packedItems);
-          
-          if (waste < minWaste) {
-            minWaste = waste;
-            bestPosition = position;
+  for (const orientation of orientations) {
+    for (let y = 0; y <= container.height - orientation.height; y += step) {
+      for (let z = 0; z <= container.depth - orientation.depth; z += step) {
+        for (let x = 0; x <= container.width - orientation.width; x += step) {
+          const position = { x, y, z };
+
+          if (
+            fitsInContainer(orientation, position, container) &&
+            !hasCollision(orientation, position, packedItems)
+          ) {
+            // Calculate wasted space (distance from edges and other items)
+            const waste = calculateWaste(orientation, position, container, packedItems);
+
+            if (waste < minWaste) {
+              minWaste = waste;
+              bestFit = { position, item: orientation };
+            }
           }
         }
       }
     }
   }
 
-  return bestPosition;
+  return bestFit;
 }
 
 /**
