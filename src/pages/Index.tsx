@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { JsonInput } from "@/components/JsonInput";
 import { ContainerForm } from "@/components/ContainerForm";
 import { ItemManager } from "@/components/ItemManager";
@@ -19,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { calculateVolume } from "@/utils/collision";
 
 const Index = () => {
   const { runPacking, runComparison, isProcessing, progress, result, comparison, setResult } = usePackingWorker();
@@ -100,15 +101,26 @@ const Index = () => {
       toast.error("Please add at least one item to pack");
       return;
     }
+
+    // Performance warning
+    if (gridResolution > 2 && calculateVolume(container) > 10000000) {
+      toast.warning("Tip", { description: "High resolution might be slow for comparison." });
+    }
+
     runComparison(
       {
         container,
         items,
         parameters: { gridResolution, geneticGenerations, mutationRate }
       },
-      ['ffd', 'bestfit', 'genetic']
+      ['ffd', 'bestfit', 'genetic', 'sa']
     );
   };
+
+  // Reset highlights when algorithm changes or new result is loaded
+  useEffect(() => {
+    setHighlightedTypes([]);
+  }, [result]);
 
   const handleLoadPrefab = (prefab: any) => {
     if (loadPrefabRef.current) {
@@ -322,24 +334,26 @@ const Index = () => {
                 )}
               </div>
 
-              {/* Type Filters */}
-              {result && !comparison && (
+              {/* Type Filters - Enabled for both Single and Comparison modes */}
+              {result && (
                 <div className="p-2 border-b border-border bg-muted/20 overflow-x-auto whitespace-nowrap flex gap-2">
-                  {Array.from(new Set([...result.packedItems, ...result.unpackedItems].map(i => i.name))).map(type => (
+                  {Array.from(new Set(
+                    [...result.packedItems, ...result.unpackedItems].map(i => i.name.replace(/ #\d+$/, ''))
+                  )).map(baseType => (
                     <Button
-                      key={type}
-                      variant={highlightedTypes.includes(type) ? "default" : "outline"}
+                      key={baseType}
+                      variant={highlightedTypes.includes(baseType) ? "default" : "outline"}
                       size="sm"
                       className="h-6 text-xs px-2"
                       onClick={() => {
                         setHighlightedTypes(prev =>
-                          prev.includes(type)
-                            ? prev.filter(t => t !== type)
-                            : [...prev, type]
+                          prev.includes(baseType)
+                            ? prev.filter(t => t !== baseType)
+                            : [...prev, baseType]
                         );
                       }}
                     >
-                      {type}
+                      {baseType}
                     </Button>
                   ))}
                 </div>
