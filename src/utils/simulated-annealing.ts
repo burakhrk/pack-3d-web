@@ -1,5 +1,5 @@
 import { Item, PackedItem, Container, PackingResult } from "@/types/packing";
-import { packItems } from "./packing-algorithm";
+import { packPreSortedItems } from "./packing-algorithm";
 import { calculateVolume } from "./collision";
 
 /**
@@ -37,7 +37,7 @@ export function packItemsSimulatedAnnealing(
     let currentSequence = [...items].sort((a, b) => calculateVolume(b) - calculateVolume(a));
     let bestSequence = [...currentSequence];
 
-    let currentResult = packItems(container, currentSequence, gridResolution);
+    let currentResult = packPreSortedItems(container, currentSequence, gridResolution);
     let bestResult = currentResult;
 
     // Minimize wasted volume (Maximize used volume)
@@ -66,7 +66,7 @@ export function packItemsSimulatedAnnealing(
         }
 
         // 3. Evaluate Neighbor
-        const neighborResult = packItems(container, neighborSequence, gridResolution);
+        const neighborResult = packPreSortedItems(container, neighborSequence, gridResolution);
         const neighborEnergy = totalContainerVolume - neighborResult.usedVolume;
 
         // 4. Acceptance Probability

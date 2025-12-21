@@ -27,9 +27,6 @@ const ITEM_COLORS = [
  * at the first available position that doesn't collide
  */
 export function packItems(container: Container, items: Item[], gridResolution: number = 5): PackingResult {
-  const packedItems: PackedItem[] = [];
-  const unpackedItems: Item[] = [];
-
   // Sort items by volume in descending order (largest first)
   const sortedItems = [...items].sort((a, b) => {
     const volumeA = calculateVolume(a);
@@ -37,9 +34,20 @@ export function packItems(container: Container, items: Item[], gridResolution: n
     return volumeB - volumeA;
   });
 
+  return packPreSortedItems(container, sortedItems, gridResolution);
+}
+
+/**
+ * Packs items in the exact order provided without re-sorting.
+ * Useful for Simulated Annealing or Genetic Algorithms where order matters.
+ */
+export function packPreSortedItems(container: Container, items: Item[], gridResolution: number = 5): PackingResult {
+  const packedItems: PackedItem[] = [];
+  const unpackedItems: Item[] = [];
+
   // Try to pack each item
-  for (let i = 0; i < sortedItems.length; i++) {
-    const item = sortedItems[i];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
     const result = findFirstFitPosition(item, container, packedItems, gridResolution);
 
     if (result) {
