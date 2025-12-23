@@ -60,17 +60,17 @@ export function StatsPanel({ result }: StatsPanelProps) {
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Box className="h-4 w-4" />
-              <span className="text-sm">Total Volume</span>
+              <span className="text-sm">Total Volume (m³)</span>
             </div>
-            <p className="text-lg font-semibold text-foreground">{totalVolume.toFixed(1)}</p>
+            <p className="text-lg font-semibold text-foreground">{(totalVolume / 1000000).toFixed(3)} m³</p>
           </div>
 
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Box className="h-4 w-4" />
-              <span className="text-sm">Used Volume</span>
+              <span className="text-sm">Used Volume (m³)</span>
             </div>
-            <p className="text-lg font-semibold text-foreground">{usedVolume.toFixed(1)}</p>
+            <p className="text-lg font-semibold text-foreground">{(usedVolume / 1000000).toFixed(3)} m³</p>
           </div>
 
           {hasWeightData && (

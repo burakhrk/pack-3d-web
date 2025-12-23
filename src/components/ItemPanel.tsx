@@ -1,4 +1,4 @@
-import { PackedItem } from "@/types/packing";
+import { PackedItem, Item } from "@/types/packing";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +6,7 @@ import { Package, AlertCircle } from "lucide-react";
 
 interface ItemPanelProps {
   packedItems: PackedItem[];
-  unpackedItems: any[];
+  unpackedItems: Item[];
   hoveredItem: PackedItem | null;
 }
 
@@ -39,11 +39,10 @@ export function ItemPanel({
             {packedItems.map((item) => (
               <div
                 key={item.id}
-                className={`p-3 rounded-lg border transition-all ${
-                  hoveredItem?.id === item.id
+                className={`p-3 rounded-lg border transition-all ${hoveredItem?.id === item.id
                     ? "border-primary bg-primary/5 shadow-md"
                     : "border-border bg-card hover:border-primary/50"
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-start gap-2 flex-1">

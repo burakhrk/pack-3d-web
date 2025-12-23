@@ -72,7 +72,7 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
   };
 
   // Load prefab into form
-  const loadPrefab = (prefab: {
+  const loadPrefab = React.useCallback((prefab: {
     name: string;
     width: number;
     height: number;
@@ -89,14 +89,14 @@ export function ItemManager({ items, onAdd, onRemove, onClearAll, disabled, onIt
     };
     setNewItem(updated);
     notifyParent(updated);
-  };
+  }, [notifyParent]);
 
   // Expose load prefab function on mount
   useEffect(() => {
     if (onLoadPrefab) {
       onLoadPrefab(loadPrefab);
     }
-  }, [onLoadPrefab]);
+  }, [onLoadPrefab, loadPrefab]);
 
   const handleAdd = () => {
     if (!newItem.name.trim()) {

@@ -3,10 +3,11 @@ import { JsonInput } from "@/components/JsonInput";
 import { ContainerForm } from "@/components/ContainerForm";
 import { ItemManager } from "@/components/ItemManager";
 import { ItemPrefabs } from "@/components/ItemPrefabs";
-import { Scene3D } from "@/components/Scene3D";
+import { Scene3D, Scene3DHandle } from "@/components/Scene3D";
 import { ItemPanel } from "@/components/ItemPanel";
 import { StatsPanel } from "@/components/StatsPanel";
 import { AlgorithmSettings } from "@/components/AlgorithmSettings";
+import { ExportActions } from "@/components/ExportActions";
 import { usePackingWorker } from "@/hooks/usePackingWorker";
 import { ComparisonPanel } from "@/components/ComparisonPanel";
 import { ScenarioSelector } from "@/components/ScenarioSelector";
@@ -24,6 +25,7 @@ import { calculateVolume } from "@/utils/collision";
 const Index = () => {
   const { runPacking, runComparison, isProcessing, progress, result, comparison, setResult } = usePackingWorker();
   const [hoveredItem, setHoveredItem] = useState<PackedItem | null>(null);
+  const sceneRef = useRef<Scene3DHandle>(null);
   const [currentItemForm, setCurrentItemForm] = useState({
     name: "",
     width: 1,
@@ -31,7 +33,7 @@ const Index = () => {
     depth: 1,
     weight: 0,
   });
-  const loadPrefabRef = useRef<((prefab: any) => void) | null>(null);
+  const loadPrefabRef = useRef<((prefab: Item) => void) | null>(null);
 
   // State for container and items
   const [container, setContainer] = useState<Container>({
@@ -72,6 +74,9 @@ const Index = () => {
   const handleImportJson = (data: PackingInput) => {
     setContainer(data.container);
     setItems(data.items);
+    if (data.parameters?.containerCount) {
+      setContainerCount(data.parameters.containerCount);
+    }
   };
 
   const handleExportJson = (): PackingInput => {
@@ -131,9 +136,24 @@ const Index = () => {
     setSelectedContainerIndex(0);
   }, [result]);
 
-  const handleLoadPrefab = (prefab: any) => {
+  const handleLoadPrefab = (prefab: Item) => {
     if (loadPrefabRef.current) {
       loadPrefabRef.current(prefab);
+    }
+  };
+
+  const handleCaptureScreenshot = () => {
+    if (sceneRef.current) {
+      const dataUrl = sceneRef.current.captureScreenshot();
+      if (dataUrl) {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `packing_view_${new Date().toISOString().split('T')[0]}.png`;
+        link.click();
+        toast.success("Screenshot captured");
+      } else {
+        toast.error("Failed to capture screenshot");
+      }
     }
   };
 
@@ -156,6 +176,9 @@ const Index = () => {
                 Workstation
               </p>
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <ExportActions result={result} onCaptureScreenshot={handleCaptureScreenshot} />
           </div>
         </div>
       </header>
@@ -306,6 +329,7 @@ const Index = () => {
             <div className="h-full w-full relative bg-gray-50 dark:bg-slate-900 overflow-hidden">
               {result ? (
                 <Scene3D
+                  ref={sceneRef}
                   container={result.containers?.[selectedContainerIndex]?.container || result.container}
                   packedItems={result.containers?.[selectedContainerIndex]?.packedItems || result.packedItems}
                   onItemHover={setHoveredItem}

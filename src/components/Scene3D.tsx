@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Text, Environment, ContactShadows, Edges } from "@react-three/drei";
 import { PackedItem, Container } from "@/types/packing";
@@ -160,11 +160,10 @@ function CameraUpdater({ container }: { container: Container }) {
     camera.far = 100000;
     camera.updateProjectionMatrix();
 
-    // @ts-ignore
     if (controls) {
-      // @ts-ignore
+      // @ts-expect-error - OrbitControls target is not correctly typed in Drei
       controls.target.set(0, 0, 0);
-      // @ts-ignore
+      // @ts-expect-error - OrbitControls update is not correctly typed in Drei
       controls.update();
     }
   }, [container, camera, controls]);
@@ -172,63 +171,83 @@ function CameraUpdater({ container }: { container: Container }) {
   return null;
 }
 
-export function Scene3D({ container, packedItems, onItemHover, highlightedTypes = [] }: Scene3DProps) {
-  const maxDimension = Math.max(container.width, container.height, container.depth);
-  const cameraDistance = maxDimension * 2;
-
-  return (
-    <div className="w-full h-full bg-visualization rounded-lg overflow-hidden shadow-lg border border-border relative">
-      <Canvas
-        shadows
-        camera={{
-          position: [cameraDistance, cameraDistance, cameraDistance],
-          fov: 50,
-          far: 100000
-        }}
-        className="bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-900 dark:to-slate-950"
-      >
-        <ambientLight intensity={0.5} />
-        <spotLight position={[maxDimension, maxDimension * 2, maxDimension]} angle={0.3} penumbra={1} intensity={1} castShadow />
-        <pointLight position={[-maxDimension, -maxDimension, -maxDimension]} intensity={0.5} />
-
-        <Environment preset="city" />
-
-        <CameraUpdater container={container} />
-
-        <group position={[-container.width / 2, -container.height / 2, -container.depth / 2]}>
-          <ContainerWireframe container={container} />
-          <AxisLabels container={container} />
-          {packedItems.map((item, idx) => {
-            const hasHighlight = highlightedTypes.length > 0;
-            // Remove suffix like " #1", " #2" to match the base type logic in Index.tsx
-            const itemBaseName = item.name.replace(/ #\d+$/, '');
-            const isHighlighted = hasHighlight ? highlightedTypes.includes(itemBaseName) : false;
-            const isDimmed = hasHighlight ? !isHighlighted : false;
-
-            return (
-              <PackedBox
-                key={item.id}
-                item={item}
-                onHover={() => onItemHover(item)}
-                onHoverEnd={() => onItemHover(null)}
-                isHighlighted={isHighlighted}
-                isDimmed={isDimmed}
-              />
-            );
-          })}
-        </group>
-
-        <ContactShadows
-          position={[0, -container.height / 2 - 0.1, 0]}
-          opacity={0.4}
-          scale={maxDimension * 2}
-          blur={2.5}
-          far={maxDimension}
-        />
-
-        <OrbitControls makeDefault enableDamping dampingFactor={0.05} rotateSpeed={0.5} zoomSpeed={0.8} />
-        <gridHelper args={[maxDimension * 2, 20]} position={[0, -container.height / 2, 0]} />
-      </Canvas>
-    </div>
-  );
+export interface Scene3DHandle {
+  captureScreenshot: () => string | null;
 }
+
+export const Scene3D = forwardRef<Scene3DHandle, Scene3DProps>(
+  ({ container, packedItems, onItemHover, highlightedTypes = [] }, ref) => {
+    const maxDimension = Math.max(container.width, container.height, container.depth);
+    const cameraDistance = maxDimension * 2;
+
+    // Use a ref to get the GL context
+    const glRef = useRef<THREE.WebGLRenderer | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      captureScreenshot: () => {
+        if (!glRef.current) return null;
+        return glRef.current.domElement.toDataURL("image/png");
+      },
+    }));
+
+    return (
+      <div className="w-full h-full bg-visualization rounded-lg overflow-hidden shadow-lg border border-border relative">
+        <Canvas
+          shadows
+          gl={{ preserveDrawingBuffer: true }}
+          onCreated={({ gl }) => {
+            glRef.current = gl as THREE.WebGLRenderer;
+          }}
+          camera={{
+            position: [cameraDistance, cameraDistance, cameraDistance],
+            fov: 50,
+            far: 100000
+          }}
+          className="bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-900 dark:to-slate-950"
+        >
+          <ambientLight intensity={0.5} />
+          <spotLight position={[maxDimension, maxDimension * 2, maxDimension]} angle={0.3} penumbra={1} intensity={1} castShadow />
+          <pointLight position={[-maxDimension, -maxDimension, -maxDimension]} intensity={0.5} />
+
+          <Environment preset="city" />
+
+          <CameraUpdater container={container} />
+
+          <group position={[-container.width / 2, -container.height / 2, -container.depth / 2]}>
+            <ContainerWireframe container={container} />
+            <AxisLabels container={container} />
+            {packedItems.map((item) => {
+              const hasHighlight = highlightedTypes.length > 0;
+              // Remove suffix like " #1", " #2" to match the base type logic in Index.tsx
+              const itemBaseName = item.name.replace(/ #\d+$/, '');
+              const isHighlighted = hasHighlight ? highlightedTypes.includes(itemBaseName) : false;
+              const isDimmed = hasHighlight ? !isHighlighted : false;
+
+              return (
+                <PackedBox
+                  key={item.id}
+                  item={item}
+                  onHover={() => onItemHover(item)}
+                  onHoverEnd={() => onItemHover(null)}
+                  isHighlighted={isHighlighted}
+                  isDimmed={isDimmed}
+                />
+              );
+            })}
+          </group>
+
+          <ContactShadows
+            position={[0, -container.height / 2 - 0.1, 0]}
+            opacity={0.4}
+            scale={maxDimension * 2}
+            blur={2.5}
+            far={maxDimension}
+          />
+
+          <OrbitControls makeDefault enableDamping dampingFactor={0.05} rotateSpeed={0.5} zoomSpeed={0.8} />
+          <gridHelper args={[maxDimension * 2, 20]} position={[0, -container.height / 2, 0]} />
+        </Canvas>
+      </div>
+    );
+  }
+);
