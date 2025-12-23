@@ -58,6 +58,24 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
         completedAlgos++;
       }
 
+      if (algorithms.includes('sa')) {
+        const iterations = parameters?.geneticGenerations ? parameters.geneticGenerations * 10 : 1000;
+        const result = packItemsMultiContainer(container, items, containerCount, (c, i) =>
+          packItemsSimulatedAnnealing(
+            c,
+            i,
+            {
+              initialTemperature: 1000,
+              coolingRate: 0.995,
+              iterations: iterations,
+              gridResolution: res
+            }
+          )
+        );
+        results.push({ ...result, algorithmName: 'Simulated Annealing' });
+        completedAlgos++;
+      }
+
       results.sort((a, b) => (b.totalUtilization || b.utilization) - (a.totalUtilization || a.utilization));
 
       const comparisonResult: ComparisonResult = {
