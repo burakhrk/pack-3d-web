@@ -66,5 +66,18 @@ export const scenarios: Scenario[] = [
             ],
             parameters: { containerCount: 1 }
         }
+    },
+    {
+        name: "The Efficiency Paradox",
+        description: "A high-density packing challenge where greedy placement might fail, but search-based optimization can succeed in fitting everything.",
+        data: {
+            container: { id: "cont-100", width: 100, height: 100, depth: 100 },
+            items: [
+                ...generateItems("l-cube", "Large Cube", 8, 45, 45, 45, 15, "#1E293B"),
+                ...generateItems("m-block", "Medium Block", 6, 40, 30, 20, 10, "#334155"),
+                ...generateItems("s-parcel", "Small Parcel", 10, 25, 20, 15, 2, "#475569"),
+            ],
+            parameters: { containerCount: 1 }
+        }
     }
 ];
