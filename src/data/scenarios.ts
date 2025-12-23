@@ -77,7 +77,7 @@ export const scenarios: Scenario[] = [
                 ...generateItems("m-block", "Medium Block", 6, 40, 30, 20, 10, "#334155"),
                 ...generateItems("s-parcel", "Small Parcel", 10, 25, 20, 15, 2, "#475569"),
             ],
-            parameters: { containerCount: 1 }
+            parameters: { containerCount: 2 }
         }
     }
 ];

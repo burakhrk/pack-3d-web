@@ -76,7 +76,15 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
         completedAlgos++;
       }
 
-      results.sort((a, b) => (b.totalUtilization || b.utilization) - (a.totalUtilization || a.utilization));
+      results.sort((a, b) => {
+        const leftA = a.unpackedItems.length;
+        const leftB = b.unpackedItems.length;
+        if (leftA !== leftB) return leftA - leftB; // Fewer items left is better
+
+        const utilA = a.totalUtilization || a.utilization;
+        const utilB = b.totalUtilization || b.utilization;
+        return utilB - utilA; // Higher utilization as tie-breaker
+      });
 
       const comparisonResult: ComparisonResult = {
         results,
