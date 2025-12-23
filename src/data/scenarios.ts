@@ -26,7 +26,8 @@ export const scenarios: Scenario[] = [
             container: { id: "cont-20ft", width: 590, height: 239, depth: 235 }, // 20ft
             items: [
                 ...generateItems("pallet", "Euro Pallet", 14, 120, 14, 80, 25, "#8B4513"),
-            ]
+            ],
+            parameters: { containerCount: 1 }
         }
     },
     {
@@ -38,7 +39,8 @@ export const scenarios: Scenario[] = [
                 ...generateItems("large-box", "Large Move Box", 10, 60, 50, 50, 15, "#2563EB"),
                 ...generateItems("med-box", "Medium Box", 30, 50, 40, 40, 10, "#3B82F6"),
                 ...generateItems("small-parcel", "Small Parcel", 50, 30, 20, 20, 2, "#93C5FD"),
-            ]
+            ],
+            parameters: { containerCount: 1 }
         }
     },
     {
@@ -50,7 +52,8 @@ export const scenarios: Scenario[] = [
                 ...generateItems("crate", "Industrial Crate", 20, 100, 100, 100, 150, "#4B5563"),
                 ...generateItems("drum", "Oil Drum", 40, 60, 90, 60, 50, "#DC2626"),
                 ...generateItems("pallet-stack", "Pallet Stack", 10, 120, 100, 80, 200, "#F59E0B"),
-            ]
+            ],
+            parameters: { containerCount: 2 }
         }
     },
     {
@@ -60,7 +63,8 @@ export const scenarios: Scenario[] = [
             container: { id: "cont-20ft-stress", width: 590, height: 239, depth: 235 },
             items: [
                 ...generateItems("brick", "Brick", 500, 20, 10, 10, 2, "#EF4444"),
-            ]
+            ],
+            parameters: { containerCount: 1 }
         }
     }
 ];
