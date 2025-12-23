@@ -44,12 +44,12 @@ export const scenarios: Scenario[] = [
         }
     },
     {
-        name: "Warehouse Transfer (40ft)",
-        description: "Large scale transfer using a 40ft container.",
+        name: "Warehouse Transfer (Multi-Container)",
+        description: "Large scale transfer requiring multiple 40ft containers due to high volume.",
         data: {
             container: { id: "cont-40ft", width: 1203, height: 239, depth: 235 }, // 40ft
             items: [
-                ...generateItems("crate", "Industrial Crate", 20, 100, 100, 100, 150, "#4B5563"),
+                ...generateItems("crate", "Industrial Crate", 60, 100, 100, 100, 150, "#4B5563"),
                 ...generateItems("drum", "Oil Drum", 40, 60, 90, 60, 50, "#DC2626"),
                 ...generateItems("pallet-stack", "Pallet Stack", 10, 120, 100, 80, 200, "#F59E0B"),
             ],
