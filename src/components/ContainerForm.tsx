@@ -16,6 +16,8 @@ import { Box, Truck, Container as ContainerIcon } from "lucide-react";
 interface ContainerFormProps {
   container: Container;
   onUpdate: (container: Container) => void;
+  containerCount?: number;
+  onContainerCountChange?: (count: number) => void;
 }
 
 const PRESETS = {
@@ -30,15 +32,18 @@ const PRESETS = {
   "pallet": { name: "Euro Pallet Load", width: 120, height: 180, depth: 80 },
 };
 
-export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
+export function ContainerForm({
+  container,
+  onUpdate,
+  containerCount = 1,
+  onContainerCountChange
+}: ContainerFormProps) {
   const [dimensions, setDimensions] = useState({
     width: container.width,
     height: container.height,
     depth: container.depth,
   });
   const [preset, setPreset] = useState("custom");
-
-
 
   const handlePresetChange = (value: string) => {
     setPreset(value);
@@ -51,68 +56,88 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
   };
 
   return (
-    <Card className="p-4">
+    <Card className="p-4 shadow-sm border-border bg-card/50">
       <div className="space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-border">
           <Box className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-foreground">Container Dimensions</h3>
+          <h3 className="font-semibold text-foreground">Container Setup</h3>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Quick Preset</Label>
-          <Select value={preset} onValueChange={handlePresetChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a preset" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="custom">Custom Size</SelectItem>
-              <SelectItem value="sprinter">
-                <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> Sprinter Van
-                </div>
-              </SelectItem>
-              <SelectItem value="truck10">
-                <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> 10ft Box Truck
-                </div>
-              </SelectItem>
-              <SelectItem value="truck16">
-                <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> 16ft Box Truck
-                </div>
-              </SelectItem>
-              <SelectItem value="truck24">
-                <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> 24ft Box Truck
-                </div>
-              </SelectItem>
-              <SelectItem value="20ft">
-                <div className="flex items-center gap-2">
-                  <ContainerIcon className="h-4 w-4" /> 20ft ISO Container
-                </div>
-              </SelectItem>
-              <SelectItem value="40ft">
-                <div className="flex items-center gap-2">
-                  <ContainerIcon className="h-4 w-4" /> 40ft ISO Container
-                </div>
-              </SelectItem>
-              <SelectItem value="semi">
-                <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4" /> 53ft Semi Trailer
-                </div>
-              </SelectItem>
-              <SelectItem value="pallet">
-                <div className="flex items-center gap-2">
-                  <Box className="h-4 w-4" /> Pallet Load (Max)
-                </div>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Quick Preset</Label>
+            <Select value={preset} onValueChange={handlePresetChange}>
+              <SelectTrigger className="bg-background/50 h-9">
+                <SelectValue placeholder="Select a preset" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="custom">Custom Size</SelectItem>
+                <SelectItem value="sprinter">
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" /> Sprinter Van
+                  </div>
+                </SelectItem>
+                <SelectItem value="truck10">
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" /> 10ft Box Truck
+                  </div>
+                </SelectItem>
+                <SelectItem value="truck16">
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" /> 16ft Box Truck
+                  </div>
+                </SelectItem>
+                <SelectItem value="truck24">
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" /> 24ft Box Truck
+                  </div>
+                </SelectItem>
+                <SelectItem value="20ft">
+                  <div className="flex items-center gap-2">
+                    <ContainerIcon className="h-4 w-4" /> 20ft ISO Container
+                  </div>
+                </SelectItem>
+                <SelectItem value="40ft">
+                  <div className="flex items-center gap-2">
+                    <ContainerIcon className="h-4 w-4" /> 40ft ISO Container
+                  </div>
+                </SelectItem>
+                <SelectItem value="semi">
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" /> 53ft Semi Trailer
+                  </div>
+                </SelectItem>
+                <SelectItem value="pallet">
+                  <div className="flex items-center gap-2">
+                    <Box className="h-4 w-4" /> Pallet Load (Max)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="container-count" className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
+              No. of Containers
+            </Label>
+            <Input
+              id="container-count"
+              type="number"
+              min="1"
+              max="50"
+              value={containerCount}
+              onChange={(e) => {
+                const val = parseInt(e.target.value) || 1;
+                onContainerCountChange?.(Math.max(1, Math.min(50, val)));
+              }}
+              className="bg-background/50 h-9"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div className="space-y-2">
-            <Label htmlFor="width" className="text-xs text-muted-foreground">
+            <Label htmlFor="width" className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
               Width (cm)
             </Label>
             <Input
@@ -127,11 +152,12 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
                 setPreset("custom");
                 onUpdate({ ...container, ...dimensions, width: val });
               }}
+              className="bg-background/50 h-9"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="height" className="text-xs text-muted-foreground">
+            <Label htmlFor="height" className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
               Height (cm)
             </Label>
             <Input
@@ -146,11 +172,12 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
                 setPreset("custom");
                 onUpdate({ ...container, ...dimensions, height: val });
               }}
+              className="bg-background/50 h-9"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="depth" className="text-xs text-muted-foreground">
+            <Label htmlFor="depth" className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
               Depth (cm)
             </Label>
             <Input
@@ -165,6 +192,7 @@ export function ContainerForm({ container, onUpdate }: ContainerFormProps) {
                 setPreset("custom");
                 onUpdate({ ...container, ...dimensions, depth: val });
               }}
+              className="bg-background/50 h-9"
             />
           </div>
         </div>

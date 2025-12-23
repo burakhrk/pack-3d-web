@@ -1,4 +1,4 @@
-import { Item, PackedItem, Container, PackingResult } from "@/types/packing";
+import { Item, PackedItem, Container, PackingResult, ContainerResult } from "@/types/packing";
 import {
   fitsInContainer,
   hasCollision,
@@ -76,6 +76,67 @@ export function packPreSortedItems(container: Container, items: Item[], gridReso
     utilization,
     totalVolume: containerVolume,
     usedVolume,
+  };
+}
+
+/**
+ * Packs items into multiple containers.
+ * @param container The base container template
+ * @param items Items to pack
+ * @param containerCount Number of containers available
+ * @param packFn The packing function to use for a single container
+ */
+export function packItemsMultiContainer(
+  container: Container,
+  items: Item[],
+  containerCount: number = 1,
+  packFn: (container: Container, items: Item[]) => PackingResult
+): PackingResult {
+  const containers: ContainerResult[] = [];
+  let remainingItems = [...items];
+  let totalUsedVolume = 0;
+  let totalContainerVolume = 0;
+
+  for (let i = 0; i < containerCount; i++) {
+    if (remainingItems.length === 0) break;
+
+    const currentContainer = { ...container, id: `${container.id}-${i}` };
+    const result = packFn(currentContainer, remainingItems);
+
+    containers.push({
+      id: currentContainer.id,
+      container: currentContainer,
+      packedItems: result.packedItems,
+      utilization: result.utilization,
+      totalVolume: result.totalVolume,
+      usedVolume: result.usedVolume,
+    });
+
+    totalUsedVolume += result.usedVolume;
+    totalContainerVolume += result.totalVolume;
+    remainingItems = result.unpackedItems;
+  }
+
+  // Return a PackingResult that is compatible with single-container UI by default (showing the first container)
+  const firstResult = containers[0] || {
+    container,
+    packedItems: [],
+    utilization: 0,
+    totalVolume: calculateVolume(container),
+    usedVolume: 0,
+  };
+
+  return {
+    ...firstResult,
+    container: firstResult.container,
+    packedItems: firstResult.packedItems,
+    unpackedItems: remainingItems,
+    utilization: firstResult.utilization,
+    totalVolume: firstResult.totalVolume,
+    usedVolume: firstResult.usedVolume,
+    containers,
+    totalUtilization: totalContainerVolume > 0 ? (totalUsedVolume / totalContainerVolume) * 100 : 0,
+    isMultiContainer: containerCount > 1,
   };
 }
 

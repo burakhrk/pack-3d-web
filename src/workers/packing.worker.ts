@@ -1,5 +1,5 @@
-import { PackingInput, PackingResult, ComparisonResult } from "@/types/packing";
-import { packItems } from "@/utils/packing-algorithm";
+import { PackingInput, PackingResult, ComparisonResult, Container } from "@/types/packing";
+import { packItems, packItemsMultiContainer } from "@/utils/packing-algorithm";
 import { packItemsBestFit } from "@/utils/best-fit-algorithm";
 import { packItemsSimulatedAnnealing } from "@/utils/simulated-annealing";
 import { packItemsGenetic } from "@/utils/genetic-algorithm";
@@ -12,6 +12,8 @@ interface WorkerInput extends PackingInput {
 // Web Worker message handler
 self.onmessage = (event: MessageEvent<WorkerInput>) => {
   const { container, items, mode = 'single', algorithms = ['ffd'], parameters } = event.data;
+  const containerCount = parameters?.containerCount || 1;
+  const res = parameters?.gridResolution || 5;
 
   try {
     if (mode === 'compare') {
@@ -20,7 +22,6 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
       let completedAlgos = 0;
 
       const updateProgress = (algoProgress: number) => {
-        // overarching progress: (completedAlgos / total) * 100 + (currentAlgo / total)
         const base = (completedAlgos / totalAlgos) * 100;
         const current = algoProgress / totalAlgos;
         self.postMessage({ success: true, progress: Math.round(base + current) });
@@ -28,7 +29,7 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
 
       if (algorithms.includes('ffd')) {
         updateProgress(0);
-        const result = packItems(container, items, parameters?.gridResolution);
+        const result = packItemsMultiContainer(container, items, containerCount, (c, i) => packItems(c, i, res));
         results.push({ ...result, algorithmName: 'First-Fit Decreasing' });
         completedAlgos++;
         updateProgress(100);
@@ -36,26 +37,28 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
 
       if (algorithms.includes('bestfit')) {
         updateProgress(0);
-        const result = packItemsBestFit(container, items, parameters?.gridResolution);
+        const result = packItemsMultiContainer(container, items, containerCount, (c, i) => packItemsBestFit(c, i, res));
         results.push({ ...result, algorithmName: 'Best-Fit' });
         completedAlgos++;
         updateProgress(100);
       }
 
       if (algorithms.includes('genetic')) {
-        const result = packItemsGenetic(
-          container,
-          items,
-          parameters?.gridResolution,
-          parameters?.geneticGenerations,
-          parameters?.mutationRate,
-          (p) => updateProgress(p) // Forward genetic progress
+        const result = packItemsMultiContainer(container, items, containerCount, (c, i) =>
+          packItemsGenetic(
+            c,
+            i,
+            res,
+            parameters?.geneticGenerations,
+            parameters?.mutationRate,
+            (p) => updateProgress(p)
+          )
         );
         results.push({ ...result, algorithmName: 'Genetic Algorithm' });
         completedAlgos++;
       }
 
-      results.sort((a, b) => b.utilization - a.utilization);
+      results.sort((a, b) => (b.totalUtilization || b.utilization) - (a.totalUtilization || a.utilization));
 
       const comparisonResult: ComparisonResult = {
         results,
@@ -65,48 +68,48 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
       self.postMessage({ success: true, comparison: comparisonResult, progress: 100 });
     } else {
       // Single mode
-      const algo = parameters?.algorithm || 'ffd'; // Use parameter or default
+      const algo = parameters?.algorithm || 'ffd';
       const onProgress = (p: number) => {
         self.postMessage({ success: true, progress: p });
       };
 
       const config = parameters || {};
-      const res = config.gridResolution || 5;
-
       self.postMessage({ success: true, progress: 10 });
 
       let result: PackingResult;
 
       if (algo === 'genetic') {
-        result = packItemsGenetic(
-          container,
-          items,
-          res,
-          config.geneticGenerations || 30,
-          config.mutationRate || 0.1,
-          onProgress
+        result = packItemsMultiContainer(container, items, containerCount, (c, i) =>
+          packItemsGenetic(
+            c,
+            i,
+            res,
+            config.geneticGenerations || 30,
+            config.mutationRate || 0.1,
+            onProgress
+          )
         );
       } else if (algo === 'bestfit') {
-        result = packItemsBestFit(container, items, res);
+        result = packItemsMultiContainer(container, items, containerCount, (c, i) => packItemsBestFit(c, i, res));
         self.postMessage({ success: true, progress: 100 });
       } else if (algo === 'sa') {
-        // Reuse geneticGenerations as iterations count for SA
         const iterations = config.geneticGenerations ? config.geneticGenerations * 10 : 1000;
-
-        result = packItemsSimulatedAnnealing(
-          container,
-          items,
-          {
-            initialTemperature: 1000,
-            coolingRate: 0.995,
-            iterations: iterations,
-            gridResolution: res
-          },
-          onProgress
+        result = packItemsMultiContainer(container, items, containerCount, (c, i) =>
+          packItemsSimulatedAnnealing(
+            c,
+            i,
+            {
+              initialTemperature: 1000,
+              coolingRate: 0.995,
+              iterations: iterations,
+              gridResolution: res
+            },
+            onProgress
+          )
         );
       } else {
         // Default ffd
-        result = packItems(container, items, res);
+        result = packItemsMultiContainer(container, items, containerCount, (c, i) => packItems(c, i, res));
         self.postMessage({ success: true, progress: 100 });
       }
 

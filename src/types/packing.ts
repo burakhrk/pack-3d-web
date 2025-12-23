@@ -32,6 +32,20 @@ export interface PackingResult {
   totalVolume: number;
   usedVolume: number;
   algorithmName?: string;
+
+  // Multi-container support
+  containers?: ContainerResult[];
+  totalUtilization?: number;
+  isMultiContainer?: boolean;
+}
+
+export interface ContainerResult {
+  id: string; // To distinguish between containers of the same dimensions
+  container: Container;
+  packedItems: PackedItem[];
+  utilization: number;
+  totalVolume: number;
+  usedVolume: number;
 }
 
 export interface ComparisonResult {
@@ -44,10 +58,12 @@ export interface AlgorithmParameters {
   geneticGenerations?: number;
   mutationRate?: number;
   algorithm?: string;
+  containerCount?: number;
 }
 
 export interface PackingInput {
   container: Container;
+  containers?: Container[]; // If provided, uses these specific containers
   items: Item[];
   parameters?: AlgorithmParameters;
 }

@@ -48,6 +48,8 @@ const Index = () => {
   const [geneticGenerations, setGeneticGenerations] = useState(30);
   const [mutationRate, setMutationRate] = useState(0.1);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("ffd");
+  const [containerCount, setContainerCount] = useState(1);
+  const [selectedContainerIndex, setSelectedContainerIndex] = useState(0);
   const [highlightedTypes, setHighlightedTypes] = useState<string[]>([]);
 
   const handleAddItem = (itemOrItems: Item | Item[]) => {
@@ -92,7 +94,13 @@ const Index = () => {
     runPacking({
       container,
       items,
-      parameters: { gridResolution, geneticGenerations, mutationRate, algorithm: selectedAlgorithm }
+      parameters: {
+        gridResolution,
+        geneticGenerations,
+        mutationRate,
+        algorithm: selectedAlgorithm,
+        containerCount
+      }
     });
   };
 
@@ -111,15 +119,16 @@ const Index = () => {
       {
         container,
         items,
-        parameters: { gridResolution, geneticGenerations, mutationRate }
+        parameters: { gridResolution, geneticGenerations, mutationRate, containerCount }
       },
       ['ffd', 'bestfit', 'genetic', 'sa']
     );
   };
 
-  // Reset highlights when algorithm changes or new result is loaded
+  // Reset highlights and container selection when result changes
   useEffect(() => {
     setHighlightedTypes([]);
+    setSelectedContainerIndex(0);
   }, [result]);
 
   const handleLoadPrefab = (prefab: any) => {
@@ -175,7 +184,12 @@ const Index = () => {
                           <BoxIcon className="h-4 w-4 text-primary" />
                           <h3 className="font-semibold text-sm">Container</h3>
                         </div>
-                        <ContainerForm container={container} onUpdate={setContainer} />
+                        <ContainerForm
+                          container={container}
+                          onUpdate={setContainer}
+                          containerCount={containerCount}
+                          onContainerCountChange={setContainerCount}
+                        />
                       </section>
 
                       <div className="h-px bg-border" />
@@ -292,8 +306,8 @@ const Index = () => {
             <div className="h-full w-full relative bg-gray-50 dark:bg-slate-900 overflow-hidden">
               {result ? (
                 <Scene3D
-                  container={result.container}
-                  packedItems={result.packedItems}
+                  container={result.containers?.[selectedContainerIndex]?.container || result.container}
+                  packedItems={result.containers?.[selectedContainerIndex]?.packedItems || result.packedItems}
                   onItemHover={setHoveredItem}
                   highlightedTypes={highlightedTypes}
                 />
@@ -325,12 +339,39 @@ const Index = () => {
           {/* RIGHT PANEL: RESULTS */}
           <ResizablePanel defaultSize={25} minSize={20} maxSize={30} className="bg-muted/10 border-l border-border">
             <div className="h-full flex flex-col">
-              <div className="p-3 border-b border-border bg-background font-semibold text-sm flex items-center justify-between">
-                <span>Results & Analysis</span>
-                {result && (
-                  <span className="text-xs text-muted-foreground">
-                    {result.algorithmName}
-                  </span>
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between p-3 border-b border-border bg-background">
+                  <span className="font-semibold text-sm">Results & Analysis</span>
+                  {result?.algorithmName && (
+                    <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                      {result.algorithmName}
+                    </span>
+                  )}
+                </div>
+
+                {result?.isMultiContainer && result.containers && (
+                  <div className="p-3 border-b border-border bg-background flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Containers</span>
+                      <span className="text-xs font-bold text-primary">
+                        Total: {Math.round(result.totalUtilization || 0)}%
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {result.containers.map((c, idx) => (
+                        <Button
+                          key={idx}
+                          variant={selectedContainerIndex === idx ? "default" : "outline"}
+                          size="sm"
+                          className="h-7 px-2.5 text-xs font-medium transition-all"
+                          onClick={() => setSelectedContainerIndex(idx)}
+                        >
+                          #{idx + 1}
+                          <span className="ml-1 opacity-60 font-normal">({Math.round(c.utilization)}%)</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
 
@@ -373,7 +414,7 @@ const Index = () => {
                 ) : result ? (
                   <div className="h-full">
                     <ItemPanel
-                      packedItems={result.packedItems}
+                      packedItems={result.containers?.[selectedContainerIndex]?.packedItems || result.packedItems}
                       unpackedItems={result.unpackedItems}
                       hoveredItem={hoveredItem}
                     />
