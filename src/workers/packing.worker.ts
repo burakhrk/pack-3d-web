@@ -81,9 +81,19 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
         const leftB = b.unpackedItems.length;
         if (leftA !== leftB) return leftA - leftB; // Fewer items left is better
 
+        // Fewer boxes used is better
+        const boxesUsedA = a.containers?.filter(c => c.packedItems.length > 0).length || 1;
+        const boxesUsedB = b.containers?.filter(c => c.packedItems.length > 0).length || 1;
+        if (boxesUsedA !== boxesUsedB) return boxesUsedA - boxesUsedB;
+
+        // If items left and boxes used are equal, prioritize more items packed in first container
+        const countA = a.packedItems.length;
+        const countB = b.packedItems.length;
+        if (countA !== countB) return countB - countA;
+
         const utilA = a.totalUtilization || a.utilization;
         const utilB = b.totalUtilization || b.utilization;
-        return utilB - utilA; // Higher utilization as tie-breaker
+        return utilB - utilA; // Higher total utilization as tie-breaker
       });
 
       const comparisonResult: ComparisonResult = {

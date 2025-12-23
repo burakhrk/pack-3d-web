@@ -54,7 +54,7 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
                     )}
                   </div>
                   <span className="text-lg font-bold text-primary">
-                    {result.utilization.toFixed(2)}%
+                    {(result.totalUtilization ?? result.utilization).toFixed(2)}%
                   </span>
                 </div>
 
@@ -64,7 +64,9 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
                       <Package className="w-3 h-3" />
                       <span>Count</span>
                     </div>
-                    <p className="font-medium">{result.packedItems.length}</p>
+                    <p className="font-medium">
+                      {result.containers?.reduce((sum, c) => sum + c.packedItems.length, 0) ?? result.packedItems.length}
+                    </p>
                   </div>
 
                   <div>
@@ -76,9 +78,14 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
                   </div>
 
                   <div className="col-span-1">
-                    <div className="text-muted-foreground mb-0.5">Vol. Used</div>
-                    <p className="font-medium truncate" title={`${result.usedVolume.toFixed(0)} / ${result.totalVolume.toFixed(0)}`}>
-                      {Math.round((result.usedVolume / result.totalVolume) * 100)}%
+                    <div className="text-muted-foreground mb-0.5">
+                      {result.isMultiContainer ? "Boxes Used" : "Vol. Used"}
+                    </div>
+                    <p className="font-medium truncate">
+                      {result.isMultiContainer
+                        ? (result.containers?.filter(c => c.packedItems.length > 0).length ?? 0)
+                        : `${Math.round((result.usedVolume / result.totalVolume) * 100)}%`
+                      }
                     </p>
                   </div>
                 </div>
@@ -88,7 +95,7 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
                     <div
                       className={`h-full transition-all ${isBest ? "bg-primary" : "bg-muted-foreground"
                         }`}
-                      style={{ width: `${result.utilization}%` }}
+                      style={{ width: `${result.totalUtilization ?? result.utilization}%` }}
                     />
                   </div>
 
