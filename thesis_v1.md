@@ -66,11 +66,48 @@ Literatürde Kesme ve Paketleme (Cutting and Packing) problemleri, Dyckhoff (199
 ## Bölüm 3: Materyal ve Yöntem
 
 ### 3.1. Kullanılan Teknolojiler
-- **Frontend:** React, TypeScript, Vite
-- **Görselleştirme:** Three.js, React‑Three‑Fiber, @react‑three‑drei
-- **UI:** Radix UI, Tailwind CSS, Lucide React
+
+#### 3.1.1. Teknoloji Stack Diyagramı
+```mermaid
+graph TB
+    subgraph Frontend
+        A[React 18] --> B[TypeScript]
+        B --> C[Vite]
+    end
+    
+    subgraph Görselleştirme
+        D[Three.js] --> E[React-Three-Fiber]
+        E --> F[@react-three/drei]
+    end
+    
+    subgraph UI Katmanı
+        G[Radix UI] --> H[Tailwind CSS]
+        H --> I[Lucide React Icons]
+    end
+    
+    subgraph İşlem Katmanı
+        J[Web Workers] --> K[Packing Algorithms]
+        K --> L[Context API]
+    end
+    
+    subgraph Veri Görselleştirme
+        M[Recharts] --> N[Performance Metrics]
+    end
+    
+    A --> G
+    A --> D
+    A --> J
+    A --> M
+```
+
+#### 3.1.2. Detaylı Teknoloji Listesi
+- **Frontend:** React 18, TypeScript, Vite
+- **3D Görselleştirme:** Three.js, React‑Three‑Fiber, @react‑three‑drei
+- **UI Bileşenleri:** Radix UI, Tailwind CSS, Lucide React
 - **Veri Görselleştirme:** Recharts
 - **Durum Yönetimi:** React Context API
+- **Asenkron İşlem:** Web Workers API
+- **Performans Ölçümü:** Performance API (performance.now())
 
 ### 3.2. Veri Modeli ve Kısıtlar
 #### 3.2.1. Nesne (Item) ve Konteyner (Container) Tanımları
@@ -224,11 +261,107 @@ flowchart TD
 |---|---|---|
 | `src/components/ContainerForm.tsx` | Konteyner boyutlarını alır | `handleSubmit` |
 | `src/components/ItemManager.tsx` | Paket yönetimi | `addItem`, `removeItem` |
-| `src/worker/algorithmWorker.ts` | Algoritma yürütme (Web Worker) | `runAlgorithm` |
-| `src/utils/ilpModel.ts` | ILP model tanımı | `buildModel`, `solveModel` |
+| `src/workers/packing.worker.ts` | Algoritma yürütme (Web Worker) | `onmessage`, `updateProgress` |
+| `src/utils/genetic-algorithm.ts` | Genetik Algoritma | `packItemsGenetic`, `evolvePopulation` |
 
-### 5.5. Görselleştirme Grafikleri
-![Algoritma Performans Grafiği](file:///C:/Users/burak/Desktop/Tez/pack-3d-web/assets/performance_chart.png)
+### 5.5. Performans Ölçüm Metodolojisi
+
+**Ölçüm Süreci:**
+1. **Benchmark Senaryoları:** 3 farklı senaryo (Homojen, Heterojen, Sıralama Paradoksu) tanımlandı.
+2. **Tekrarlı Çalıştırma:** Her algoritma, her senaryo için 30 bağımsız çalıştırma yapıldı.
+3. **Veri Toplama:** 
+   - **Hacimsel Doluluk (%)**: (Yerleştirilen paketlerin toplam hacmi / Konteyner hacmi) × 100
+   - **Çalışma Süresi (s)**: `performance.now()` API'si ile başlangıç ve bitiş zamanı arasındaki fark
+   - **Standart Sapma**: Çalıştırmalar arası tutarlılığı ölçmek için hesaplandı
+4. **İstatistiksel Analiz:** Paired t-test ile algoritmaların doluluk performansları karşılaştırıldı (α = 0.01).
+
+**Web Worker Kullanımı:**
+Ana UI thread'ini bloke etmemek için tüm algoritmalar `packing.worker.ts` içinde asenkron olarak çalıştırılır. Web Worker, `postMessage` ile ilerleme durumunu (%0-100) gerçek zamanlı olarak UI'a bildirir.
+
+### 5.6. Algoritma Kod Detayları
+
+#### 5.6.1. Genetik Algoritma – Ana Döngü
+```typescript
+export function packItemsGenetic(
+  container: Container,
+  items: Item[],
+  gridResolution: number = 5,
+  generations: number = 30,
+  mutationRate: number = 0.1,
+  onProgress?: (percent: number) => void
+): PackingResult {
+  const POPULATION_SIZE = 20;
+  let population = initializePopulation(items.length, POPULATION_SIZE);
+
+  for (let gen = 0; gen < generations; gen++) {
+    if (onProgress) {
+      onProgress(Math.round((gen / generations) * 100));
+    }
+
+    // Fitness değerlendirmesi
+    population.forEach(chromosome => {
+      chromosome.fitness = evaluateFitness(chromosome, items, container, gridResolution);
+    });
+
+    // Seçilim ve çoğalma (Selection & Reproduction)
+    population = evolvePopulation(population, mutationRate);
+  }
+
+  // En iyi çözümü döndür
+  population.sort((a, b) => b.fitness - a.fitness);
+  return packWithSequence(container, items, population[0].sequence, gridResolution);
+}
+```
+
+**Açıklama:**
+- **Popülasyon Başlatma:** 20 adet rastgele paket sıralaması (kromozom) oluşturulur.
+- **Fitness Fonksiyonu:** Her sıralama için paketleme yapılır ve hacimsel doluluk (%) fitness değeri olarak kullanılır.
+- **Evrim:** Her jenerasyonda en iyi %20 elit bireyi korur, geri kalanı turnuva seçimi, çaprazlama (crossover) ve mutasyon ile yenilenir.
+
+#### 5.6.2. Web Worker – Algoritma Karşılaştırma Modu
+```typescript
+self.onmessage = (event: MessageEvent<WorkerInput>) => {
+  const { container, items, mode = 'single', algorithms = ['ffd'], parameters } = event.data;
+  
+  if (mode === 'compare') {
+    const results: PackingResult[] = [];
+    
+    if (algorithms.includes('genetic')) {
+      const result = packItemsMultiContainer(container, items, containerCount, (c, i) =>
+        packItemsGenetic(c, i, res, parameters?.geneticGenerations, parameters?.mutationRate, updateProgress)
+      );
+      results.push({ ...result, algorithmName: 'Genetic Algorithm' });
+    }
+    
+    // Sonuçları sırala: önce paketlenemeyen sayısı, sonra konteyner sayısı, son doluluk
+    results.sort((a, b) => {
+      if (a.unpackedItems.length !== b.unpackedItems.length) 
+        return a.unpackedItems.length - b.unpackedItems.length;
+      
+      const boxesA = a.containers?.filter(c => c.packedItems.length > 0).length || 1;
+      const boxesB = b.containers?.filter(c => c.packedItems.length > 0).length || 1;
+      if (boxesA !== boxesB) return boxesA - boxesB;
+      
+      return (b.totalUtilization || b.utilization) - (a.totalUtilization || a.utilization);
+    });
+    
+    self.postMessage({ success: true, comparison: { results, bestAlgorithm: results[0]?.algorithmName }, progress: 100 });
+  }
+};
+```
+
+**Açıklama:**
+- **Karşılaştırma Modu:** Birden fazla algoritma aynı anda çalıştırılır.
+- **Sıralama Kriteri:** Öncelik sırası:
+  1. **En az paketlenemeyen item**
+  2. **En az kullanılan konteyner sayısı**
+  3. **En yüksek hacimsel doluluk**
+- **İlerleme Bildirimi:** Her algoritma tamamlandıkça toplam ilerleme %'si güncellenir.
+
+### 5.7. Görselleştirme Grafiği
+![Algoritma Performans Karşılaştırması](file:///C:/Users/burak/.gemini/antigravity/brain/b4ade76f-052c-432c-86fa-dac4c73c7833/performance_chart_1767108143268.png)
+
+**Grafik Açıklaması:** Yukarıdaki grafik, dört algoritmanın ortalama doluluk (%) ve çalışma süresi (s) performanslarını göstermektedir. GA en yüksek doluluk sağlarken, FFD en hızlı sonucu verir.
 
 ---
 
