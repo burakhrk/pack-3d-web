@@ -11,40 +11,58 @@ Geliştirilen sistem, açık kaynak kodlu olması, anlık 3‑D görselleştirme
 
 ## Bölüm 1: Giriş
 
-### 1.1. Çalışmanın Amacı
-Bu çalışmanın temel amacı, lojistik sektöründe karşılaşılan 3‑Boyutlu Konteyner Yükleme Problemi (3D‑CLP) için erişilebilir, web‑tabanlı ve etkileşimli bir karar‑destek sistemi geliştirmektir. Çalışmada, klasik (First‑Fit, Best‑Fit) ve meta‑sezgisel (Genetik Algoritma, Tavlama Benzetimi) optimizasyon yöntemlerinin performansları karşılaştırmalı olarak incelenmektedir. Özellikle "Sıralama Paradoksu" gibi karmaşık geometrik senaryolarda, doğru algoritma seçimiyle hacimsel doluluk oranının artırılması, konteyner maliyetlerinin düşürülmesi ve karar vericilere görsel bir analiz ortamı sunulması hedeflenmektedir.
+Küreselleşen dünya ekonomisinde, mal ve hizmetlerin üretim noktalarından tüketim noktalarına en etkin şekilde ulaştırılması, işletmelerin rekabet gücü ve sürdürülebilirliği açısından hayati bir önem taşımaktadır. Lojistik maliyetlerin minimize edilmesi ve kısıtlı taşıma kapasitelerinin maksimize edilmesi hedefi doğrultusunda, **3-Boyutlu Konteyner Yükleme Problemi (3D-CLP)**, hem endüstriyel uygulamalarda hem de akademik literatürde çözüm aranan en karmaşık optimizasyon problemlerinden biri olarak öne çıkmaktadır. Bu tez çalışması, söz konusu problemi ele alarak, modern web teknolojileri ve ileri optimizasyon algoritmalarının entegrasyonu ile geliştirilen, platform bağımsız ve etkileşimli bir **Karar Destek Sistemi** sunmaktadır.
 
-### 1.2. Araştırma Soruları
-1. **RQ1:** Meta‑sezgisel algoritmalar (GA, SA) klasik sezgisel yöntemlere (FFD, Best‑Fit) kıyasla farklı dağılımlı veri setlerinde hacimsel doluluk oranını ne ölçüde artırır?
-2. **RQ2:** "Sıralama Paradoksu" senaryosunda algoritmaların konteyner sayısı üzerindeki etkisi nasıldır?
-3. **RQ3:** Web‑tabanlı görselleştirme, kullanıcıların paket yerleşimini algılamasını ve karar vermesini nasıl etkiler?
-4. **RQ4:** Çoklu konteyner yönetimi stratejileri (iteratif paketleme) sistem performansını ve ölçeklenebilirliği nasıl etkiler?
+Çalışmanın temel motivasyonu, lojistik planlama süreçlerinde insan hatasına açık geleneksel manuel yöntemlerin yetersizliğini aşmak ve ticari yazılımların oluşturduğu yüksek maliyet bariyerine karşı, KOBİ'ler ve araştırmacılar için erişilebilir, açık kaynaklı bir çözüm alternatifi üretmektir. Bu bağlamda araştırma; **"İnteraktif 3-boyutlu görselleştirme ile desteklenen meta-sezgisel algoritmalar, karmaşık kargo dağılımlarında ve 'Sıralama Paradoksu' gibi özel durumlarda konteyner doluluk oranlarını klasik yöntemlere kıyasla ne ölçüde artırabilir?"** temel sorusuna yanıt aramaktadır. Tezte, paketlerin konteyner içerisindeki optimal yerleşimini belirlemek amacıyla **Genetik Algoritma (GA)** ve **Tavlama Benzetimi (SA)** gibi meta-sezgisel yöntemler geliştirilmiş, bunların performansı **First-Fit** ve **Best-Fit** gibi klasik yaklaşımlarla karşılaştırmalı olarak analiz edilmiştir. Elde edilen bulguların ve geliştirilen yazılımın, lojistik operasyonlarında kaynak verimliliğini artırarak hem ekonomik kazanç sağlaması hem de karbon ayak izinin azaltılmasına katkıda bulunması hedeflenmektedir.
 
-### 1.3. Problem Tanımı ve Karmaşıklık (NP‑Hard)
-Küresel ticaretin hacmi artarken, lojistik operasyonlarının verimliliği rekabet avantajı sağlamada kritik bir rol oynamaktadır. Bu operasyonların merkezinde **3‑Boyutlu Konteyner Yükleme Problemi (3D‑CLP)** yer alır; matematiksel olarak "NP‑Zor" (NP‑Hard) sınıfında bulunan en karmaşık optimizasyon problemlerinden biridir.
+### 1.1. Konu Tanımı
+Küresel ticaret hacminin, özellikle e-ticaretin ve uluslararası lojistiğin hızla büyümesiyle birlikte, taşıma maliyetlerinin optimize edilmesi ve lojistik süreçlerinin verimliliğinin artırılması, endüstriyel işletmeler için kritik bir rekabet unsuru haline gelmiştir. Bu süreçlerin merkezinde yer alan temel problemlerden biri, **3-Boyutlu Konteyner Yükleme Problemi (3D-CLP)** olarak tanımlanmaktadır. 3D-CLP, belirli boyutlara sahip dikdörtgen prizma biçimindeki nesnelerin, hacimsel kısıtlar altında ve belirli oryantasyon kurallarına bağlı kalarak, bir veya daha fazla konteynere, boşlukları minimize edecek ve doluluk oranını maksimize edecek şekilde yerleştirilmesi problemidir.
 
-**NP‑Hard Nedir?**
-Bir problemin NP‑Hard olması, optimal çözümün bulunması için gereken işlem süresinin veri boyutu arttıkça üssel (exponential) olarak artması anlamına gelir. Örneğin, 10 kutuyu yerleştirmek saniyeler sürerken, 100 kutuyu "mükemmel" yerleştirmek için gereken kombinasyon sayısı evrendeki atom sayısını aşabilir. Bu nedenle, endüstriyel ölçekli problemlerde kesin çözüm aramak yerine, kabul edilebilir sürede "yeterince iyi" çözümler üreten yaklaşımlara ihtiyaç duyulur.
+Matematiksel literatürde **"NP-Zor" (NP-Hard)** karmaşıklık sınıfında yer alan bu problem, çözüm uzayının büyüklüğü nedeniyle, nesne sayısı arttıkça kesin (exact) yöntemlerle çözülmesi imkansız hale gelen kombinatoryal bir yapıya sahiptir. Örneğin, sadece 50 adet farklı boyutlardaki kutunun bir konteynere optimal şekilde yerleştirilmesi için gereken permütasyon sayısı, günümüzün en güçlü süper bilgisayarları için bile milyarlarca yıl sürebilecek bir hesaplama yükü oluşturmaktadır. Bu durum, endüstride "sezgisel" (heuristic) ve "meta-sezgisel" (meta-heuristic) algoritmaların kullanımını zorunlu kılmaktadır.
 
-### 1.4. Çözüm Yaklaşımı: Sezgisel ve Meta‑Sezgisel Algoritmalar
-Bu çalışmada, problemin karmaşıklığını aşmak için iki temel algoritma ailesi kullanılmıştır:
+Günümüzde pek çok lojistik firması, fabrika ve depo yönetim sistemi, yükleme planlarını ya manuel deneyimlere dayanarak ya da yüksek lisans maliyetlerine sahip, karmaşık masaüstü yazılımları kullanarak oluşturmaktadır. Manuel planlama, insan hatasına açık olup genellikle %70-80 civarında düşük doluluk oranlarıyla sonuçlanırken; ticari yazılımlar ise genellikle KOBİ ölçeğindeki işletmeler için erişilebilir olmaktan uzaktır. Ayrıca, mevcut çözümlerin çoğu "kara kutu" mantığıyla çalışmakta, kullanıcıya yükleme planının *neden* o şekilde yapıldığını gösteren etkileşimli bir görselleştirme sunmamaktadır.
 
-1. **Sezgisel Algoritmalar (Heuristics):** Problem yapısına özgü, hızlı ve pratik kurallara dayalı yöntemlerdir.
-   - *Örnek:* "Her zaman en büyük kutuyu al ve ilk bulduğun boşluğa koy" (First‑Fit Decreasing).
-   - *Avantaj:* Çok hızlı çalışır.
-   - *Dezavantaj:* Genellikle en iyi sonucu vermez; yerel tıkanıklıkta iyileştirme yapamaz.
-2. **Meta‑Sezgisel Algoritmalar (Meta‑heuristics):** Doğadaki süreçlerden (evrim, metalin soğuması vb.) esinlenen, daha genel ve güçlü arama stratejileridir.
-   - *Örnek:* Genetik Algoritma (GA) ve Tavlama Benzetimi (SA).
-   - *Avantaj:* Yerel minimumlardan kaçabilir ve daha kaliteli çözümler üretir.
-   - *Dezavantaj:* Hesaplama maliyeti daha yüksektir.
+Bu çalışmada, lojistik ve tedarik zinciri yönetimi alanında faaliyet gösteren işletmelerin ihtiyaçlarına yönelik, **web tabanlı, erişilebilir ve görsel destekli bir 3D yükleme optimizasyon sistemi** konu edilmiştir. Çalışma, modern web teknolojileri (React, Three.js) ile güçlü optimizasyon algoritmalarını (Genetik Algoritma, Tavlama Benzetimi) birleştirerek, hem akademik bir araştırma problemi olan 3D-CLP'ye yenilikçi bir yaklaşım getirmeyi hem de endüstriyel uygulamalarda kullanılabilecek pratik bir karar destek aracı sunmayı hedeflemektedir.
 
-### 1.5. Çalışmanın Önemi
-Konteyner hacminin verimli kullanılması durumunda elde edilecek %5'lik bir artış bile, yıllık binlerce konteyner sevkiyatı yapan bir firma için milyonlarca dolarlık tasarruf anlamına gelmektedir. Ayrıca, daha az konteyner kullanımı karbon ayak izini düşürerek sürdürülebilirliğe katkı sağlar. Mevcut ticari yazılımlar genellikle yüksek lisans/abonelik maliyetlerine sahiptir. Bu çalışma, açık kaynaklı web teknolojileri ile erişilebilir, hızlı ve görsel destekli bir çözüm sunarak hem akademik literatüre hem de KOBİ ölçeğindeki endüstriyel uygulamalara katkı sağlamayı amaçlamaktadır.
+### 1.2. Araştırmanın Amaçları
+Bu tezin temel amacı, lojistik operasyonlarında konteyner hacim kullanımını maksimize ederken, yükleme planlama süresini minimize eden, web tabanlı ve platform bağımsız bir **Akıllı Karar Destek Sistemi** geliştirmektir.
 
-### 1.6. Çalışmanın Hedefleri
-1. **Görselleştirme:** Yükleme planlarının 3‑boyutlu, interaktif ve anlaşılır bir şekilde web tarayıcısı üzerinden sunulması.
-2. **Optimizasyon:** Genetik Algoritma ve Tavlama Benzetimi gibi meta‑sezgisel yöntemlerin 3D‑CLP üzerindeki performansının analiz edilmesi ve klasik yöntemlerle (Best‑Fit) kıyaslanması.
-3. **Hibrit Yaklaşım:** "Sıralama Paradoksu" gibi özel durumlarda algoritmaların güçlü yönlerini birleştiren bir karar‑destek sistemi oluşturulması.
+Bu genel amaç doğrultusunda belirlenen alt hedefler şunlardır:
+
+1.  **Algoritma Performans Analizi:** Klasik sezgisel algoritmalar (First-Fit Decreasing, Best-Fit) ile modern meta-sezgisel algoritmaların (Genetik Algoritma, Tavlama Benzetimi) performanslarını, farklı senaryolar (homojen yük, heterojen yük, sıralama paradoksu) altında karşılaştırmalı olarak analiz etmek.
+2.  **Karar Destek ve Görselleştirme:** Kullanıcıların yükleme planlarını 3-boyutlu bir ortamda, her açıdan inceleyebilmelerine olanak tanıyan, sürükle-bırak kolaylığında etkileşimli bir arayüz sunmak. Böylece, kağıt üzerindeki soyut planların sahada uygulanabilirliğini artırmak.
+3.  **Sıralama Paradoksu Çözümü:** Literatürde "The Tetris Paradox" olarak bilinen ve basit algoritmaların başarısız olduğu özel durumlar için, nesne sıralamasının optimizasyon üzerindeki kritik rolünü ortaya koymak ve bu durumlarda meta-sezgisel yöntemlerin üstünlüğünü kanıtlamak.
+4.  **Erişilebilirlik ve Ölçeklenebilirlik:** Kurulum gerektirmeyen, herhangi bir modern web tarayıcısı üzerinden çalışabilen ve istemci tabanlı (client-side) hesaplama gücünü kullanarak sunucu maliyetlerini düşüren bir yazılım mimarisi oluşturmak.
+
+### 1.3. Araştırmada Kullanılan Yöntemler
+Çalışmanın gerçekleştirilmesinde, hem yazılım mühendisliği prensipleri hem de yöneylem araştırması tekniklerini kapsayan hibrit bir metodoloji izlenmiştir:
+
+1.  **Optimizasyon Algoritmaları:**
+    *   **Sezgisel Yöntemler:** Hızlı sonuç üretme kapasiteleri nedeniyle *First-Fit Decreasing (FFD)* ve *Best-Fit* algoritmaları temel (baseline) yöntemler olarak kullanılmıştır.
+    *   **Meta-Sezgisel Yöntemler:** Yerel optimum tuzaklarından kurtulabilme ve daha kaliteli çözüm üretme yetenekleri nedeniyle, biyolojik evrimden esinlenen *Genetik Algoritma (GA)* ve termodinamik süreçlerden esinlenen *Tavlama Benzetimi (Simulated Annealing - SA)* algoritmaları geliştirilmiştir.
+
+2.  **Yazılım Teknolojileri ve Mimari:**
+    *   Uygulama, **React** kütüphanesi ve **TypeScript** kullanılarak modüler bir yapıda geliştirilmiştir.
+    *   3-boyutlu görselleştirme ve render işlemleri için **Three.js** ve **React-Three-Fiber** teknolojileri kullanılmıştır.
+    *   Kullanıcı arayüzünü (UI) bloke etmeden, arka planda ağır matematiksel hesaplamaları gerçekleştirmek için **Web Workers API** teknolojisinden yararlanılmıştır. Bu sayede, binlerce paketin optimizasyonu sırasında bile arayüzün donması engellenmiştir.
+
+3.  **Veri Toplama ve Analiz:**
+    *   Algoritmaların başarısını ölçmek için literatürden alınan standart test setleri ve proje kapsamında oluşturulan özel senaryolar ("Sıralama Paradoksu") kullanılmıştır.
+    *   Performans kriteri olarak; *Hacimsel Doluluk Oranı (%)*, *Çalışma Süresi (milisaniye)* ve *Kullanılan Konteyner Sayısı* metrikleri esas alınmıştır.
+    *   Elde edilen sonuçlar, istatistiksel analiz yöntemleri (t-testi, standart sapma analizi) ile değerlendirilmiştir.
+
+### 1.4. Araştırmanın Beklenen Katkıları
+Bu çalışmanın sonuçlarının, hem endüstriyel uygulamalara hem de akademik literatüre ve araştırmacı öğrenciye çok yönlü katkılar sağlaması öngörülmektedir:
+
+**Endüstriyel ve Kurumsal Katkılar:**
+*   **Maliyet Tasarrufu:** Geliştirilen algoritmalar sayesinde konteyner doluluk oranlarında sağlanacak %5-10'luk bir artış, firmaların yıllık navlun maliyetlerinde ciddi tasarruflar sağlamasına olanak tanıyacaktır.
+*   **Operasyonel Verimlilik:** Yükleme planlama süresinin saatlerden saniyelere indirilmesi, lojistik planlama departmanlarının iş yükünü hafifletecektir.
+*   **Hata Minimizasyonu:** Görselleştirme yeteneği sayesinde, "sığmayan yük" veya "hatalı yükleme" gibi problemler, yükleme işlemi başlamadan sanal ortamda tespit edilebilecektir.
+
+**Akademik ve Bireysel Katkılar:**
+*   Bu tez çalışması, öğrenciye karmaşık bir optimizasyon probleminin (NP-Hard) analizi, matematiksel modellemesi ve modern web teknolojileri ile çözümü konularında derinlemesine yetkinlik kazandırmıştır.
+*   "Sıralama Paradoksu" üzerine yapılan detaylı analiz ve görselleştirmeler, literatürdeki benzer çalışmalara kıyasla problemin anlaşılırlığını artıran özgün bir eğitim materyali niteliği taşımaktadır.
+*   Geliştirilen açık kaynaklı proje, gelecekteki araştırmacılar için çoklu kısıtlar (ağırlık dengesi, tehlikeli madde ayrımı vb.) üzerine eklentiler geliştirebilecekleri esnek bir temel oluşturmaktadır.
 
 ---
 
