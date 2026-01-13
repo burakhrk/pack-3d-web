@@ -55,15 +55,15 @@ export const scenarios: Scenario[] = [
     },
 
     {
-        name: "The Leftover Stress Test",
-        description: "High volume overflow test. Best algorithms pack 30 items (leave 15). Greedy packs fewer (leaves ~21). Uses 1 container.",
+        name: "The Heavyweight Stress Test",
+        description: "Fewer but much larger items. 'Titans' and 'Colossi' dominate space. Inefficiency leads to massive Unpacked chunks. Total 26 items.",
         data: {
-            container: { id: "cont-overflow", width: 100, height: 100, depth: 1200 },
+            container: { id: "cont-heavy", width: 100, height: 100, depth: 1200 },
             items: [
-                ...Array.from({ length: 12 }).map((_, i) => ({ id: `over-a-${i}`, name: "Block A (36)", width: 36, height: 100, depth: 100, weight: 36, color: "#EF4444" })),
-                ...Array.from({ length: 24 }).map((_, i) => ({ id: `over-b-${i}`, name: "Block B (32)", width: 32, height: 100, depth: 100, weight: 32, color: "#3B82F6" })),
-                ...Array.from({ length: 24 }).map((_, i) => ({ id: `over-c-${i}`, name: "Filler C (18)", width: 18, height: 50, depth: 50, weight: 5, color: "#10B981" })),
-                ...Array.from({ length: 6 }).map((_, i) => ({ id: `over-d-${i}`, name: "Awkward D (52)", width: 52, height: 50, depth: 50, weight: 15, color: "#F59E0B" })),
+                ...Array.from({ length: 5 }).map((_, i) => ({ id: `titan-${i}`, name: "Titan (65)", width: 65, height: 100, depth: 100, weight: 65, color: "#991B1B" })),
+                ...Array.from({ length: 5 }).map((_, i) => ({ id: `colossus-${i}`, name: "Colossus (55)", width: 55, height: 100, depth: 100, weight: 55, color: "#B91C1C" })),
+                ...Array.from({ length: 8 }).map((_, i) => ({ id: `heavy-${i}`, name: "Heavy (45)", width: 45, height: 100, depth: 100, weight: 45, color: "#D97706" })),
+                ...Array.from({ length: 8 }).map((_, i) => ({ id: `medium-${i}`, name: "Medium (35)", width: 35, height: 100, depth: 100, weight: 35, color: "#F59E0B" })),
             ],
             parameters: { containerCount: 1 }
         }
