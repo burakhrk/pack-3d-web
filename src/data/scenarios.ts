@@ -35,16 +35,15 @@ export const scenarios: Scenario[] = [
     },
 
     {
-        name: "The Tetris Paradox",
-        description: "The 'Bad Shelf' Trap (Final). 10 layers. Depth 1250. This is the 'Sweet Spot': Too tight for Greedy (failed here), but passable for the Boosted Genetic Algorithm (100 gens).",
+        name: "The Tetris Paradox (Modulo Trap)",
+        description: "Items A(34) and B(33) pack perfectly as [34, 33, 33] (Sum 100). But Greedy sorts A(34) first, packing [34, 34], leaving a 32 gap where 33 can't fit.",
         data: {
-            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1250 },
+            container: { id: "cont-modulo", width: 100, height: 100, depth: 100 },
             items: [
-                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
-                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
-                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-c-${i}`, name: "Filler Block C (65x40)", width: 65, height: 40, depth: 100, weight: 10, color: "#475569" })),
+                ...Array.from({ length: 9 }).map((_, i) => ({ id: `mod-a-${i}`, name: "Block A (34)", width: 34, height: 34, depth: 100, weight: 34, color: "#EF4444" })),
+                ...Array.from({ length: 18 }).map((_, i) => ({ id: `mod-b-${i}`, name: "Block B (33)", width: 33, height: 33, depth: 100, weight: 33, color: "#3B82F6" })),
             ],
             parameters: { containerCount: 2 }
         }
-    }
+    },
 ];
