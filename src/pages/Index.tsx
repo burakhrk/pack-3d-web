@@ -74,8 +74,11 @@ const Index = () => {
   const handleImportJson = (data: PackingInput) => {
     setContainer(data.container);
     setItems(data.items);
-    if (data.parameters?.containerCount) {
-      setContainerCount(data.parameters.containerCount);
+    if (data.parameters) {
+      if (data.parameters.containerCount) setContainerCount(data.parameters.containerCount);
+      if (data.parameters.gridResolution) setGridResolution(data.parameters.gridResolution);
+      if (data.parameters.geneticGenerations) setGeneticGenerations(data.parameters.geneticGenerations);
+      if (data.parameters.mutationRate) setMutationRate(data.parameters.mutationRate);
     }
   };
 

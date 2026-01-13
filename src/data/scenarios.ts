@@ -50,7 +50,7 @@ export const scenarios: Scenario[] = [
                 ...Array.from({ length: 2 }).map((_, i) => ({ id: `trapB-sub1-${i}`, name: "B-Sub1 (45x55)", width: 45, height: 55, depth: 100, weight: 24, color: "#60A5FA" })), // Light Blue
                 ...Array.from({ length: 2 }).map((_, i) => ({ id: `trapB-sub2-${i}`, name: "B-Sub2 (45x45)", width: 45, height: 45, depth: 100, weight: 20, color: "#BFDBFE" })), // Pale Blue
             ],
-            parameters: { containerCount: 2 }
+            parameters: { containerCount: 2, gridResolution: 5 }
         }
     },
 
