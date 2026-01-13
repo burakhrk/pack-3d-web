@@ -46,4 +46,17 @@ export const scenarios: Scenario[] = [
             parameters: { containerCount: 2 }
         }
     },
+
+    {
+        name: "The Leftover Stress Test",
+        description: "High volume overflow test. Best algorithms pack 30 items (leave 15). Greedy packs fewer (leaves ~21). Uses 1 container.",
+        data: {
+            container: { id: "cont-overflow", width: 100, height: 100, depth: 1000 },
+            items: [
+                ...Array.from({ length: 15 }).map((_, i) => ({ id: `over-a-${i}`, name: "Block A (36)", width: 36, height: 100, depth: 100, weight: 36, color: "#EF4444" })),
+                ...Array.from({ length: 30 }).map((_, i) => ({ id: `over-b-${i}`, name: "Block B (32)", width: 32, height: 100, depth: 100, weight: 32, color: "#3B82F6" })),
+            ],
+            parameters: { containerCount: 1 }
+        }
+    },
 ];
