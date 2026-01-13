@@ -40,10 +40,10 @@ export const scenarios: Scenario[] = [
         data: {
             container: { id: "cont-tetris-large", width: 100, height: 100, depth: 1200 },
             items: Array.from({ length: 12 }).flatMap((_, i) => [
-                { id: `block-a-${i}`, name: "Tetris Block A", width: 60, height: 40, depth: 100, weight: 10, color: "#1E293B" },
+                { id: `block-a-${i}`, name: "Tetris Block A", width: 60, height: 60, depth: 100, weight: 10, color: "#1E293B" },
                 { id: `block-b-${i}`, name: "Tetris Block B", width: 40, height: 60, depth: 100, weight: 10, color: "#334155" },
                 { id: `block-c-${i}`, name: "Tetris Block C", width: 60, height: 40, depth: 100, weight: 10, color: "#475569" },
-                { id: `block-d-${i}`, name: "Tetris Block D", width: 40, height: 60, depth: 100, weight: 10, color: "#64748B" },
+                { id: `block-d-${i}`, name: "Tetris Block D", width: 40, height: 40, depth: 100, weight: 10, color: "#64748B" },
             ]),
             parameters: { containerCount: 2 }
         }
