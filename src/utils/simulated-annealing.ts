@@ -103,5 +103,6 @@ export function packItemsSimulatedAnnealing(
 
     if (onProgress) onProgress(100);
 
+    console.log(`[Simulated Annealing] Final Result: Packed ${bestResult.packedItems.length}/${items.length} items. Utilization: ${bestResult.utilization.toFixed(2)}%`);
     return bestResult;
 }

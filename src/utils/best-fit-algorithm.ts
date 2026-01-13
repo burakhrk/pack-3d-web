@@ -48,6 +48,8 @@ export function packItemsBestFit(container: Container, items: Item[], gridResolu
   );
   const utilization = calculateUtilization(containerVolume, usedVolume);
 
+  console.log(`[Best-Fit] Packed ${packedItems.length}/${items.length} items. Utilization: ${utilization.toFixed(2)}%`);
+
   return {
     container,
     packedItems,
