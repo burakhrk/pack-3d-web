@@ -15,8 +15,9 @@ export function StatsPanel({ result }: StatsPanelProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
+  const panelRef = useRef<HTMLDivElement>(null);
   const dragStartOffset = useRef({ x: 0, y: 0 });
-  const resizeStart = useRef({ x: 0, y: 0, initialScale: 1 });
+  const resizeStart = useRef({ initialScale: 1, initialDistance: 0, centerX: 0, centerY: 0 });
 
   // Handle window resize to keep panel on screen if needed, or just initial init
   useEffect(() => {
@@ -32,16 +33,17 @@ export function StatsPanel({ result }: StatsPanelProps) {
           y: e.clientY - dragStartOffset.current.y
         });
       } else if (isResizing) {
-        // Calculate new scale based on drag distance
-        // Dragging down/right increases scale, up/left decreases
-        const deltaX = e.clientX - resizeStart.current.x;
-        const deltaY = e.clientY - resizeStart.current.y;
+        // Calculate distance from center
+        const dx = e.clientX - resizeStart.current.centerX;
+        const dy = e.clientY - resizeStart.current.centerY;
+        const currentDistance = Math.sqrt(dx * dx + dy * dy);
 
-        // Use the larger delta to drive scaling for smoother feel, or average them
-        const sensitivity = 0.005; // 1 pixel = 0.005 scale change
-        const delta = deltaX + deltaY; // Bias towards X for width, or allow both
+        // Avoid division by zero
+        if (resizeStart.current.initialDistance === 0) return;
 
-        let newScale = resizeStart.current.initialScale + delta * sensitivity;
+        // New scale is proportional to distance change relative to start
+        const ratio = currentDistance / resizeStart.current.initialDistance;
+        let newScale = resizeStart.current.initialScale * ratio;
 
         // Clamp scale limits
         newScale = Math.min(Math.max(newScale, 0.5), 2.5);
@@ -78,12 +80,24 @@ export function StatsPanel({ result }: StatsPanelProps) {
 
   const handleResizeMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent drag start
-    setIsResizing(true);
-    resizeStart.current = {
-      x: e.clientX,
-      y: e.clientY,
-      initialScale: scale
-    };
+
+    if (panelRef.current) {
+      const rect = panelRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = e.clientX - centerX;
+      const dy = e.clientY - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      setIsResizing(true);
+      resizeStart.current = {
+        initialScale: scale,
+        initialDistance: distance,
+        centerX,
+        centerY
+      };
+    }
     e.preventDefault();
   };
 
@@ -98,6 +112,13 @@ export function StatsPanel({ result }: StatsPanelProps) {
           zIndex: 40,
         }}
       >
+        <div
+          className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors"
+          onMouseDown={handleMouseDown}
+          title="Drag to move"
+        >
+          <Move className="h-4 w-4 text-muted-foreground" />
+        </div>
         <div className="text-center text-muted-foreground">
           <BarChart3 className="h-12 w-12 mx-auto mb-2 opacity-50" />
           <p>Run the packing algorithm to see statistics</p>
@@ -116,9 +137,22 @@ export function StatsPanel({ result }: StatsPanelProps) {
   const packedWeight = packedItems.reduce((sum, item) => sum + (item.weight || 0), 0);
   const hasWeightData = totalWeight > 0;
 
+  // Resize Handle Component
+  const ResizeHandle = ({ className, cursor }: { className: string, cursor: string }) => (
+    <div
+      className={`absolute p-1.5 hover:bg-primary/20 rounded-full transition-colors z-50 ${className}`}
+      style={{ cursor }}
+      onMouseDown={handleResizeMouseDown}
+      title="Drag to scale"
+    >
+      <div className="w-2 h-2 bg-primary/50 rounded-full" />
+    </div>
+  );
+
   return (
     <Card
-      className="p-6 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 origin-top-left transition-transform duration-75"
+      ref={panelRef}
+      className="p-6 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-transform duration-75"
       style={{
         position: 'fixed',
         left: position.x,
@@ -126,46 +160,28 @@ export function StatsPanel({ result }: StatsPanelProps) {
         zIndex: 40,
         cursor: isDragging ? 'grabbing' : 'auto',
         userSelect: 'none',
+        transformOrigin: 'center center',
         transform: `scale(${scale})`
       }}
     >
       {/* Drag Handle (Move) */}
       <div
-        className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group z-50"
+        className="absolute top-2 left-1/2 -translate-x-1/2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group z-50"
         onMouseDown={handleMouseDown}
         title="Drag position"
       >
         <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
       </div>
 
-      {/* Resize Handle (Scale) */}
-      <div
-        className="absolute bottom-2 right-2 p-1.5 cursor-nwse-resize hover:bg-muted rounded-md transition-colors group z-50"
-        onMouseDown={handleResizeMouseDown}
-        title="Drag to scale"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
-        >
-          <path d="M15 3h6v6" />
-          <path d="M14 10l6.1-6.1" />
-          <path d="M9 21H3v-6" />
-          <path d="M10 14l-6.1 6.1" />
-        </svg>
-      </div>
+      {/* 4 Corner Resize Handles */}
+      <ResizeHandle className="-top-1 -left-1" cursor="nwse-resize" />
+      <ResizeHandle className="-top-1 -right-1" cursor="nesw-resize" />
+      <ResizeHandle className="-bottom-1 -left-1" cursor="nesw-resize" />
+      <ResizeHandle className="-bottom-1 -right-1" cursor="nwse-resize" />
 
-      <div className="space-y-6">
+      <div className="space-y-6 pt-2"> {/* Added pt-2 for top handle space */}
         <div>
-          <div className="flex items-center justify-between mb-2 pr-6"> {/* pr-6 to avoid overlap with handle */}
+          <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Container Utilization</h3>
             <span className="text-2xl font-bold text-foreground">{utilization.toFixed(1)}%</span>
           </div>
