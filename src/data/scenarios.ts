@@ -36,13 +36,13 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox",
-        description: "The 'Bad Shelf' Trap. 16 layers of perfectly fitting items (A+B+C). Greedy algorithms will double-pack Bs into the shelf, wasting space and overflowing large Cs. Requires Global Optimization (GA) to utilize the 1750 depth (1600 needed, ~10% slack).",
+        description: "The 'Bad Shelf' Trap (Small Batch). 10 layers of A+B+C. Depth 1300 provides 30% slack for optimal packing (Needs 1000). Greedy algorithms fall into the double-packing trap, wasting 30% width and requiring 1500 depth, forcing a 2nd container. GA should easily fit 1 box.",
         data: {
-            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1750 },
+            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1300 },
             items: [
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-c-${i}`, name: "Filler Block C (65x40)", width: 65, height: 40, depth: 100, weight: 10, color: "#475569" })),
+                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
+                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
+                ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-c-${i}`, name: "Filler Block C (65x40)", width: 65, height: 40, depth: 100, weight: 10, color: "#475569" })),
             ],
             parameters: { containerCount: 2 }
         }
