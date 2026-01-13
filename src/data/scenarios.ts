@@ -36,14 +36,14 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox (Dual Modulo Trap)",
-        description: "Mixed Trap. Set 1: [34, 33, 33]=100. Set 2: [40, 30, 30]=100. Greedy mixes them (40+34=74) leaving unfillable 26 gaps. GA should separate sets.",
+        description: "Mixed Trap. Items are full-height slices. Set 1: [34, 33, 33]=100. Set 2: [40, 30, 30]=100. Greedy mixes them (40+34=74) leaving 26 gap. Solvable by Grouping.",
         data: {
             container: { id: "cont-dual-trap", width: 100, height: 100, depth: 500 },
             items: [
-                ...Array.from({ length: 9 }).map((_, i) => ({ id: `trap1-a-${i}`, name: "Trap1 A (34)", width: 34, height: 34, depth: 100, weight: 34, color: "#EF4444" })),
-                ...Array.from({ length: 18 }).map((_, i) => ({ id: `trap1-b-${i}`, name: "Trap1 B (33)", width: 33, height: 33, depth: 100, weight: 33, color: "#3B82F6" })),
-                ...Array.from({ length: 6 }).map((_, i) => ({ id: `trap2-c-${i}`, name: "Trap2 C (40)", width: 40, height: 40, depth: 100, weight: 40, color: "#10B981" })),
-                ...Array.from({ length: 12 }).map((_, i) => ({ id: `trap2-d-${i}`, name: "Trap2 D (30)", width: 30, height: 30, depth: 100, weight: 30, color: "#F59E0B" })),
+                ...Array.from({ length: 9 }).map((_, i) => ({ id: `trap1-a-${i}`, name: "Trap1 A (34)", width: 34, height: 100, depth: 100, weight: 34, color: "#EF4444" })),
+                ...Array.from({ length: 18 }).map((_, i) => ({ id: `trap1-b-${i}`, name: "Trap1 B (33)", width: 33, height: 100, depth: 100, weight: 33, color: "#3B82F6" })),
+                ...Array.from({ length: 6 }).map((_, i) => ({ id: `trap2-c-${i}`, name: "Trap2 C (40)", width: 40, height: 100, depth: 100, weight: 40, color: "#10B981" })),
+                ...Array.from({ length: 12 }).map((_, i) => ({ id: `trap2-d-${i}`, name: "Trap2 D (30)", width: 30, height: 100, depth: 100, weight: 30, color: "#F59E0B" })),
             ],
             parameters: { containerCount: 1 }
         }
