@@ -35,13 +35,15 @@ export const scenarios: Scenario[] = [
     },
 
     {
-        name: "The Tetris Paradox (Modulo Trap)",
-        description: "Items A(34) and B(33) pack perfectly as [34, 33, 33] (Sum 100). But Greedy sorts A(34) first, packing [34, 34], leaving a 32 gap where 33 can't fit.",
+        name: "The Tetris Paradox (Dual Modulo Trap)",
+        description: "Mixed Trap. Set 1: [34, 33, 33]=100. Set 2: [40, 30, 30]=100. Greedy mixes them (40+34=74) leaving unfillable 26 gaps, forcing 2 containers. GA finds the sets.",
         data: {
-            container: { id: "cont-modulo", width: 100, height: 100, depth: 100 },
+            container: { id: "cont-dual-trap", width: 100, height: 100, depth: 200 },
             items: [
-                ...Array.from({ length: 9 }).map((_, i) => ({ id: `mod-a-${i}`, name: "Block A (34)", width: 34, height: 34, depth: 100, weight: 34, color: "#EF4444" })),
-                ...Array.from({ length: 18 }).map((_, i) => ({ id: `mod-b-${i}`, name: "Block B (33)", width: 33, height: 33, depth: 100, weight: 33, color: "#3B82F6" })),
+                ...Array.from({ length: 9 }).map((_, i) => ({ id: `trap1-a-${i}`, name: "Trap1 A (34)", width: 34, height: 34, depth: 100, weight: 34, color: "#EF4444" })),
+                ...Array.from({ length: 18 }).map((_, i) => ({ id: `trap1-b-${i}`, name: "Trap1 B (33)", width: 33, height: 33, depth: 100, weight: 33, color: "#3B82F6" })),
+                ...Array.from({ length: 6 }).map((_, i) => ({ id: `trap2-c-${i}`, name: "Trap2 C (40)", width: 40, height: 40, depth: 100, weight: 40, color: "#10B981" })),
+                ...Array.from({ length: 12 }).map((_, i) => ({ id: `trap2-d-${i}`, name: "Trap2 D (30)", width: 30, height: 30, depth: 100, weight: 30, color: "#F59E0B" })),
             ],
             parameters: { containerCount: 2 }
         }
