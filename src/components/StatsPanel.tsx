@@ -9,31 +9,53 @@ interface StatsPanelProps {
 }
 
 export function StatsPanel({ result }: StatsPanelProps) {
-  // Drag functionality state
+  // Drag and Scale functionality states
   const [position, setPosition] = useState({ x: 20, y: window.innerHeight - 450 });
+  const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+
   const dragStartOffset = useRef({ x: 0, y: 0 });
+  const resizeStart = useRef({ x: 0, y: 0, initialScale: 1 });
 
   // Handle window resize to keep panel on screen if needed, or just initial init
   useEffect(() => {
-    // Ensure initial position is reasonable (bottom-left area)
+    // Ensure initial position is reasonably visible
     setPosition({ x: 20, y: window.innerHeight - 450 });
   }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      setPosition({
-        x: e.clientX - dragStartOffset.current.x,
-        y: e.clientY - dragStartOffset.current.y
-      });
+      if (isDragging) {
+        setPosition({
+          x: e.clientX - dragStartOffset.current.x,
+          y: e.clientY - dragStartOffset.current.y
+        });
+      } else if (isResizing) {
+        // Calculate new scale based on drag distance
+        // Dragging down/right increases scale, up/left decreases
+        const deltaX = e.clientX - resizeStart.current.x;
+        const deltaY = e.clientY - resizeStart.current.y;
+
+        // Use the larger delta to drive scaling for smoother feel, or average them
+        const sensitivity = 0.005; // 1 pixel = 0.005 scale change
+        const delta = deltaX + deltaY; // Bias towards X for width, or allow both
+
+        let newScale = resizeStart.current.initialScale + delta * sensitivity;
+
+        // Clamp scale limits
+        newScale = Math.min(Math.max(newScale, 0.5), 2.5);
+
+        setScale(newScale);
+      }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      setIsResizing(false);
     };
 
-    if (isDragging) {
+    if (isDragging || isResizing) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     }
@@ -42,7 +64,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, isResizing]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Only allow dragging from the handle or header area
@@ -52,6 +74,17 @@ export function StatsPanel({ result }: StatsPanelProps) {
       y: e.clientY - position.y
     };
     e.preventDefault(); // Prevent text selection
+  };
+
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent drag start
+    setIsResizing(true);
+    resizeStart.current = {
+      x: e.clientX,
+      y: e.clientY,
+      initialScale: scale
+    };
+    e.preventDefault();
   };
 
   if (!result) {
@@ -65,13 +98,6 @@ export function StatsPanel({ result }: StatsPanelProps) {
           zIndex: 40,
         }}
       >
-        <div
-          className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors"
-          onMouseDown={handleMouseDown}
-          title="Drag to move"
-        >
-          <Move className="h-4 w-4 text-muted-foreground" />
-        </div>
         <div className="text-center text-muted-foreground">
           <BarChart3 className="h-12 w-12 mx-auto mb-2 opacity-50" />
           <p>Run the packing algorithm to see statistics</p>
@@ -92,23 +118,49 @@ export function StatsPanel({ result }: StatsPanelProps) {
 
   return (
     <Card
-      className="p-6 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60"
+      className="p-6 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 origin-top-left transition-transform duration-75"
       style={{
         position: 'fixed',
         left: position.x,
         top: position.y,
         zIndex: 40,
         cursor: isDragging ? 'grabbing' : 'auto',
-        userSelect: 'none'
+        userSelect: 'none',
+        transform: `scale(${scale})`
       }}
     >
-      {/* Drag Handle */}
+      {/* Drag Handle (Move) */}
       <div
-        className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group"
+        className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group z-50"
         onMouseDown={handleMouseDown}
-        title="Drag to move"
+        title="Drag position"
       >
         <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+      </div>
+
+      {/* Resize Handle (Scale) */}
+      <div
+        className="absolute bottom-2 right-2 p-1.5 cursor-nwse-resize hover:bg-muted rounded-md transition-colors group z-50"
+        onMouseDown={handleResizeMouseDown}
+        title="Drag to scale"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
+        >
+          <path d="M15 3h6v6" />
+          <path d="M14 10l6.1-6.1" />
+          <path d="M9 21H3v-6" />
+          <path d="M10 14l-6.1 6.1" />
+        </svg>
       </div>
 
       <div className="space-y-6">
