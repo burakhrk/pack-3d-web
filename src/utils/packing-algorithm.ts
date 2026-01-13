@@ -35,6 +35,13 @@ export function packItems(container: Container, items: Item[], gridResolution: n
   });
 
   const result = packPreSortedItems(container, sortedItems, gridResolution);
+
+  // Log detailed verification data
+  console.log(`[Greedy FFD] First 3 Items:`);
+  result.packedItems.slice(0, 3).forEach((item, idx) => {
+    console.log(`  ${idx + 1}. ${item.name} at (${item.position.x}, ${item.position.y}, ${item.position.z})`);
+  });
+
   console.log(`[Greedy FFD] Packed ${result.packedItems.length}/${items.length} items. Utilization: ${result.utilization.toFixed(2)}%`);
   return result;
 }
