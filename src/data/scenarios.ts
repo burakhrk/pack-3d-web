@@ -33,17 +33,7 @@ export const scenarios: Scenario[] = [
             parameters: { containerCount: 2 }
         }
     },
-    {
-        name: "Fragmentation Stress Test",
-        description: "Hundreds of small items to test packing efficiency and performance.",
-        data: {
-            container: { id: "cont-20ft-stress", width: 590, height: 239, depth: 235 },
-            items: [
-                ...generateItems("brick", "Brick", 500, 20, 10, 10, 2, "#EF4444"),
-            ],
-            parameters: { containerCount: 1 }
-        }
-    },
+
     {
         name: "The Tetris Paradox",
         description: "Scaled-up version with 48 items. Classic packing problem where greedy placement fails, but an optimal 'Tetris' arrangement fits everything efficiently.",
