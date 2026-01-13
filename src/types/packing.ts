@@ -12,6 +12,7 @@ export interface Item extends Dimensions {
   id: string;
   name: string;
   weight?: number;
+  color?: string;
 }
 
 export interface PackedItem extends Item {

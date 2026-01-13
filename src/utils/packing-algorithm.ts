@@ -63,7 +63,7 @@ export function packPreSortedItems(container: Container, items: Item[], gridReso
       packedItems.push({
         ...result.item, // Use dimensions from the fitted permutation
         position: result.position,
-        color: ITEM_COLORS[i % ITEM_COLORS.length],
+        color: item.color || ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
       unpackedItems.push(item);
