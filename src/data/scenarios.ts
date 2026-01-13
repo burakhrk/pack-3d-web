@@ -26,9 +26,12 @@ export const scenarios: Scenario[] = [
         data: {
             container: { id: "cont-20ft", width: 590, height: 239, depth: 235 }, // 20ft Standard
             items: [
-                ...generateItems("crate", "Industrial Crate", 32, 100, 100, 100, 150, "#4B5563"),
-                ...generateItems("drum", "Oil Drum", 25, 60, 90, 60, 50, "#DC2626"),
-                ...generateItems("pallet-stack", "Pallet Stack", 8, 120, 100, 80, 200, "#F59E0B"),
+                ...generateItems("crate", "Industrial Crate", 15, 100, 100, 100, 150, "#4B5563"),
+                ...generateItems("drum", "Oil Drum", 15, 60, 90, 60, 50, "#DC2626"),
+                ...generateItems("pallet", "Pallet Stack", 8, 120, 100, 80, 200, "#F59E0B"),
+                ...generateItems("long", "Long Box (200)", 8, 200, 50, 50, 80, "#2563EB"), // Blue - Long
+                ...generateItems("tall", "Tall Machine (180)", 8, 60, 180, 60, 120, "#7C3AED"), // Purple - Tall
+                ...generateItems("small", "Small Parts", 30, 30, 30, 30, 10, "#10B981"), // Green - Filler
             ],
             parameters: { containerCount: 2 }
         }
