@@ -36,9 +36,9 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox",
-        description: "The 'Bad Shelf' Trap (Small Batch). 10 layers of A+B+C. Depth 1300 provides 30% slack for optimal packing (Needs 1000). Greedy algorithms fall into the double-packing trap, wasting 30% width and requiring 1500 depth, forcing a 2nd container. GA should easily fit 1 box.",
+        description: "The 'Bad Shelf' Trap (Strict). 10 layers. Depth 1150 (needs 1000). 15% slack. Greedy algorithms wasting 25-30% space will mathematically fail to fit in 1150. GA (near-optimal) will fit easily.",
         data: {
-            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1300 },
+            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1150 },
             items: [
                 ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
                 ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
