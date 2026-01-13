@@ -46,8 +46,8 @@ const Index = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   // Algorithm parameters
-  const [gridResolution, setGridResolution] = useState(10);
-  const [geneticGenerations, setGeneticGenerations] = useState(30);
+  const [gridResolution, setGridResolution] = useState(5);
+  const [geneticGenerations, setGeneticGenerations] = useState(50);
   const [mutationRate, setMutationRate] = useState(0.1);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("ffd");
   const [containerCount, setContainerCount] = useState(1);
