@@ -513,9 +513,7 @@ Geliştirilen "Yerleşim Motoru" (Placement Engine), her bir yerleştirme adım�
 
 
 
-Pseudo Code
-
- sistem çalışma mimarisi 
+ 
 BÖLÜM 5: UYGULAMA
 
 Bu bölümde, web tabanlı 3D konteyner yükleme optimizasyon sisteminin teknik mimarisi, uygulama senaryoları ve kullanılan standartlar detaylandırılmıştır.
