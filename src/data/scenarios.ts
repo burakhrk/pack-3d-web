@@ -31,7 +31,7 @@ export const scenarios: Scenario[] = [
                 ...generateItems("pallet", "Pallet Stack", 8, 120, 100, 80, 200, "#F59E0B"),
                 ...generateItems("long", "Long Box (200)", 8, 200, 50, 50, 80, "#2563EB"), // Blue - Long
                 ...generateItems("tall", "Tall Machine (180)", 8, 60, 180, 60, 120, "#7C3AED"), // Purple - Tall
-                ...generateItems("small", "Small Parts", 30, 30, 30, 30, 10, "#10B981"), // Green - Filler
+                ...generateItems("small", "Small Parts", 30, 60, 60, 60, 10, "#10B981"), // Green - Filler
             ],
             parameters: { containerCount: 2 }
         }

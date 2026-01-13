@@ -61,7 +61,7 @@ function Box({
         roughness={0.4}
         metalness={0.1}
       />
-      {isHighlighted && <Edges color="black" threshold={15} />}
+      <Edges color="black" threshold={15} linewidth={1.5} />
     </mesh>
   );
 }
