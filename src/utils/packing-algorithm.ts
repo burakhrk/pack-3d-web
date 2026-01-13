@@ -150,8 +150,38 @@ export function packItemsMultiContainer(
 }
 
 /**
+ * Find the lowest valid Y position for an item at a given (x, z) footprint
+ * considering items already packed below it (gravity simulation)
+ */
+function findLowestValidY(
+  x: number,
+  z: number,
+  width: number,
+  depth: number,
+  packedItems: PackedItem[]
+): number {
+  let maxY = 0; // Start from floor
+
+  // Find all items whose footprints overlap with this position
+  for (const packed of packedItems) {
+    const xOverlap =
+      x < packed.position.x + packed.width && x + width > packed.position.x;
+    const zOverlap =
+      z < packed.position.z + packed.depth && z + depth > packed.position.z;
+
+    if (xOverlap && zOverlap) {
+      // This item is below our position, update the floor height
+      const itemTop = packed.position.y + packed.height;
+      maxY = Math.max(maxY, itemTop);
+    }
+  }
+
+  return maxY;
+}
+
+/**
  * Find the first position where an item can fit without collision
- * Checks all 6 possible orientations
+ * Checks all 6 possible orientations and uses gravity for realistic placement
  */
 function findFirstFitPosition(
   item: Item,
@@ -164,10 +194,14 @@ function findFirstFitPosition(
 
   // Try each orientation
   for (const orientation of orientations) {
-    // Start from bottom (y=0), try positions layer by layer
-    for (let y = 0; y <= container.height - orientation.height; y += step) {
-      for (let z = 0; z <= container.depth - orientation.depth; z += step) {
-        for (let x = 0; x <= container.width - orientation.width; x += step) {
+    // Try positions on the X-Z plane (footprint)
+    for (let z = 0; z <= container.depth - orientation.depth; z += step) {
+      for (let x = 0; x <= container.width - orientation.width; x += step) {
+        // Find the lowest valid Y for this footprint (gravity)
+        const y = findLowestValidY(x, z, orientation.width, orientation.depth, packedItems);
+
+        // Check if item fits at this position
+        if (y + orientation.height <= container.height) {
           const position = { x, y, z };
 
           if (
