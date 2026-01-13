@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { PackingResult } from "@/types/packing";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { BarChart3, Box, Package, Weight, Move } from "lucide-react";
+import { BarChart3, Box, Package, Weight, Move, ChevronDown, ChevronUp } from "lucide-react";
 
 interface StatsPanelProps {
   result: PackingResult | null;
@@ -14,6 +14,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
   const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const dragStartOffset = useRef({ x: 0, y: 0 });
@@ -101,25 +102,61 @@ export function StatsPanel({ result }: StatsPanelProps) {
     e.preventDefault();
   };
 
+  const toggleCollapse = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsCollapsed(!isCollapsed);
+  };
+
   if (!result) {
     return (
       <Card
-        className="p-6 w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60"
+        className={`w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
         style={{
           position: 'fixed',
           left: position.x,
           top: position.y,
           zIndex: 40,
+          transformOrigin: 'center center',
+          transform: `scale(${scale})`
         }}
       >
+        {/* Header / Remote Control Area */}
         <div
-          className="absolute top-2 right-2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors"
-          onMouseDown={handleMouseDown}
-          title="Drag to move"
+          className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+          onClick={isCollapsed ? toggleCollapse : undefined}
         >
-          <Move className="h-4 w-4 text-muted-foreground" />
+          {/* Drag Handle (Move) - Center */}
+          <div
+            className="p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group mx-auto"
+            onMouseDown={handleMouseDown}
+            title="Drag position"
+          >
+            <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+
+          {/* Collapse Toggle - Right */}
+          <div
+            className="absolute right-2 top-2 p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
+            onClick={toggleCollapse}
+            title={isCollapsed ? "Expand" : "Collapse"}
+          >
+            {isCollapsed ? (
+              <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            ) : (
+              <ChevronUp className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            )}
+          </div>
+
+          {/* Title when collapsed */}
+          {isCollapsed && (
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
+              Stats
+            </div>
+          )}
         </div>
-        <div className="text-center text-muted-foreground">
+
+        {/* Content - Hidden when collapsed */}
+        <div className={`text-center text-muted-foreground ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100 transition-opacity duration-300 pt-6'}`}>
           <BarChart3 className="h-12 w-12 mx-auto mb-2 opacity-50" />
           <p>Run the packing algorithm to see statistics</p>
         </div>
@@ -152,7 +189,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
   return (
     <Card
       ref={panelRef}
-      className="p-6 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-transform duration-75"
+      className={`w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
       style={{
         position: 'fixed',
         left: position.x,
@@ -164,81 +201,101 @@ export function StatsPanel({ result }: StatsPanelProps) {
         transform: `scale(${scale})`
       }}
     >
-      {/* Drag Handle (Move) */}
+      {/* Header / Remote Control Area */}
       <div
-        className="absolute top-2 left-1/2 -translate-x-1/2 p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group z-50"
-        onMouseDown={handleMouseDown}
-        title="Drag position"
+        className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+        onClick={isCollapsed ? toggleCollapse : undefined}
       >
-        <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        {/* Drag Handle (Move) - Center */}
+        <div
+          className="p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group mx-auto"
+          onMouseDown={handleMouseDown}
+          title="Drag position"
+        >
+          <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        </div>
+
+        {/* Collapse Toggle - Right */}
+        <div
+          className="absolute right-2 top-2 p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
+          onClick={toggleCollapse}
+          title={isCollapsed ? "Expand" : "Collapse"}
+        >
+          {isCollapsed ? (
+            <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          ) : (
+            <ChevronUp className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          )}
+        </div>
+
+        {/* Title when collapsed */}
+        {isCollapsed && (
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
+            Stats
+          </div>
+        )}
       </div>
 
-      {/* 4 Corner Resize Handles */}
-      <ResizeHandle className="-top-1 -left-1" cursor="nwse-resize" />
-      <ResizeHandle className="-top-1 -right-1" cursor="nesw-resize" />
-      <ResizeHandle className="-bottom-1 -left-1" cursor="nesw-resize" />
-      <ResizeHandle className="-bottom-1 -right-1" cursor="nwse-resize" />
+      {/* Content - Hidden when collapsed */}
+      <div className={`space-y-6 pt-6 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100 transition-opacity duration-300'}`}>
 
-      <div className="space-y-6 pt-2"> {/* Added pt-2 for top handle space */}
+        {/* Resize Handles - Only separate when not collapsed */}
+        {!isCollapsed && (
+          <>
+            <ResizeHandle className="-top-1 -left-1" cursor="nwse-resize" />
+            <ResizeHandle className="-top-1 -right-1" cursor="nesw-resize" />
+            <ResizeHandle className="-bottom-1 -left-1" cursor="nesw-resize" />
+            <ResizeHandle className="-bottom-1 -right-1" cursor="nwse-resize" />
+          </>
+        )}
+
         <div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Container Utilization</h3>
             <span className="text-2xl font-bold text-foreground">{utilization.toFixed(1)}%</span>
           </div>
-          <Progress value={utilization} className="h-3" />
+          <Progress value={utilization} className="h-2" />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Package className="h-4 w-4" />
-              <span className="text-sm">Packed Items</span>
+          <div className="bg-muted/50 p-3 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <Package className="h-4 w-4 text-primary" />
+              <span className="text-xs font-medium text-muted-foreground">Packed</span>
             </div>
-            <p className="text-2xl font-bold text-success">{packedItems.length}</p>
+            <p className="text-xl font-bold">{packedItems.length}</p>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Package className="h-4 w-4" />
-              <span className="text-sm">Unpacked Items</span>
+          <div className="bg-muted/50 p-3 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <Box className="h-4 w-4 text-destructive" />
+              <span className="text-xs font-medium text-muted-foreground">Unpacked</span>
             </div>
-            <p className="text-2xl font-bold text-destructive">{unpackedItems.length}</p>
+            <p className="text-xl font-bold text-destructive">{unpackedItems.length}</p>
           </div>
+        </div>
 
-          <div className="space-y-1">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Box className="h-4 w-4" />
-              <span className="text-sm">Total Volume</span>
+              <span>Volume</span>
             </div>
-            <p className="text-lg font-semibold text-foreground">{(totalVolume / 1000000).toFixed(3)} m³</p>
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Box className="h-4 w-4" />
-              <span className="text-sm">Used Volume</span>
-            </div>
-            <p className="text-lg font-semibold text-foreground">{(usedVolume / 1000000).toFixed(3)} m³</p>
+            <span className="font-mono">
+              {(usedVolume / 1000).toFixed(1)}k / {(totalVolume / 1000).toFixed(1)}k
+            </span>
           </div>
 
           {hasWeightData && (
-            <>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Weight className="h-4 w-4" />
-                  <span className="text-sm">Total Weight</span>
-                </div>
-                <p className="text-lg font-semibold text-foreground">{totalWeight.toFixed(1)} kg</p>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Weight className="h-4 w-4" />
+                <span>Weight</span>
               </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Weight className="h-4 w-4" />
-                  <span className="text-sm">Packed Weight</span>
-                </div>
-                <p className="text-lg font-semibold text-success">{packedWeight.toFixed(1)} kg</p>
-              </div>
-            </>
+              <span className="font-mono">
+                {packedWeight.toFixed(1)} / {totalWeight.toFixed(1)} kg
+              </span>
+            </div>
           )}
         </div>
       </div>
