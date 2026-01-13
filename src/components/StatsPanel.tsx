@@ -164,15 +164,24 @@ export function StatsPanel({ result }: StatsPanelProps) {
     );
   }
 
-  const { utilization, packedItems, unpackedItems, totalVolume, usedVolume } = result;
+  const { utilization, packedItems, unpackedItems, totalVolume, usedVolume, containers, totalUtilization } = result;
+
+  // For multi-container results, we need to aggregate all packed items
+  const allPackedItems = containers
+    ? containers.flatMap(c => c.packedItems)
+    : packedItems;
 
   // Calculate weight statistics
-  const totalWeight = [...packedItems, ...unpackedItems].reduce(
+  const totalWeight = [...allPackedItems, ...unpackedItems].reduce(
     (sum, item) => sum + (item.weight || 0),
     0
   );
-  const packedWeight = packedItems.reduce((sum, item) => sum + (item.weight || 0), 0);
+  const packedWeight = allPackedItems.reduce((sum, item) => sum + (item.weight || 0), 0);
   const hasWeightData = totalWeight > 0;
+
+  // Use aggregated stats for display
+  const displayUtilization = totalUtilization ?? utilization;
+  const displayPackedCount = allPackedItems.length;
 
   // Resize Handle Component
   const ResizeHandle = ({ className, cursor }: { className: string, cursor: string }) => (
@@ -252,9 +261,9 @@ export function StatsPanel({ result }: StatsPanelProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Container Utilization</h3>
-            <span className="text-2xl font-bold text-foreground">{utilization.toFixed(1)}%</span>
+            <span className="text-2xl font-bold text-foreground">{displayUtilization.toFixed(1)}%</span>
           </div>
-          <Progress value={utilization} className="h-2" />
+          <Progress value={displayUtilization} className="h-2" />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -263,7 +272,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
               <Package className="h-4 w-4 text-primary" />
               <span className="text-xs font-medium text-muted-foreground">Packed</span>
             </div>
-            <p className="text-xl font-bold">{packedItems.length}</p>
+            <p className="text-xl font-bold">{displayPackedCount}</p>
           </div>
 
           <div className="bg-muted/50 p-3 rounded-lg">
@@ -303,7 +312,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
             <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Item Details</h4>
             <div className="max-h-48 overflow-y-auto pr-2 space-y-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
               {Object.values(
-                [...packedItems, ...unpackedItems].reduce((acc, item) => {
+                [...allPackedItems, ...unpackedItems].reduce((acc, item) => {
                   if (!acc[item.name]) {
                     acc[item.name] = {
                       name: item.name,
@@ -320,7 +329,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
                 }, {} as Record<string, { name: string, width: number, height: number, depth: number, total: number, packed: number }>)
               ).map((stat: any) => {
                 // Calculate packed count for this specific group
-                stat.packed = packedItems.filter(p => p.name === stat.name).length;
+                stat.packed = allPackedItems.filter(p => p.name === stat.name).length;
                 const isComplete = stat.packed === stat.total;
 
                 return (

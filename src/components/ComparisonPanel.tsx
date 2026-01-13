@@ -115,7 +115,7 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
         <div className="pt-3 border-t">
           <p className="text-xs text-muted-foreground">
             <strong className="text-foreground">{comparison.bestAlgorithm}</strong> is most efficient at{" "}
-            <strong className="text-foreground">{comparison.results[0].utilization.toFixed(2)}%</strong>
+            <strong className="text-foreground">{(comparison.results[0].totalUtilization ?? comparison.results[0].utilization).toFixed(2)}%</strong>
           </p>
         </div>
       </div>
