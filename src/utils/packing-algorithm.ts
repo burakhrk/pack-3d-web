@@ -57,9 +57,12 @@ export function packPreSortedItems(container: Container, items: Item[], gridReso
         color: ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
+      console.warn(`[Greedy] Failed to pack item ${item.name} (${item.width}x${item.height}x${item.depth}). Container full?`);
       unpackedItems.push(item);
     }
   }
+
+  console.log(`[Greedy] Finished. Packed ${packedItems.length}/${items.length} items.`);
 
   // Calculate utilization
   const containerVolume = calculateVolume(container);

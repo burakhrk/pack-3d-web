@@ -35,8 +35,8 @@ export function packItemsGenetic(
 
   for (let gen = 0; gen < generations; gen++) {
     // Report progress
+    // Calculate percentage (0 to 100)
     if (onProgress) {
-      // Calculate percentage (0 to 100)
       onProgress(Math.round((gen / generations) * 100));
     }
 
@@ -44,6 +44,11 @@ export function packItemsGenetic(
     population.forEach(chromosome => {
       chromosome.fitness = evaluateFitness(chromosome, items, container, gridResolution);
     });
+
+    // Sort to find best
+    population.sort((a, b) => b.fitness - a.fitness);
+    const bestFitness = population[0].fitness;
+    console.log(`[Genetic] Gen ${gen + 1}/${generations}: Best Fitness (Utilization) = ${bestFitness.toFixed(2)}%`);
 
     // Selection and reproduction
     population = evolvePopulation(population, mutationRate);
@@ -54,8 +59,10 @@ export function packItemsGenetic(
   // Get best solution
   population.sort((a, b) => b.fitness - a.fitness);
   const bestSequence = population[0].sequence;
+  const finalResult = packWithSequence(container, items, bestSequence, gridResolution);
 
-  return packWithSequence(container, items, bestSequence, gridResolution);
+  console.log(`[Genetic] Final Result: Packed ${finalResult.packedItems.length}/${items.length} items. Utilization: ${finalResult.utilization.toFixed(2)}%`);
+  return finalResult;
 }
 
 function initializePopulation(itemCount: number, populationSize: number): Chromosome[] {
