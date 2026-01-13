@@ -22,13 +22,13 @@ export const scenarios: Scenario[] = [
 
     {
         name: "Warehouse Transfer (Multi-Container)",
-        description: "Large scale transfer requiring multiple 40ft containers due to high volume.",
+        description: "Standard 20ft ISO container shipment. High volume mixed cargo requiring multiple containers.",
         data: {
-            container: { id: "cont-40ft", width: 1203, height: 239, depth: 235 }, // 40ft
+            container: { id: "cont-20ft", width: 590, height: 239, depth: 235 }, // 20ft Standard
             items: [
-                ...generateItems("crate", "Industrial Crate", 60, 100, 100, 100, 150, "#4B5563"),
-                ...generateItems("drum", "Oil Drum", 40, 60, 90, 60, 50, "#DC2626"),
-                ...generateItems("pallet-stack", "Pallet Stack", 10, 120, 100, 80, 200, "#F59E0B"),
+                ...generateItems("crate", "Industrial Crate", 32, 100, 100, 100, 150, "#4B5563"),
+                ...generateItems("drum", "Oil Drum", 25, 60, 90, 60, 50, "#DC2626"),
+                ...generateItems("pallet-stack", "Pallet Stack", 8, 120, 100, 80, 200, "#F59E0B"),
             ],
             parameters: { containerCount: 2 }
         }
@@ -53,8 +53,10 @@ export const scenarios: Scenario[] = [
         data: {
             container: { id: "cont-overflow", width: 100, height: 100, depth: 1000 },
             items: [
-                ...Array.from({ length: 15 }).map((_, i) => ({ id: `over-a-${i}`, name: "Block A (36)", width: 36, height: 100, depth: 100, weight: 36, color: "#EF4444" })),
-                ...Array.from({ length: 30 }).map((_, i) => ({ id: `over-b-${i}`, name: "Block B (32)", width: 32, height: 100, depth: 100, weight: 32, color: "#3B82F6" })),
+                ...Array.from({ length: 12 }).map((_, i) => ({ id: `over-a-${i}`, name: "Block A (36)", width: 36, height: 100, depth: 100, weight: 36, color: "#EF4444" })),
+                ...Array.from({ length: 24 }).map((_, i) => ({ id: `over-b-${i}`, name: "Block B (32)", width: 32, height: 100, depth: 100, weight: 32, color: "#3B82F6" })),
+                ...Array.from({ length: 24 }).map((_, i) => ({ id: `over-c-${i}`, name: "Filler C (18)", width: 18, height: 50, depth: 50, weight: 5, color: "#10B981" })),
+                ...Array.from({ length: 6 }).map((_, i) => ({ id: `over-d-${i}`, name: "Awkward D (52)", width: 52, height: 50, depth: 50, weight: 15, color: "#F59E0B" })),
             ],
             parameters: { containerCount: 1 }
         }
