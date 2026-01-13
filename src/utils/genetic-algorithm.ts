@@ -61,6 +61,12 @@ export function packItemsGenetic(
   const bestSequence = population[0].sequence;
   const finalResult = packWithSequence(container, items, bestSequence, gridResolution);
 
+  // Log detailed verification data
+  console.log(`[Genetic] Final Best Sequence - First 3 Items:`);
+  finalResult.packedItems.slice(0, 3).forEach((item, idx) => {
+    console.log(`  ${idx + 1}. ${item.name} at (${item.position.x}, ${item.position.y}, ${item.position.z})`);
+  });
+
   console.log(`[Genetic] Final Result: Packed ${finalResult.packedItems.length}/${items.length} items. Utilization: ${finalResult.utilization.toFixed(2)}%`);
   return finalResult;
 }

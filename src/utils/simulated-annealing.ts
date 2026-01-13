@@ -103,6 +103,12 @@ export function packItemsSimulatedAnnealing(
 
     if (onProgress) onProgress(100);
 
+    // Log detailed verification data
+    console.log(`[Simulated Annealing] First 3 Items:`);
+    bestResult.packedItems.slice(0, 3).forEach((item, idx) => {
+        console.log(`  ${idx + 1}. ${item.name} at (${item.position.x}, ${item.position.y}, ${item.position.z})`);
+    });
+
     console.log(`[Simulated Annealing] Final Result: Packed ${bestResult.packedItems.length}/${items.length} items. Utilization: ${bestResult.utilization.toFixed(2)}%`);
     return bestResult;
 }
