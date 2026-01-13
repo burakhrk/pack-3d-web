@@ -34,7 +34,7 @@ export function packItemsBestFit(container: Container, items: Item[], gridResolu
       packedItems.push({
         ...result.item, // Use rotated dimensions
         position: result.position,
-        color: ITEM_COLORS[i % ITEM_COLORS.length],
+        color: item.color || ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
       unpackedItems.push(item);

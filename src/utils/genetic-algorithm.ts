@@ -183,7 +183,7 @@ function packWithSequence(container: Container, items: Item[], sequence: number[
               packedItems.push({
                 ...orientation,
                 position,
-                color: ITEM_COLORS[colorIdx % ITEM_COLORS.length],
+                color: item.color || ITEM_COLORS[colorIdx % ITEM_COLORS.length],
               });
               placed = true;
             }
