@@ -19,30 +19,7 @@ const generateItems = (baseId: string, name: string, count: number, w: number, h
 };
 
 export const scenarios: Scenario[] = [
-    {
-        name: "Standard Pallet Run",
-        description: "14 Euro Pallets attempting to fit into a 20ft Container.",
-        data: {
-            container: { id: "cont-20ft", width: 590, height: 239, depth: 235 }, // 20ft
-            items: [
-                ...generateItems("pallet", "Euro Pallet", 14, 120, 14, 80, 25, "#8B4513"),
-            ],
-            parameters: { containerCount: 1 }
-        }
-    },
-    {
-        name: "E-Commerce Delivery",
-        description: "A delivery truck packed with mixed parcel sizes.",
-        data: {
-            container: { id: "truck", width: 420, height: 220, depth: 210 }, // Delivery Truck
-            items: [
-                ...generateItems("large-box", "Large Move Box", 10, 60, 50, 50, 15, "#2563EB"),
-                ...generateItems("med-box", "Medium Box", 30, 50, 40, 40, 10, "#3B82F6"),
-                ...generateItems("small-parcel", "Small Parcel", 50, 30, 20, 20, 2, "#93C5FD"),
-            ],
-            parameters: { containerCount: 1 }
-        }
-    },
+
     {
         name: "Warehouse Transfer (Multi-Container)",
         description: "Large scale transfer requiring multiple 40ft containers due to high volume.",

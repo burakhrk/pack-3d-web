@@ -1,13 +1,149 @@
-WEB TABANLI 3 BOYUTLU KONTEYNER YÜKLEME OPTİMİZASYONU VE KARŞILAŞTIRMALI SEZGİSEL ALGORİTMA ANALİZİ
+ 
 
+T.C. PAMUKKALE ÜNİVERSİTESİ MÜHENDİSLİK FAKÜLTESİ
+
+ENDÜSTRİ MÜHENDİSLİĞİ BÖLÜMÜ
+
+
+LİSANS BİTİRME TEZİ
+Web Tabanlı 3 Boyutlu Konteyner Yükleme Optimizasyonu ve Karşılaştırmalı Sezgisel Algoritma Analizi
+
+
+HAZIRLAYAN
+Osman Şahin BENLİ
+Burak Haydar KONCA
+
+
+DANIŞMAN
+Profesör Dr. Can Berk Kalaycı
+
+
+
+
+
+
+Aralık 2025, DENİZLİ
+ 
+ONAY SAYFASI
+
+Bu tez, Pamukkale Üniversitesi Endüstri Mühendisliği Bölümü Tez Yazım Kılavuzu'na uygun olarak hazırlanmış ve aşağıda imzası bulunan danışman öğretim üyesi tarafından kabul edilmiştir.
+
+
+
+Tez Adı	
+Öğrenci Adı Soyadı	
+Öğrenci Numarası	
+Danışman Ünvanı Adı Soyadı	
+
+
+
+
+
+Jüri Rolü	Öğretim Üyesi Ünvanı Adı Soyadı	İmza
+Danışman		
+Üye		
+Üye		
+ 
+TEZ BEYANNAMESİ
+
+Pamukkale Üniversitesi Mühendislik Fakültesi Endüstri Mühendisliği, tez yazım kurallarına uygun olarak hazırladığım bu tez çalışmasında;
+	Yer alan tüm bilgi ve belgeleri, akademik kurallar çerçevesinde elde ettiğimi,
+	Kullandığım verilerde herhangi bir değişiklik yapmadığımı,
+	Yükseköğretim Kurulu tarafından yayınlanan “Üretken Yapay Zeka Kullanımı Etik Kuralları” ile uyumlu hareket ettiğimi,
+	Referans aldığım tüm kaynaklara atıf verdiğimi beyan ederim.
+
+
+
+
+Tarih Öğrencinin Numarası, Adı ve SOYADI
+İmzası
+ 
+İÇİNDEKİLER
+TEZ BAŞLIĞI
+ŞEKİLLER LİSTESİ	iv
+TABLOLAR LİSTESİ	v
+ÖZET	vii
+ABSTRACT	viii
+	BÖLÜM: GİRİŞ	1
+	BÖLÜM: LİTERATÜR TARAMASI	3
+	BÖLÜM: PROBLEM TANIMI	4
+	BÖLÜM: YÖNTEM	5
+	BÖLÜM: UYGULAMA	8
+	BÖLÜM: BULGULAR	13
+	BÖLÜM: SONUÇLAR VE ÖNERİLER	15
+KAYNAKÇA	16
+EKLER	19
+ 
+ŞEKİLLER LİSTESİ
+
+
+Şekil 1<Şekil adı burada olacak>	2
+
+Şekil 2	5
+ 
+TABLOLAR LİSTESİ
+Tablo 1<Tablo adı burada olacak>	2
+Tablo 2	5
+ 
+ÖNSÖZ
+
+
+	Bu tez çalışması, lojistik ve tedarik zinciri yönetiminin en kritik süreçlerinden biri olan konteyner yükleme operasyonlarının dijitalleşmesi ve optimizasyonu üzerine odaklanmaktadır. "Web Tabanlı 3 Boyutlu Konteyner Yükleme Optimizasyonu ve Karşılaştırmalı Sezgisel Algoritma Analizi" başlıklı bu çalışma ile farklı sezgisel algoritmaların yükleme verimliliği üzerindeki etkileri karşılaştırmalı olarak analiz edilmiş ve bu algoritmaların web tabanlı bir arayüz aracılığıyla 3 boyutlu görselleştirme imkanları araştırılmıştır. Çalışmanın temel amacı, karmaşık yükleme problemlerine hızlı, etkin ve kullanıcı dostu çözümler sunarak operasyonel süreçlerdeki doluluk oranlarını maksimize etmektir.
+
+	Bu çalışmanın planlanması, yürütülmesi ve tamamlanması aşamalarında değerli bilgi, birikim ve tecrübeleriyle bana yol gösteren, her konuda akademik desteğini esirgemeyen sayın Profesör Dr. Can Berk Kalaycı'ya en içten teşekkürlerimi sunarım.
+ 
+Web Tabanlı 3 Boyutlu Konteyner Yükleme Optimizasyonu ve Karşılaştırmalı Sezgisel Algoritma Analizi
+	ÖZET
+
+Amaç: 
+Tasarım ve Yöntem: 
+Bulgular: 
+Sonuç ve Öneriler: 
+Anahtar Kelimeler: 
+ 
+<İNGİLİZCE TEZ BAŞLIĞINI BURAYA YAZINIZ> ABSTRACT
+
+Aim: 
+
+Design and Method: 
+Findings: 
+Results and Discussions: 
+Keywords: 
+ 
+
+
+
+
+
+
+
+Amaç
+ 
+ÖRNEK
+<Örneği inceledikten sonra bu sayfayı siliniz> TEDARİKÇİ SEÇİMİ İÇİN BİR KARAR DESTEK SİSTEMİ
 ÖZET
-Lojistik sektöründe konteyner doluluk oranının artırılması, taşıma maliyetlerinin düşürülmesi ve çevresel etkilerin azaltılması açısından kritik bir problemdir. Bu çalışmada, 3-Boyutlu Konteyner Yükleme Problemi (3D-CLP) için web-tabanlı, etkileşimli bir karar-destek aracı geliştirilmiştir. Araç, Best-Fit, Genetik Algoritma (GA) ve Tavlama Benzetimi (SA) olmak üzere üç farklı sezgisel yöntemi uygulayarak paket yerleşimini optimize eder ve sonuçları Three.js tabanlı bir arayüzde üç boyutlu olarak görselleştirir.
+ 
+Bu çalışmanın temel amacı, lojistik sektöründe kritik bir öneme sahip olan 3 Boyutlu Konteyner Yükleme Problemi (3D-CLP) için web tabanlı, etkileşimli ve erişilebilir bir karar destek sistemi geliştirmektir. Çalışma kapsamında, klasik sezgisel yöntemler (First-Fit, Best-Fit) ile meta-sezgisel optimizasyon yöntemlerinin (Genetik Algoritma, Tavlama Benzetimi) performanslarının karşılaştırmalı olarak analiz edilmesi hedeflenmektedir. Özellikle "Sıralama Paradoksu" gibi karmaşık geometrik senaryolarda, doğru algoritma seçimiyle hacimsel doluluk oranının artırılması ve konteyner maliyetlerinin düşürülmesi amaçlanmaktadır. Ayrıca, Three.js tabanlı modern web teknolojileri kullanılarak yükleme planlarının 3 boyutlu ve interaktif bir şekilde görselleştirilmesi, böylece karar vericilere operasyonel verimliliği artıracak kullanıcı dostu bir analiz ortamı sunulması hedeflenmiştir.
+Tasarım ve Yöntem
+Bulgular
+Sonuç
+Anahtar Kelimeler: 
 
-Algoritmalar, "Homojen Dağılım", "Heterojen Dağılım" ve "Sıralama Paradoksu" adlı üç benchmark senaryosu üzerinde karşılaştırmalı olarak test edilmiştir. GA, özellikle "Sıralama Paradoksu" senaryosunda %7,2 daha yüksek hacimsel doluluk ve %30 daha kısa işlem süresi (yaklaşık 30 sn) elde ederken, Best-Fit ise en hızlı (yaklaşık 0,8 sn) ancak daha düşük doluluk (%84) sunar.
 
-Geliştirilen sistem, açık kaynak kodlu olması, anlık 3-D görselleştirme sunması ve tarayıcı üzerinden erişilebilir olmasıyla mevcut ticari çözümlere göre daha düşük maliyetli ve ölçeklenebilir bir alternatif sunmaktadır.
 
-BÖLÜM 1: GİRİŞ
+
+ 
+ÖRNEK
+<Örneği inceledikten sonra bu sayfayı siliniz>
+A DECISION SUPPORT SYSTEMS FOR SUPPLIER SELECTION ABSTRACT
+Aim
+Design & Methodology
+Findings
+Sonuç (Conclusion)
+Keywords: 
+ 
+	BÖLÜM: GİRİŞ
+
 
 Küreselleşen dünya ekonomisi ve patlayıcı bir büyüme gösteren e-ticaret sektörü, tedarik zinciri yönetimini modern işletmelerin en kritik yetkinliği haline getirmiştir. Üretim noktalarından nihai tüketiciye uzanan süreçte, dağıtım lojistiği (outbound logistics), toplam ürün maliyetinin önemli bir bileşenini oluşturmaktadır. Özellikle denizaşırı taşımacılıkta standart birim olan konteynerlerin etkin kullanımı, sadece bir maliyet kalemi değil, aynı zamanda operasyonel sürdürülebilirlik ve karbon ayak izinin azaltılması açısından da stratejik bir zorunluluktur. Bu bağlamda, kısıtlı bir hacme sahip olan taşıma birimlerine (konteyner, kamyon, palet) maksimum miktarda ürünün, belirli geometrik ve fiziksel kısıtlar altında yerleştirilmesi problemi, yani "3-Boyutlu Konteyner Yükleme Problemi" (3D-CLP), endüstri mühendisliği ve yöneylem araştırması literatürünün en köklü ve güncel problemlerinden biri olarak öne çıkmaktadır.
 
@@ -16,6 +152,14 @@ Lojistik sektöründe "Hava Taşıma" (Shipping Air) olarak bilinen verimsizlik 
 Bu tez çalışması, söz konusu literatür boşluğunu doldurmak amacıyla, modern web teknolojileri (React, Three.js) ile ileri optimizasyon algoritmalarının (Genetik Algoritma, Tavlama Benzetimi) entegrasyonuna dayalı, platform bağımsız ve etkileşimli bir "Akıllı Karar Destek Sistemi" önermektedir. Çalışma, sadece optimum paketleme düzenini matematiksel olarak hesaplamayı değil, aynı zamanda bu düzeni kullanıcıya 3-boyutlu, döndürülebilir ve katman katman incelenebilir bir görsel simülasyon olarak sunmayı hedefler.
 
 Çalışmanın temel araştırma problemi, "İnteraktif 3-boyutlu görselleştirme ile desteklenen meta-sezgisel algoritmalar, karmaşık kargo dağılımlarında ve 'Sıralama Paradoksu' gibi özel geometrik kriz senaryolarında, konteyner doluluk oranlarını klasik kurallı yöntemlere (First-Fit, Best-Fit) kıyasla ne ölçüde artırabilir?" sorusudur. Bu doğrultuda, geliştirilen sistem üzerinden Best-Fit, Genetik Algoritma (GA) ve Tavlama Benzetimi (SA) algoritmalarının performansları karşılaştırmalı olarak analiz edilmiştir. Elde edilen bulgular, lojistik operasyonlarında kaynak verimliliğini artırarak hem ekonomik kazanç sağlanmasına hem de gereksiz sefer sayısının azaltılarak çevresel sürdürülebilirliğe katkıda bulunulmasına yönelik somut öneriler sunmaktadır.
+
+Şekil tablosu öğesi bulunamadı.
+Açıklama
+Problem	3D Çoklu Konteyner Yükleme
+Yöntemler	FFD, Best-Fit, GA, SA
+Ortam	Web tabanlı DSS
+Performans Ölçütleri	Doluluk %, Süre, Konteyner Sayısı
+Katkı	Sıralama Paradoksu analizi + görselleştirme
 
 1.1. KONU TANIMI
 
@@ -97,10 +241,37 @@ Akademik ve Bireysel Katkılar:
 - "Sıralama Paradoksu" üzerine yapılan detaylı analiz ve görselleştirmeler, literatürdeki benzer çalışmalara kıyasla problemin anlaşılırlığını artıran özgün bir eğitim materyali niteliği taşımaktadır.
 - Geliştirilen açık kaynaklı proje, gelecekteki araştırmacılar için çoklu kısıtlar (ağırlık dengesi, tehlikeli madde ayrımı vb.) üzerine eklentiler geliştirebilecekleri esnek bir temel oluşturmaktadır.
 
-BÖLÜM 2: LİTERATÜR TARAMASI
 
-2.1. Konteyner Yükleme Problemi (CLP) Sınıflandırması
-Literatürde Kesme ve Paketleme (Cutting and Packing) problemleri, Dyckhoff (1990) ve Wäscher et al. (2007) tarafından kapsamlı tipolojilere ayrılmıştır. 3D-CLP, temel olarak "Output Maximization" (Çıktı Maksimizasyonu) sınıfına girer; burada amaç, sabit bir konteyner hacmi içerisine yerleştirilen kargo hacmini maksimize etmektir. Problem, Knapsack Problemi'nin geometrik kısıtlarla (çakışmazlık, ortogonallik, oryantasyon) genişletilmiş halidir.
+	BÖLÜM: LİTERATÜR TARAMASI
+
+
+Yazar(lar)	Yöntem(ler)	Çalışma Alanı	Özet
+Sani Tijjani,(2014)	Genetik Algoritma (GA), Karınca Kolonisi (ACO) ve Takviyeli Öğrenme ($TD(\lambda)$, Q-öğrenme, SARSA, Monte-Carlo).
+	Bilgisayar Mühendisliği / Lojistik ve Konteyner Yükleme Optimizasyonu.	Çalışma, konteyner yükleme verimliliğini artırmak için farklı algoritmaları karşılaştırmaktadır. Bulgulara göre; küçük ölçekli yerleşimlerde Genetik Algoritma hızlı ve etkiliyken, büyük ve karmaşık depolama alanlarında $TD(\lambda)$ algoritması en yüksek işlem hızı ve verimliliği sunan yöntem olmuştur. RL (Takviyeli Öğrenme) yöntemlerinin, büyük veri setlerinde hesaplama maliyetini önemli ölçüde azalttığı kanıtlanmıştır.
+
+Andreas Bortfeldt ve Hermann Gehring,(2001)	Hibrit Genetik Algoritma (GA) ve entegre açgözlü (greedy) sezgisel algoritma.	3 Boyutlu Konteyner Yükleme Problemi (3D-CLP) ve Paketleme Optimizasyonu.	Bu çalışma, farklı boyutlardaki kutuların tek bir konteynere yerleştirilmesi için hibrit bir genetik algoritma sunar. Yükleme planları dikey katmanlar temel alınarak oluşturulur ve gerçek hayattaki kısıtlar dikkate alınır. Yapılan testler, bu yöntemin özellikle çok farklı boyutlardaki (heterojen) kutuların olduğu karmaşık senaryolarda yüksek performans sergilediğini kanıtlamıştır.
+Tian Tian, Wenbin Zhu, Andrew Lim ve Lijun Wei (2016).	İstatistiksel tahmin yöntemi (statistical estimation), ikili arama (binary search) ve "look-ahead" (ileriye dönük) paketleme sezgiseli.	Çoklu Konteyner Yükleme Problemi (MCLPP), Karar Destek Sistemleri ve Lojistik Optimizasyonu.	Bu çalışma, "Tercihli Çoklu Konteyner Yükleme Problemi" (MCLPP) adlı yeni bir problemi literatüre kazandırmaktadır. Uluslararası bir ses ekipmanı üreticisinin gerçek ihtiyaçlarından yola çıkarak, müşteri tercihlerini göz önünde bulundurup sipariş miktarlarını optimize ederek birim nakliye maliyetlerini düşürmeyi hedefler. Geliştirilen algoritma hem konteyner doluluk oranını artırmakta hem de lojistik süreçlerde karar vericilere stratejik bir destek sunmaktadır.
+David Pisinger (2002).	Duvar inşa etme (wall-building) yaklaşımı, katman ve şerit ayrıştırma tekniği, Dal-Sınır (Branch-and-Bound) algoritması ve Knapsack Problemi optimizasyonu.	3 Boyutlu Konteyner Yükleme Problemi (3D-CLP), Sırt Çantası (Knapsack) Problemi ve Sezgisel Optimizasyon.	Çalışma, bir konteynere yerleştirilen kutuların toplam hacmini maksimize etmek için "duvar inşa etme" stratejisine dayalı yeni bir sezgisel yöntem önermektedir. Problem, önce katmanlara ardından şeritlere ayrıştırılır; her bir şeridin paketlenmesi bir Knapsack Problemi olarak çözülür. Geliştirilen algoritma, hem benzer (homojen) hem de farklı boyutlardaki (heterojen) kutu setlerinde test edilmiş; özellikle büyük ölçekli veri setlerinde %90'ın üzerinde doluluk oranlarına ulaşarak yüksek performans sergilediği kanıtlanmıştır.
+Shyi-Ching Liang, Chi-Yu Lee ve Shih-Wei Huang (2007).	Hibrit meta-sezgisel (hybrid meta-heuristic) yaklaşım (Genetik Algoritma ve yerel arama tekniklerinin birleşimi).	3 Boyutlu Konteyner Yükleme Problemi (CLP) ve Lojistik Yönetimi.	Bu çalışma, konteynerlerdeki boş alanı en aza indirmek ve nakliye maliyetlerini düşürmek için verimli bir yükleme stratejisi önermektedir. Geliştirilen hibrit meta-sezgisel yöntem, kutuların yerleşim sırasını ve yönelimini optimize ederek hacimsel doluluk oranını maksimize eder. Yapılan deneysel testler, bu yöntemin operasyonel verimliliği artırmada geleneksel yöntemlere göre daha başarılı sonuçlar verdiğini ortaya koymuştur.
+Aykut Şen (2023).	Genetik Algoritma (GA) tabanlı hibrit yaklaşım ve sezgisel yerleşim stratejileri.	Akıllı Sistemler Mühendisliği, Konteyner Yükleme Problemi (CLP) ve Lojistik Optimizasyonu.	Bu yüksek lisans tezi, lojistik süreçlerde konteyner doluluk oranlarını maksimize etmek ve maliyetleri düşürmek amacıyla hibrit bir genetik algoritma geliştirmeye odaklanmaktadır. Çalışma kapsamında, kutuların yerleşim sırası ve yönelimini optimize eden evrimsel bir yaklaşım sunulmuş; bu sayede konteyner içerisindeki boş alan kaybı en aza indirilmiştir. Ayrıca, modern yazılım teknolojilerinin (JavaScript, WebGL gibi) bu tür karmaşık optimizasyon problemlerinin görselleştirilmesi ve çözümündeki rolü ele alınmıştır.
+Gülesin Sena Daş (2010).	Karınca Kolonisi Optimizasyonu (ACO) ve Arı Algoritması (BA).	Endüstri Mühendisliği, 3 Boyutlu Konteyner Yükleme Problemi (3D-CLP) ve Meta-sezgisel Algoritmalar.	Bu doktora tezi, konteyner doluluk oranını maksimize etmek amacıyla sürü zekâsı (swarm intelligence) tabanlı çözüm yaklaşımlarını incelemektedir. Çalışma kapsamında Karınca Kolonisi ve Arı Algoritması yöntemleri ilk kez bu problem özelinde uygulanmış; elde edilen sonuçlar literatürdeki algoritmalarla kıyaslanarak bu meta-sezgisel yaklaşımların karmaşık yerleşim problemlerindeki etkinliği ve performansı kanıtlanmıştır.
+C.S. Chen, S.M. Lee ve Q.S. Shen (1995).	Sıfır-bir karışık tam sayılı programlama (zero-one mixed integer programming)	Endüstri ve Sistem Mühendisliği, Konteyner Yükleme Problemi (CLP) ve Matematiksel Modelleme.	Bu çalışma, farklı boyutlardaki kutuların (kartonların) konteynerlere yüklenmesi problemini ele alan analitik bir model sunmaktadır. Problem, kutu yönelimlerini, çoklu konteyner kullanımını ve kutuların üst üste binmemesi kısıtlarını içeren bir matematiksel model olarak formüle edilmiştir. Çalışma, problemin matematiksel özünü yakalamayı amaçlamakta ve geliştirilen modelin geçerliliğini çeşitli sayısal örneklerle kanıtlamaktadır.
+Shigeyuki Takahara (2008).	Çoklu başlangıçlı yerel arama (multi-start local search) ve "First-Fit" kavramına dayalı açgözlü (greedy) algoritma yaklaşımı.	Çoklu Konteyner Yükleme Problemi (MCLP), Üç Boyutlu Paketleme ve Lojistik Planlama.	Bu çalışma, farklı boyutlardaki kutuların bir veya daha fazla konteynere, atık alanı en aza indirecek veya yüklenen kutuların toplam değerini maksimize edecek şekilde yerleştirilmesi problemini ele almaktadır. Yazar, kutuların sıralanması ve ardından yerleştirilmesi esasına dayanan iki aşamalı bir strateji önermiştir. Geliştirilen bu "açgözlü" yaklaşım, karmaşık paketleme problemlerinde hızlı ve etkili sonuçlar üreterek yükleme planlama yazılımları için pratik bir temel oluşturmaktadır.
+Mustafa Ensari (2007).	Sezgisel (heuristic) yerleşim algoritmaları, hacim optimizasyonu ve koordinat tabanlı (X, Y, Z) yerleşim analizi.	Endüstri Mühendisliği, Konteynır Yükleme Problemi (CLP) ve Lojistik Planlama.	Bu yüksek lisans tezi, konteynerlerdeki boş hacmi en aza indirerek taşıma maliyetlerini düşürmeyi amaçlayan sezgisel bir yaklaşım önermektedir. Çalışmada, kutuların üç boyutlu bir alana en verimli şekilde yerleştirilmesi için bir algoritma geliştirilmiş; bu algoritmanın performansı, ortalama hacim oranları ve kutu yerleşim verimliliği gibi kriterler üzerinden analiz edilerek sunulmuştur.
+Mikele Gajda, Alessio Trivella, Renata Mansini ve David Pisinger (2022).	Rastgeleleştirilmiş yapıcı sezgisel (randomized constructive heuristic) algoritma ve pratik kısıt yönetimi.	Gerçek Hayat Senaryolu 3 Boyutlu Konteyner Yükleme Problemi (CLP) ve Endüstriyel Lojistik Optimizasyonu.	Bu çalışma, bir lojistik firmasının günlük operasyonlarında karşılaştığı çok karmaşık ve gerçekçi kısıtları (yük dengeleme, kargo stabilitesi, istifleme kuralları ve müşteri öncelikleri gibi) eş zamanlı olarak çözen bir optimizasyon modeli sunar. Geliştirilen sezgisel yöntem, teorik modellerin aksine endüstriyel sahadaki güvenlik ve elleçleme gereksinimlerini ön planda tutarak sevkiyat değerini maksimize eder. Sektörel iş birliğiyle hazırlanan bu makale, akademik çözümlerin gerçek dünya lojistik problemlerine başarılı bir şekilde nasıl entegre edilebileceğini kanıtlamaktadır.
+Sezgi Tekil ve Vildan Ç. Özkır (2017).	Matematiksel optimizasyon modelleri ve kutulama algoritmaları.	Lojistik Sektörü, Konteyner Yükleme ve Kutulama (Bin Packing) Problemleri.	Bu çalışma, bir filtre fabrikasının lojistik operasyonlarını temel alarak konteyner ve ticari araç yükleme süreçlerini optimize etmeyi amaçlamaktadır. Çalışma kapsamında, büyük ölçekli problemlerde kesin çözüm algoritmalarının yetersiz kalması nedeniyle geliştirilen kutulama algoritmaları kullanılmış; bu sayede konteyner sayısının azaltılması, yükleme hızının artırılması ve maliyetlerin minimize edilmesi hedeflenmiştir.
+Li Wang ve Xiaoning Zhu (2019).	Genetik Algoritma (GA) ve toplam elleçleme süresi ile konteyner yer değiştirmelerini (reshuffling) minimize eden optimizasyon modeli.	Demiryolu-Karayolu İntermodal Terminalleri, Konteyner Yükleme Optimizasyonu ve Sürdürülebilirlik.	Bu çalışma, sürdürülebilirlik kavramı çerçevesinde demiryolu-karayolu aktarma terminallerindeki konteyner yükleme operasyonlarını ve enerji tüketimini ele almaktadır. Konteynerlerin yükleme sırasını optimize etmek için özel bir Genetik Algoritma tasarlanmış; bu sayede elleçleme süresinin, gereksiz yer değiştirme hareketlerinin ve dolayısıyla enerji tüketiminin önemli ölçüde azaltılabileceği Çin'deki bir terminal örneği üzerinden kanıtlanmıştır.
+Türkay Dereli ve Gülesin Sena Daş (2010).	Hibrit Tavlama Benzetimi (Hybrid Simulated Annealing - SA) algoritması.	Çok Amaçlı Konteyner Yükleme Problemi (CLP) ve Lojistik Optimizasyonu.	Bu çalışma, konteyner yükleme problemlerini sadece hacimsel doluluk açısından değil, aynı zamanda yük dengesi gibi birden fazla amacı (çok amaçlı) göz önünde bulundurarak çözmek için hibrit bir Tavlama Benzetimi algoritması önermektedir. Geliştirilen meta-sezgisel yöntem, karmaşık kısıtlar altında hem konteyner verimliliğini artırmakta hem de operasyonel güvenliği sağlayan dengeli yerleşim planları üretmektedir.
+Tevfik Altınalev ve Alpaslan Fığlalı (2024)	İki aşamalı ardışık matematiksel modelleme ve IBM ILOG CPLEX çözümü.	Konteyner Yükleme Problemi (KYP) ve Döngüsel Taşıma Sistemleri (Milkrun).	Bu çalışma, yedek parça lojistiğinde karşılaşılan döngüsel taşıma kısıtlarına sahip özgün bir KYP'yi ele almaktadır. Karmaşıklığı yönetmek için problem ikiye bölünmüştür; ilk aşamada kutuların araçlara atanması ve tır rotalarının belirlenmesi, ikinci aşamada ise kutuların konteyner içine yerleşimi modellenmiştir. Modelde ağırlık limiti, yük dengesi, dikey kararlılık ve oryantasyon gibi çok sayıda gerçek hayat kısıtı bir arada kullanılmış ve orta ölçekli problemlerde makul sürede en iyiye yakın sonuçlar elde edilmiştir
+
+
+Literatür Özeti ve Karşılaştırmalı Analiz
+Konteyner Yükleme Problemleri (CLP), literatürde Kesme ve Paketleme (Cutting and Packing) problemleri altında incelenen ve hesaplama karmaşıklığı açısından NP-Zor (NP-Hard) kategorisinde yer alan bir yöneylem araştırması olgusudur. Problemin çözümüne yönelik ilk yaklaşımlar, Chen ve ark. (1995) tarafından sunulan sıfır-bir karışık tam sayılı programlama modelleri gibi analitik yöntemlere odaklanmıştır. Bu matematiksel modeller, problemin geometrik özünü yakalamada başarılı olsa da, nesne sayısı arttıkça çözüm süresinin üssel artması nedeniyle endüstriyel boyuttaki problemlerde yetersiz kalmaktadır. Bu kısıtlılığı aşmak amacıyla literatürde kesin çözüm yerine kabul edilebilir sürede nitelikli sonuç üreten sezgisel (heuristic) ve meta-sezgisel yöntemlerin kullanımı yaygınlaşmıştır.
+Sezgisel yöntemler arasında, Pisinger (2002) tarafından önerilen ve büyük ölçekli veri setlerinde %90'ın üzerinde doluluk oranlarına ulaşan "duvar inşa etme" (wall-building) stratejisi, hacimsel maksimizasyon açısından kritik bir dönüm noktası oluşturmuştur. Benzer şekilde, Takahara (2008) "First-Fit" kavramına dayalı açgözlü (greedy) algoritmalar ile hızlı ve pratik çözümler geliştirmiştir. Ancak, bu kural tabanlı algoritmaların "Yerel Minimum" (Local Minimum) tuzaklarına düşme eğilimi, daha gelişmiş arama stratejileri olan meta-sezgisel yöntemlerin geliştirilmesini zorunlu kılmıştır.
+Meta-sezgisel alanda, biyolojik evrimden esinlenen Genetik Algoritmalar (GA) en popüler yaklaşımlardan biridir. Bortfeldt ve Gehring (2001), heterojen kutu setlerinde yüksek performans sergileyen hibrit GA modelleri sunarken; Liang ve ark. (2007), GA'yı yerel arama teknikleriyle birleştirerek yerleşim sırası ve yönelim optimizasyonu üzerine yoğunlaşmıştır. Sani Tijjani (2014) ise GA'nın küçük ölçekli yerleşimlerde etkili olduğunu, ancak büyük veri setlerinde Takviyeli Öğrenme (RL) yöntemlerinin hesaplama maliyetini düşürmede daha avantajlı olduğunu kanıtlamıştır. Diğer bir meta-sezgisel yaklaşım olan Tavlama Benzetimi (SA), Dereli ve Daş (2010) tarafından hacimsel doluluğun yanı sıra yük dengesi gibi çok amaçlı kısıtları optimize etmek amacıyla kullanılmıştır. Daş (2010), Karınca Kolonisi ve Arı Algoritması gibi sürü zekâsı tabanlı yöntemlerin karmaşık yerleşim problemlerindeki etkinliğini ortaya koyarak literatüre farklı bir perspektif kazandırmıştır.
+Günümüz literatürü, teorik modellerden ziyade gerçek hayat senaryolarındaki karmaşık kısıtların entegrasyonuna yönelmiştir. Gajda ve ark. (2022), yük dengeleme ve müşteri öncelikleri gibi pratik kısıtları içeren sezgisel yöntemlerin endüstriyel sahadaki başarısını vurgulamıştır. Altınalev ve Fığlalı (2024) ise döngüsel taşıma (milkrun) kısıtlarına sahip problemler için iki aşamalı ardışık modeller önererek operasyonel süreçlerin yönetimine katkı sağlamıştır.
+
+Bu tez çalışması, literatürdeki bu iki temel eğilimi (algoritmik performans ve uygulama erişilebilirliği) birleştirerek özgün bir konum edinmektedir. Aykut Şen (2023) tarafından vurgulanan JavaScript ve WebGL gibi modern teknolojilerin optimizasyon sonuçlarının görselleştirilmesindeki rolü, bu çalışmanın temel teknolojik altyapısını oluşturmaktadır. Önerilen web tabanlı Karar Destek Sistemi (DSS), asenkron çalışan Web Workers mimarisi sayesinde, literatürdeki GA ve SA gibi yoğun hesaplama gerektiren algoritmaları tarayıcı tabanlı akıcı bir arayüzle sunarak "kara kutu" sorununu aşmayı ve özellikle "Sıralama Paradoksu" gibi geometrik kriz senaryolarına şeffaf çözümler üretmeyi hedeflemektedir
 
 2.2. Çözüm Yöntemleri ve Algoritma Aileleri
 
@@ -121,131 +292,305 @@ Yerel optimum (local optimum) tuzaklarından kaçmak için tasarlanmış, daha g
 
 Aşağıdaki tablo, bu tezde kullanılan ve literatürde sıkça karşılaşılan algoritmaların teorik limitlerini ve projeye uygunluklarını özetlemektedir:
 
-[TABLO 2.1: Algoritma Karmaşıklık ve Performans Karşılaştırması]
-(Aşağıdaki veriyi Word'de seçip 'Ekle > Tablo > Metni Tabloya Dönüştür' diyerek tablo yapabilirsiniz. Ayırıcı olarak ';' noktalı virgül kullanın)
 
-Algoritma;Zaman Karmaşıklığı;Çözüm Kalitesi;Parametre Hassasiyeti;Web/Mobil Uygunluğu
-FFD;O(n log n);Orta-Düşük;Yok (Deterministik);Çok Yüksek (Milisaniye)
-Best-Fit;O(n^2);Orta;Yok;Yüksek
-Genetik Algoritma;O(g * p * n);Yüksek;Yüksek (Popülasyon, Mutasyon);Orta (Worker Gerekli)
-Tavlama Benzetimi;O(i * n);Orta-Yüksek;Orta (Soğutma Katsayısı);Orta-Yüksek
-Branch-and-Bound;O(2^n);Optimal (En İyi);Yok;Düşük (Kullanılamaz)
+Algoritma	Zaman Karmaşıklığı	Çözüm Kalitesi	Parametre Hassasiyeti	Web/Mobil Uygunluğu
+FFD	O(n log n)	Orta-Düşük	Yok (Deterministik)	Çok Yüksek (Milisaniye)
+Best-Fit	O(n^2)	Orta	Yok	Yüksek
+Genetik Algoritma	O(g * p * n)	Yüksek	Yüksek (Popülasyon, Mutasyon)	Orta (Worker Gerekli)
+Tavlama Benzetimi	O(i * n)	Orta-Yüksek	Orta (Soğutma Katsayısı)	Orta-Yüksek
+Branch-and-Bound	O(2^n)	Optimal (En İyi)	Yok	Düşük (Kullanılamaz)
 
 *Not: GA için g: jenerasyon sayısı, p: popülasyon büyüklüğü; SA için i: iterasyon sayısıdır.*
 
-2.3. Web Tabanlı Hesaplama ve Asenkron Mimari
-Geleneksel optimizasyon yazılımları genellikle C++ veya Java gibi masaüstü dilleriyle geliştirilirken, modern lojistik ihtiyaçları platform bağımsız erişimi zorunlu kılmaktadır. Ancak, JavaScript'in "tek kanallı" (single-threaded) yapısı, ağır matematiksel hesaplamaların (GA gibi) arayüzü dondurmasına (UI blocking) neden olur.
+2.3. Web Tabanlı Yüksek Performanslı Hesaplama ve Asenkron Mimari
 
-Bu projede, literatürdeki bu boşluğu doldurmak için **Web Workers API** kullanılmıştır. Bu yaklaşım sayesinde:
-1. Hesaplama (Packing Logic) ve Görselleştirme (Rendering) işlemleri ayrıştırılmıştır.
-2. Genetik Algoritma arka planda binlerce iterasyon yaparken, kullanıcı 3D sahnede gezinmeye (zoom/rotate) devam edebilir.
-3. Bu mimari, "Masaüstü Performansı"nı "Web Erişilebilirliği" ile birleştiren yenilikçi bir yaklaşımdır.
+Literatürdeki web tabanlı optimizasyon çalışmalarının karşılaştığı en büyük teknik engel, JavaScript motorunun (V8 vb.) doğası gereği "Tek Kanallı" (Single-Threaded) çalışmasıdır. Bu bölümde, söz konusu engeli aşmak için geliştirilen mimari yaklaşım, geleneksel yöntemlerle kıyaslanarak sunulmuştur.
 
-2.4. Son Yıllarda Web-Tabanlı Görselleştirme ve Derin Öğrenme Yaklaşımları
-2020-2024 döneminde, web-tabanlı 3-D görselleştirme (WebGL, Three.js) ve derin öğrenme temelli paketleme (ör. CNN-tabanlı yerleşim tahmini) üzerine artan bir ilgi gözlemlenmiştir (Lee & Kim, 2021; Zhang et al., 2022). Bu çalışmalar, kullanıcı etkileşimini artırarak karar-destek sistemlerinin kullanılabilirliğini iyileştirmiştir. Tezin katkısı, bu görselleştirmeleri aktif bir optimizasyon motoruyla gerçek zamanlı olarak entegre etmesidir.
+2.3.1. Hesaplama Darboğazı ve Çözüm Yaklaşımı
 
-BÖLÜM 3: MATERYAL VE YÖNTEM
+**Geleneksel Yaklaşım (Senkron/Bloke Edici):**
+Klasik web uygulamalarında, arayüz (UI) ve mantık (Logic) işlemleri aynı ana iş parçacığı (Main Thread) üzerinde yürütülür. Genetik Algoritma gibi milyonlarca döngü içeren CPU-yoğun bir işlem başlatıldığında:
+1. İşlemci %100 kullanıma ulaşır.
+2. Arayüz render işlemi durur (FPS 0'a düşer).
+3. Kullanıcı tarayıcıyı hareket ettiremez veya kapatamaz ("Sayfa Yanıt Vermiyor" hatası).
+Bu durum, endüstriyel boyutta bir optimizasyon aracının web ortamında çalışmasını imkânsız kılan temel faktördür.
 
-3.1. Kullanılan Teknolojiler
+Önerilen Mimari (Web Workers ile Asenkron/Paralel):
+Bu tezde uygulanan mimaride, **Web Workers API kullanılarak hesaplama yükü ana sistemden tamamen izole edilmiştir.
+Ana Kanal (UI Thread):Sadece Three.js ile 60 FPS akıcı 3D görselleştirme, kullanıcı etkileşimi ve sonuçların sunumunu yönetir.
+- İşçi Kanalı (Worker Thread):Arka planda çalışan, DOM erişimi olmayan izole bir ortamdır. Paketleme algoritmaları burada koşturulur.
 
-3.1.1. Teknoloji Stack Diyagramı
-[ŞEKİL 3.1: Teknoloji Stack ve Sistem Mimarisi Diyagramı]
-(Orijinal metindeki Mermaid diyagramı yerine bu açıklama konulmuştur. Şekil 3.1'de React, TypeScript, Three.js ve Web Workers katmanları arasındaki ilişki gösterilmektedir.)
+Karşılaştırmalı Performans Analizi:
+(Aşağıdaki veriyi Word'de seçip 'Ekle > Tablo > Metni Tabloya Dönüştür' diyerek tablo yapabilirsiniz. Ayırıcı olarak ';' noktalı virgül kullanın)
 
-3.1.2. Detaylı Teknoloji Listesi
-- Frontend: React 18, TypeScript, Vite
-- 3D Görselleştirme: Three.js, React-Three-Fiber, @react-three-drei
-- UI Bileşenleri: Radix UI, Tailwind CSS, Lucide React
-- Veri Görselleştirme: Recharts
-- Durum Yönetimi: React Context API
-- Asenkron İşlem: Web Workers API
-- Performans Ölçümü: Performance API
+Mimarisi;UI Tepki Süresi (Latency);Optimizasyon Süresince Arayüz;Kullanıcı Deneyimi
+Geleneksel (Single Thread);> 5000ms (Bloke);Donmuş (Unresponsive);Kritik Hata Algısı
+Önerilen (Multi-Thread Worker);< 16ms (60 FPS);Akıcı / İnteraktif;Masaüstü Uygulama Kalitesi
 
-3.2. Veri Modeli ve Kısıtlar
+Bu mimari tercih, web tabanlı bir sistemin, C++ ile yazılmış yerel bir masaüstü yazılımı kadar tepkisel ve yüksek performanslı olabilmesinin teknik temelini oluşturmaktadır.
 
-3.2.1. Nesne (Item) ve Konteyner (Container) Tanımları
-Sistemde kullanılan temel veri yapıları şunlardır:
-- Item: ID, genişlik, yükseklik, derinlik ve opsiyonel ağırlık bilgisini içerir.
-- PackedItem: Item özelliklerine ek olarak x, y, z koordinatlarını ve rotasyon durumunu tutar.
 
-3.2.2. Rotasyon Permütasyonları
-[ŞEKİL 3.2: Rotasyon Permütasyonları Şeması]
-(Bir nesnenin 3 boyutlu uzayda alabileceği 6 farklı oryantasyon gösterilmektedir.)
+ 
+	BÖLÜM: PROBLEM TANIMI
 
-3.3. Algoritmalar
 
-3.3.1. First-Fit Decreasing (FFD)
-1. Sıralama: Nesneler hacimlerine göre azalan sırada dizilir.
-2. Konteyner Başlatma: Boş bir konteyner ve başlangıç noktası (0,0,0) belirlenir.
-3. Konum Arama: Izgara (gridResolution=5) üzerinde tarama yapılır.
-4. Uygunluk Kontrolü: Rotasyonlardan biri sığıyorsa paketleme gerçekleşir.
-5. Tekrar: Yerleşemeyen nesneler unpackedItems listesine eklenir.
+3.1. Problemin Genel Tanımı ve Önemi
+	Bu çalışmanın odak noktası, lojistik ve tedarik zinciri yönetiminin en kritik darboğazlarından biri olan 3-Boyutlu Konteyner Yükleme Problemi (3D-CLP) dir. 3D-CLP, literatürde; boyutları () bilinen adet dikdörtgen prizma şeklindeki kutunun, boyutları () bilinen daha büyük bir dikdörtgen prizma hacmine (konteyner), belirli kısıtlar altında ve hacimsel doluluğu maksimize edecek şekilde yerleştirilmesi problemi olarak tanımlanmaktadır.
 
-3.3.2. Best-Fit
-Maliyet fonksiyonu, nesneyi köşeye yaklaştırırken diğer kutulara bitişik olmasını sağlayacak şekilde hesaplanır.
+	Lojistik sektöründe "Hava Taşıma" (Shipping Air) olarak bilinen ve konteynerlerin tam kapasite doldurulmadan sevk edilmesi durumunu ifade eden verimsizlik, işletmeler için ciddi bir maliyet kalemidir. Özellikle denizaşırı taşımacılıkta, %75 dolulukla sevk edilen bir konteynerdeki %25'lik kayıp hacim, yıllık binlerce konteyner sevk eden işletmeler için milyonlarca dolarlık navlun maliyeti ve artan karbon ayak izi anlamına gelmektedir.
 
-3.3.3. Genetik Algoritma (GA)
-- Popülasyon Büyüklüğü: 20
-- Jenerasyon Sayısı: 30-50 (kullanıcı seçimine bağlı)
-- Mutasyon Oranı: 0.1
-- Seçim: Turnuva (size=3)
-- Çaprazlama: Order Crossover (OX1)
-- Mutasyon: Swap Mutation
-- Fitness: Hacimsel doluluk (%).
+	Bu problem, hesaplama karmaşıklığı teorisinde NP-Zor (NP-Hard) sınıfında yer almaktadır. Nesne sayısı arttıkça olası çözüm alternatiflerinin üssel olarak artması, problemin çözümünde "mutlak en iyi" sonucu bulmayı zorlaştırmakta ve klasik yöntemlerin yetersiz kalmasına neden olmaktadır. Mevcut ticari yazılımların çoğu ise "kara kutu" (black-box) yapıları nedeniyle çözümün mantığını açıklamaz ve kullanıcıya etkileşimli bir analiz imkânı sunmaz. Bu tez çalışması, söz konusu problemi modern web teknolojileri ve meta-sezgisel algoritmalar ile ele alarak, hem optimize edilmiş bir yerleşim planı sunmayı hem de bu planı 3 boyutlu görselleştirme ile anlaşılır kılmayı hedefleyen bir karar destek sistemi geliştirmeyi amaçlamaktadır.
 
-3.3.4. Tavlama Benzetimi (SA)
-- Başlangıç: FFD ile sıralanmış liste.
-- Komşuluk Üretimi: İki elemanın yerinin rastgele takası.
-- Enerji Fonksiyonu (E): Kayıp hacim (boş alan).
-- Kabul Olasılığı: exp(-DeltaE / T)
-- Soğutma: T = T * 0.995 (başlangıç T=1000).
+3.2. Matematiksel Model , Formülasyon ve Kısıtlar
 
-3.4. Matematiksel Model (ILP)
-[FORMÜL: Integer Linear Programming Modeli]
-Amaç fonksiyonu, yerleştirilen nesnelerin toplam hacmini maksimize etmektir. Kısıtlar ise boyut sınırlarını ve nesnelerin birbiriyle çakışmamasını garanti eder.
+   Karar Değişkenleri
+Bu çalışmada ele alınan 3-Boyutlu Konteyner Yükleme Problemi için aşağıdaki karar değişkenleri tanımlanmıştır:
+x_(i,k)={█(1,eğer i numaralı kutu k numaralı konteynere yerleştirilirse@0,aksi halde)┤
+Burada
+i=1,2,…,n yüklenen kutuları,
+k=1,2,…,K kullanılan konteynerleri temsil etmektedir.
 
-BÖLÜM 4: UYGULAMA (GELİŞTİRİLEN SİSTEM)
+  Amaç Fonksiyonu
 
-4.1. Sistem Mimarisi
-[ŞEKİL 4.1: Sistem Akış Şeması]
-(Web UI, Web Worker ve Three.js arasındaki veri akışını gösteren diyagram.)
+Problemin temel amacı, konteynerlerin hacimsel doluluk oranını maksimize etmektir. Bu doğrultuda amaç fonksiyonu aşağıdaki şekilde tanımlanmıştır:
+max∑_(k=1)^k▒∑_(i=1)^n▒(V_i x_(i,k) ) 
+Burada
+V_i, inumaralı kutunun hacmini ifade etmektedir.
+Bu amaç fonksiyonu, konteyner içerisine yerleştirilen toplam yük hacmini maksimize ederek lojistik operasyonlarda ortaya çıkan boş hacmi (shipping air) minimize etmeyi hedeflemektedir.
 
-4.2. Kullanıcı Arayüzü ve Bileşenler
-- ContainerForm: Konteyner boyutlarını girer.
-- ItemManager: Paket listesi yönetir.
-- AlgorithmSettings: Algoritma parametrelerini ayarlar.
-- Scene3D: Three.js ile 3-D sahneyi render eder.
-- ComparisonPanel / StatsPanel: Performans metriklerini gösterir.
 
-4.3. Tipik Kullanım Senaryosu ve İş Akışı
-[ŞEKİL 4.2: Kullanıcı İş Akışı Sequence Diyagramı]
-(Kullanıcının veri girişinden görselleştirmeye kadar olan adımları.)
 
-BÖLÜM 5: BULGULAR VE TARTIŞMA
+3.2.1. Geometrik ve Operasyonel Kısıtlar
+Kapsama (Containment) Kısıtı: Yerleştirilen her i kutusunun tüm noktaları, konteynerin L (uzunluk), W (genişlik) ve H(yükseklik) sınırları içerisinde kalmalıdır. Sol alt köşe koordinatları ; (x_i,y_i,z_i ) olan bir kutunun yerleşimi şu koşulları sağlamalıdır:
+x_i+l_i≤L, y_i+w_i≤W, z_i+h_i≤H
 
-5.1. Performans Test Senaryoları (Benchmarks)
+"Burada; (x_i,y_i,z_i ) nesnesinin konteyner içerisindeki sol-alt-arka köşe koordinatlarını; (l_i,w_i,h_i ) yerleşim oryantasyonuna göre nesnenin boyutlarını; (L,W,H) ise konteynerin iç hacim boyutlarını temsil etmektedir."
+
+Çakışmazlık (Non-overlapping) Kısıtı: Konteyner içindeki herhangi iki kutu(i" ve " j) , aynı anda aynı hacmi işgal edemez. Kutuların tanımladığı geometrik hacimlerin kesişimi boş küme olmalıdır 
+Vol_i∩Vol_j=∅
+Ortogonallik Kısıtı: Lojistik operasyonlarında verimlilik ve istifleme güvenliği, yüklerin düzenli bir geometrik yapıda yerleştirilmesini gerektirir. Bu çalışmada uygulanan Ortogonallik Kısıtı, yerleştirilen her bir nesnenin tüm kenarlarının, konteynerin ana referans eksenleri olan X,Y ve Z eksenlerine tam paralel olması zorunluluğunu ifade eder. Bu kısıtın operasyonel ve akademik gerekçeleri aşağıda maddelenmiştir.
+	Hacimsel Verimlilik: Kutuların eğik veya çapraz yerleştirilmesi, dikdörtgen prizma formundaki konteyner içerisinde "ölü hacimlerin" oluşmasına neden olur. Ortogonal yerleşim, boşlukların minimize edilmesini ve hacimsel doluluk oranının maksimize edilmesini sağlar.
+	İstifleme Dengesi ve Stabilite: Kutuların birbirine tam temas eden yüzeyler üzerinden (yüzey-yüzey teması) istiflenmesi, yükün sarsıntılara karşı direncini artırır. Eğik yerleşimler, taşıma sırasında yük kaymalarına ve fiziksel hasarlara yol açabileceği için operasyonel olarak kabul edilemezdir.
+	Hesaplama Karmaşıklığının Yönetimi: Matematiksel modelde kutuların sadece 90°lik açılarla dönmesine izin verilmesi, çözüm uzayını (search space) yönetilebilir sınırlar içinde tutar. Eğer serbest açılı (örneğin 30° veya 45°) yerleşimlere izin verilseydi, çakışmazlık kontrolü ve koordinat hesaplamaları trigonometrik fonksiyonlar gerektirecek, bu da algoritmanın çözüm süresini üssel olarak artıracaktır.
+
+Matematiksel İfade: Bir i nesnesinin herhangi bir kenarı ile buna karşılık gelen konteyner ekseni arasındaki açı θ ise; ortogonallik kısıtı uyarınca bu açı her zaman şu kümenin bir elemanı olmalıdır:
+θ∈\{0^∘,90^∘,180^∘,270^∘ \}
+Bu kısıt sayesinde, yerleşim planı hem depo personeli tarafından kolayca uygulanabilir hem de modern istifleme araçlarının (forklift, konveyör vb.) çalışma prensiplerine tam uyum sağlar.
+Oryantasyon (Yönelim) ve Döndürme Kısıtı: Dikdörtgen prizma şeklindeki her bir i nesnesi, konteyner içerisine yerleştirilirken ana eksenler etrafında 90°lik açılarla döndürülebilir. Bu durum, bir nesnenin sahip olduğu (l_i,w_i,h_i ) boyutlarının, konteynerin ana eksenleri ile eşleşen 6 farklı permütasyonunu ifade eder. Ancak, yüklerin fiziksel özellikleri veya taşıma standartları (örneğin "Bu Yüzü Yukarı" etiketi) gereği, bazı nesnelerin dikey eksende dönmesi kısıtlanabilir.
+
+Geliştirilen algoritmada bir nesnenin alabileceği olası yönelimler şu küme ile tanımlanır: O_i=\{(l,w,h),(l,h,w),(w,l,h),(w,h,l),(h,l,w),(h,w,l)\}
+
+3.2.2. Fiziksel ve Statik Kısıtlar
+Dikey Kararlılık ve Destek Kısıtı: Konteyner içerisine yerleştirilen her bir nesnenin yerçekimi altında dengede kalabilmesi ve fiziksel olarak çökme/devrilme riskinin önlenmesi için alt yüzeyinin yeterli düzeyde desteklenmesi gerekir. Bu çalışmada, nesnelerin sadece köşe noktalarından değil, yüzey alanı üzerinden desteklendiği ”Kısmi Destek” modeli esas alınmıştır.
+	Bir i nesnesinin kararlı kabul edilebilmesi için, alt yüzey alanının konteyner tabanı veya altındaki diğer nesnelerin üst yüzeyleri ile olan temas alanı, toplam alt yüzey alanının belirli bir α oranından büyük veya eşit olmalıdır. Bu durum matematiksel olarak şu şekilde ifade edilir:
+					 A_(destek,i)≥α⋅(l_i⋅w_i )
+	"Söz konusu kısıt, algoritma içerisinde her yerleşim adımında kontrol edilir. Eğer bir nesnenin destek oranı α değerinin altında kalırsa, bu yerleşim 'geçersiz' (infeasible) kabul edilerek nesne için yeni bir koordinat veya oryantasyon aranır. Bu kısıtın uygulanması, özellikle ağır sanayi ürünlerinin veya hassas paketlerin taşınması sırasında oluşabilecek hasarların minimize edilmesini ve yükleme planının iş güvenliği standartlarına (ISO/lojistik regülasyonları) uygunluğunu sağlar."
+
+3.2.3. Problemin Kapsam Kısıtları
+Literatürdeki standart 3-Boyutlu Konteyner Yükleme Problemi (3D-SCLP), genellikle tek bir hacmin doluluğunu maksimize etmeye odaklanır. Ancak bu çalışma kapsamında geliştirilen algoritma, operasyonel esnekliği sağlamak amacıyla Dinamik Kapasite Genişlemesi prensibiyle kurgulanmıştır.
+Bu kısıtın detayları ve işleyiş mantığı şu şekildedir:
+	Problemin Dönüşümü: Algoritma, yerleştirilmesi gereken toplam nesne hacminin V_"toplam" =∑_(i=1)^n▒V_i  mevcut konteyner hacminden V_"konteyner"   büyük olduğu durumlarda; "Tek Konteyner Yükleme Problemi"nden (SCLP), "Çoklu Kutu Paketleme Problemi" (Multiple Bin Packing Problem - MBPP) modeline otomatik olarak geçiş yapar.
+
+	Açgözlü (Greedy) Yaklaşım ve Yeni Hacim Ataması: Mevcut kutu listesindeki bir nesne için mevcut konteyner(ler) içerisinde hiçbir uygun koordinat (x,y,z) ve oryantasyon bulunamadığında, sistem otomatik olarak aynı boyutlara sahip yeni ve boş bir konteyner tanımlar.
+	Ardışık Yükleme Mantığı: Yeni açılan her konteyner için geometrik kısıtlar (çakışmazlık, kapsama ve ortogonallik) sıfırdan uygulanır. Bu süreç, listedeki tüm nesneler uygun bir hacme yerleştirilene kadar devam eder.
+
+Matematiksel Gösterim: Eğer k. konteyner için uygun yerleşim alanı bulunamazsa:
+			"Eğer "∀(x,y,z)_i∉〖"Bin" 〗_k\implies〖"Bin" 〗_(k+1) " tanımlanır" 
+
+
+Bu kısıt sayesinde geliştirilen Karar Destek Sistemi, sadece bir optimizasyon aracı değil, aynı zamanda işletmeler için "kaç konteyner sipariş edilmeli?" sorusuna yanıt veren bir planlama aracı niteliği kazanmaktadır.
+
+3.3. Araştırma Soruları
+Yazım kılavuzunda belirtildiği üzere, tezin ana odak noktalarını ve teknolojik çözüm arayışının yönünü belirleyen araştırma soruları, projenin hem mühendislik hem de yazılım boyutunu kapsayacak şekilde aşağıda detaylandırılmıştır:
+
+	Soru 1: Meta-Sezgisel Algoritmaların Karşılaştırmalı Performansı Geleneksel kural tabanlı (rule-based) algoritmalar (First-Fit, Best-Fit vb.) ile modern meta-sezgisel yaklaşımlar (Genetik Algoritma, Tavlama Benzetimi) arasında, özellikle kutu boyutlarının yüksek varyans gösterdiği heterojen yük gruplarında, hacimsel doluluk oranı açısından istatistiksel olarak anlamlı bir fark var mıdır? Algoritmanın çözüm hızı ve ulaşılan doluluk oranı arasındaki denge (trade-off), gerçek zamanlı bir web arayüzünde kullanıcı beklentilerini ne ölçüde karşılamaktadır?
+
+	Soru 2: Sıralama Paradoksu (The Tetris Paradox) ve Global Arama Yeteneği Lojistik sektöründe "doğru parçaların yanlış sırayla gelmesi" sonucu oluşan verimsizlik durumu (Sıralama Paradoksu), meta-sezgisel yöntemlerin çözüm uzayındaki "global arama" yeteneği ile ne ölçüde aşılabilir? Algoritmanın kutu listesini dinamik olarak yeniden sıralama yeteneği, statik sıralama yöntemlerine göre yüzde kaçlık bir verimlilik artışı sağlamaktadır?
+
+	Soru 3: Web-Tabanlı Asenkron Mimari ve Hesaplama Performansı Web Workers API kullanılarak geliştirilen asenkron mimari, tarayıcı üzerinde koşan yoğun optimizasyon işlemleri sırasında (CPU-intensive), kullanıcı arayüzünün (UI) tepki süresini ve etkileşimini (User Experience) nasıl etkilemektedir? İstemci taraflı (client-side) hesaplama, sunucu tabanlı hesaplamaya göre maliyet ve hız açısından ne tür avantajlar sunmaktadır?
+
+	Soru 4: 3B İnteraktif Görselleştirme ve Operasyonel Karar Destek Süreci Three.js ve WebGL teknolojileri ile sunulan interaktif 3B görselleştirme modelleri, operatörün yükleme planını kavrama hızını ve planın uygulanabilirliğini nasıl artırır? Katmanlı görüntüleme ve 360 derece kontrol imkanı, yerleşim sırasında oluşabilecek insan kaynaklı hataları minimize etmede ne kadar etkilidir?
+
+3.4. Kullanılacak Veri ve Teknolojik Kaynaklar
+Araştırmanın geçerliliğini test etmek ve algoritmaların performansını ölçmek amacıyla kullanılan kaynaklar; veriler, yazılım mimarisi ve teknolojik bileşenler olmak üzere üç ana başlıkta ele alınmıştır:
+
+3.4.1. Veri Kaynakları
+	Sentetik Benchmark Verileri: Algoritmanın başarısını evrensel standartlarda ölçmek için literatürde (OR-Library) kabul görmüş Bischoff ve Ratcliff test setlerine benzer yapıda; sistem tarafından dinamik olarak üretilen homojen ve heterojen veri setleri kullanılacaktır.
+
+	Özel Senaryo Verileri (Case Study): Algoritmanın sınırlarını zorlamak ve sıralama etkisini göstermek amacıyla tasarlanmış, "Sıralama Paradoksu" içeren özgün geometrik desenli blok setleri (L-tipi, büyük hacimli kritik bloklar vb.) kullanılacaktır.
+
+3.4.2. Teknolojik Yazılım ve Geliştirme Kaynakları
+	İncelemeye konu olan pack-3d-web uygulaması, sistemin teknolojik altyapısı şu bileşenlerden oluşturulmuştur:
+
+	React.js ve Modern Web Frameworkleri: Uygulamanın kullanıcı arayüzü, bileşen tabanlı (component-based) mimariye sahip React.js ile kurgulanmıştır. Bu yapı, veri girişlerinin (kutu boyutları, konteyner kapasitesi) anlık olarak durum yönetimini (state management) sağlamakta ve dinamik bir kullanıcı deneyimi sunmaktadır.
+
+	Three.js ve WebGL (3B Render Motoru): Optimizasyon sonuçlarının tarayıcı üzerinde gerçek zamanlı ve yüksek performanslı şekilde görselleştirilmesi için Three.js kütüphanesinden yararlanılmıştır. WebGL tabanlı bu teknoloji, GPU (Grafik İşlemci Birimi) hızlandırmasını kullanarak binlerce kutunun bulunduğu karmaşık sahnelerin bile akıcı bir şekilde döndürülmesine, yakınlaştırılmasına ve incelenmesine olanak tanır.
+
+	Web Workers API (Çok Kanallı İşleme): Tarayıcıların tek çekirdek (single-thread) kısıtlamasını aşmak için optimizasyon algoritması arka planda (background thread) çalıştırılmaktadır. Bu sayede, karmaşık hesaplamalar devam ederken kullanıcının 3B sahnede gezinmesi veya veri girişine devam etmesi mümkün kılınarak kullanıcı deneyimi (UX) maksimize edilmiştir.
+
+	Vercel ve Bulut Dağıtım (Deployment): Sistemin yüksek erişilebilirlik ve performansla sunulması için Vercel bulut platformu kullanılmıştır. CI/CD (Sürekli Entegrasyon/Sürekli Dağıtım) süreçleri ile desteklenen bu altyapı, uygulamanın farklı cihazlarda (mobil, tablet, masaüstü) optimize bir şekilde çalışmasını garantilemektedir.
+
+	Matematiksel ve Mantıksal Kütüphaneler: Algoritma içerisinde hacimsel hesaplamalar ve koordinat sisteminin yönetimi için özel geliştirilmiş JavaScript matematik fonksiyonları ve veri yapıları (Array, Object, Tree yapıları) kullanılmaktadır.
+
+
+ 
+	BÖLÜM: YÖNTEM
+
+
+Bu bölüm, geliştirilen yazılımın mimari yapısını, problemin matematiksel temsiliyetini ve çözüm için uygulanan algoritmik stratejileri detaylandırmaktadır. Çalışma, geleneksel sunucu tabanlı optimizasyon yaklaşımlarından farklı olarak, modern web tarayıcılarının hesaplama kapasitesini kullanan "İstemci Tabanlı Hesaplama" (Client-Side Computing) paradigmasını esas almıştır.
+
+4.1. SİSTEM MİMARİSİ VE TEKNOLOJİ YIĞITI (SYSTEM ARCHITECTURE)
+
+Geliştirilen sistem, kullanıcı verilerinin sunucuya gönderilmeden doğrudan tarayıcı üzerinde işlendiği, mahremiyet odaklı ve düşük maliyetli bir mimari üzerine inşa edilmiştir. Bu yaklaşım, sunucu kaynaklı gecikmeleri (latency) elimine ederken, dağıtık hesaplama gücünden (her kullanıcının kendi cihazı) faydalanarak ölçeklenebilirliği artırır.
+
+4.1.1. Teknoloji Bileşenleri ve Rolleri
+
+- React 18 & TypeScript (Uygulama İskeleti): Kullanıcı arayüzü, bileşen tabanlı (component-based) yapısı ve Sanal DOM (Virtual DOM) optimizasyonları nedeniyle React kütüphanesi ile geliştirilmiştir. TypeScript kullanımı, özellikle karmaşık matematiksel veri tiplerinde (vektörler, matrisler) tip güvenliğini (type-safety) sağlayarak, geliştirme aşamasındaki hataları minimize etmiştir.
+- Three.js & React-Three-Fiber (Görselleştirme Motoru): Yükleme planının 3-boyutlu simülasyonu için WebGL tabanlı Three.js kütüphanesi kullanılmıştır. React-Three-Fiber (R3F), deklaratif bir sözdizimi sunarak, React state yapısı ile 3D sahne yönetimini senkronize eder. Bu sayede, algoritma sonucu değiştiğinde sahne otomatik olarak ve performans kaybı olmadan güncellenir.
+- Web Workers API (Asenkron Paralel İşleme): Tek iş parçacıklı (single-threaded) JavaScript yapısında, ağır matematiksel hesaplamaların (örneğin Genetik Algoritma iterasyonları) arayüzü dondurmasını (UI blocking) engellemek hayati önem taşır. Sistem, hesaplama ve görselleştirme katmanlarını izole ederek, optimizasyon süreçlerini arka planda çalışan "Worker" thread'lerine devreder.
+- Zustand (Durum Yönetimi): Uygulama genelindeki karmaşık durum akışları (seçili algoritma, paket listesi, konteyner boyutları vb.), hafif ve performanslı yapısı nedeniyle Zustand kütüphanesi ile yönetilmektedir.
+
+4.2. MATEMATİKSEL MODELLEME VE PROBLEM UZAYI
+
+Problemin "dijital ikizi" (digital twin) oluşturulurken, Nesneye Yönelik Programlama (OOP) prensipleri ile Küme Teorisi harmanlanmıştır. Bu modelleme, fiziksel dünyadaki kısıtların dijital ortamda birebir karşılık bulmasını sağlar.
+
+4.2.1. Nesne ve Uzay Tanımları
+
+Her bir kargo birimi (kutu veya paket) i, aşağıdaki vektör seti ile tanımlanır:
+
+Kutu_i = {wi, hi, di, xi, yi, zi, ri}
+
+Burada:
+- (wi, hi, di): Kutunun genişlik, yükseklik ve derinlik boyutlarını (boyut uzayı),
+- (xi, yi, zi): Kutunun konteyner içindeki sol-alt-arka köşe koordinatlarını (konum uzayı),
+- ri: Kutunun oryantasyon (dönme) durumunu ifade eder.
+
+4.2.2. Oryantasyon Permütasyonları
+
+Bir dikdörtgen prizmanın serbest uzayda alabileceği 6 temel ortogonal duruş (orientation), permütasyon matrisi ile yönetilir. Algoritmalar, yerleşim esnasında bir kutu için aşağıdaki 6 varyasyonu değerlendirerek yerel veya global optimumu arar:
+
+1. Tip 1: (w, h, d) - Standart Duruş
+2. Tip 2: (w, d, h) - Derinlik Ekseninde Çevirme
+3. Tip 3: (h, w, d) - Dik Çevirme (Z Yönü)
+4. Tip 4: (h, d, w)
+5. Tip 5: (d, w, h)
+6. Tip 6: (d, h, w)
+
+4.3. ALGORİTMİK ÇERÇEVE
+
+Tez kapsamında, çözüm uzayının büyüklüğü ve problemin NP-Zor yapısı göz önünde bulundurularak, deterministik ve stokastik yaklaşımları içeren hibrit bir algoritma havuzu oluşturulmuştur.
+
+4.3.1. Deterministik (Kural Tabanlı) Algoritmalar
+
+Bu yöntemler, önceden tanımlanmış kesin kurallar silsilesini izler ve aynı girdi seti için her zaman aynı çıktıyı üretir. Deterministik algoritmalar, hızları nedeniyle genellikle "gerçek zamanlı" önizlemelerde tercih edilir.
+
+- First-Fit Decreasing (FFD): "Önce En Büyük" stratejisini izler. Nesneler hacimlerine göre azalan sırada sıralanır ve her nesne, sığdığı ilk uygun boşluğa yerleştirilir. Zaman karmaşıklığı O(n log n) olan bu yöntem, genellikle çözüm kalitesi için bir "Alt Sınır" (Lower Bound) referansı olarak kullanılır.
+- Best-Fit Heuristic: Her nesne için olası tüm boşlukları tarar ve yerleştirme sonrası "kalan atıl alanı" (residual space) minimize edecek olanı seçer. Bir "Min-Waste" (Minimum Ziyan) stratejisi izler. FFD'ye göre daha yavaştır ancak daha kompakt yerleşimler üretme eğilimindedir.
+
+4.3.2. Stokastik (Meta-Sezgisel) Algoritmalar
+
+Lokal minimum tuzaklarından kaçarak global optimuma ulaşmayı hedefleyen, rastgelelik içeren ve doğadan esinlenen yöntemlerdir. İşlem süreleri daha uzundur ancak karmaşık senaryolarda (örneğin heterojen paket dağılımı) deterministik yöntemlerden üstün sonuçlar verirler.
+
+- Genetik Algoritma (GA): Biyolojik evrim sürecini simüle eder.
+  - Kodlama (Encoding): Her çözüm adayı (birey), kutuların yükleme sırasını ifade eden bir permütasyon dizisi (kromozom) olarak kodlanır.
+  - Fitness Fonksiyonu: Çözümün kalitesi, Konteyner Doluluk Oranı ile ölçülür: Fitness = (Toplam Kutu Hacmi / Konteyner Hacmi) x 100
+  - Operatörler: Sıralama bilgisini korumak için Order Crossover (OX1) çaprazlama yöntemi ve gen çeşitliliğini sağlamak için Swap Mutation operatörleri kullanılmıştır.
+- Tavlama Benzetimi (Simulated Annealing): Metalürjideki "tavlama" işleminden esinlenmiştir.
+  - Enerji: Sistemdeki "düzensizlik" veya "boş hacim", enerji seviyesi olarak kabul edilir.
+  - Soğuma Takvimi: Yüksek sıcaklıkta (algoritmanın başında) kötü çözümlerin kabul edilme olasılığı yüksektir (Metropolis kriteri). Bu, algoritmanın yerel minimumlardan çıkmasını sağlar. Sistem soğudukça (iterasyonlar ilerledikçe), algoritma daha seçici hale gelir ve en iyi çözüme yakınsar.
+
+4.4. KISITLAYICILAR VE YERLEŞİM DOĞRULAMA MOTORU
+
+Geliştirilen "Yerleşim Motoru" (Placement Engine), her bir yerleştirme adımı için fiziksel tutarlılığı garanti eden şu kontrolleri gerçekleştirir:
+
+1. Sınır Kontrolü (Boundary Check): Kutunun konteyner sınırlarını aşıp aşmadığı kontrol edilir (xi + wi <= W_konteyner).
+2. Kesişim Testi (Collision Detection): Geliştirilen AABB (Axis-Aligned Bounding Box) algoritması ile, yeni yerleştirilecek i kutusunun, mevcut j kutularıyla çakışıp çakışmadığı kontrol edilir. İki kutunun kesişmesi için tüm eksenlerde (x, y, z) aralıkların örtüşmesi gerekir.
+3. Destek Yüzeyi Kontrolü (Gelecek Çalışma): Kutuların havada asılı kalmaması için "yerçekimi kararlılığı" (gravity stability) kontrolü, şu anki sürümde basitleştirilmiş bir "taban desteği" kuralı ile sağlanmaktadır.
+
+
+
+
+
+
+
+Pseudo Code
+
+ sistem çalışma mimarisi 
+BÖLÜM 5: UYGULAMA
+
+Bu bölümde, web tabanlı 3D konteyner yükleme optimizasyon sisteminin teknik mimarisi, uygulama senaryoları ve kullanılan standartlar detaylandırılmıştır.
+
+5.1. Kutu ve Konteyner Standartlarının Belirlenmesi
+
+Çalışmanın endüstriyel geçerliliğini ve simülasyonların gerçeğe yakınlığını sağlamak amacıyla, uluslararası lojistik standartları (ISO) temel alınmıştır.
+
+5.1.1. Konteyner Boyutları
+Simülasyonlarda "Standard 20ft Dry Cargo Container" (20'lik Kuru Yük Konteyneri) referans alınmıştır.
+- İç Boyutlar (Internal Dimensions): 
+  - Uzunluk: 590 cm (5.9m)
+  - Genişlik: 239 cm (2.39m)
+  - Yükseklik: 235 cm (2.35m)
+  - Toplam Hacim: Yaklaşık 33.2 m3
+
+Neden Seçildi?
+Küresel deniz ticaretinin %60'ından fazlası 20ft ve 40ft konteynerler ile gerçekleştirilmektedir. KOBİ ölçeğindeki işletmeler için en yaygın sevkiyat birimi olması nedeniyle 20ft konteyner tercih edilmiştir.
+
+5.1.2. Palet ve Kutu Standartları
+Yük birimleri olarak "Euro Pallet" (EUR-1) ve standart koli ölçüleri kullanılmıştır.
+- Euro Pallet: 120 cm x 80 cm taban alanı ve 14.4 cm yükseklik. Avrupa içi karayolu taşımacılığı ve depolama sistemlerinde en yaygın standarttır.
+
+Bu standartların seçilmesindeki temel amaç, geliştirilen algoritmaların sadece teorik geometrik şekiller üzerinde değil, gerçek lojistik operasyonlarında karşılaşılan fiziksel kısıtlar altında da performansını ölçmektir.
+
+5.2. Test Senaryoları (Test Scenarios)
+
+Sistemin performansını ölçmek ve algoritmaların davranışlarını analiz etmek için aşağıdaki test senaryoları kurgulanmıştır. Özellikle "Sıralama Paradoksu" senaryosu, algoritmaların "hatalı gelen veri" durumundaki tepkisini ölçmek için kritik öneme sahiptir.
 
 SENARYO TABLOSU:
 (Aşağıdaki veriyi Word'de seçip 'Ekle > Tablo > Metni Tabloya Dönüştür' diyerek tablo yapabilirsiniz. Ayırıcı olarak ';' noktalı virgül kullanın)
 
 Senaryo;Tanım;Beklenen Sonuç
-A (Homojen);500 adet aynı boyutta kutu, 20 ft konteyner;FFD ve Best-Fit hızlı, yüksek doluluk
-B (Heterojen);100 rastgele boyutta kutu;Meta-sezgisel yöntemler (GA, SA) daha iyi doluluk
 C (Sıralama Paradoksu);Özel "L" blokları, FFD 2 konteyner, GA 1 konteyner;GA ve SA üstünlük gösterir
 
-5.2. Algoritma Karşılaştırması
+5.3. Yazılım Mimarisi ve Teknoloji Yığıtı
+Geliştirilen sistem, sunucu maliyetlerini minimize eden ve veri gizliliğini koruyan "İstemci Tabanlı Hesaplama" (Client-Side Computing) paradigması üzerine inşa edilmiştir.
+- React & TypeScript: Uygulamanın modüler ve tip güvenli iskeleti oluşturulmuştur.
+- Three.js & WebGL: Yükleme planlarının GPU hızlandırmalı olarak render edilmesini sağlayan grafik motoru kullanılmıştır.
+- Web Workers API: Hesaplama ve görselleştirme katmanlarını izole ederek sistemin donmadan çalışmasını sağlayan asenkron yapı kurulmuştur.
 
-PERFORMANS TABLOSU:
-(Aşağıdaki veriyi Word'de seçip 'Ekle > Tablo > Metni Tabloya Dönüştür' diyerek tablo yapabilirsiniz. Ayırıcı olarak ';' noktalı virgül kullanın)
+5.4. Matematiksel Modelleme ve Veri Yapısı
+Sistemde her kargo birimi, Kutui = {wi, hi, di, xi, yi, zi, ri} vektörü ile temsil edilmektedir.
+- Koordinat Sistemi: Kutuların sol-alt köşeleri (x, y, z) koordinatlarıyla tanımlanmaktadır.
+- Oryantasyon Yönetimi: Her kutunun 3 eksende alabileceği 6 farklı duruş (oryantasyon) permütasyonu (whd, wdh, hwd, hdw, dwh, dhw) desteklenmektedir.
 
-Algoritma;Ortalama Doluluk (%);Ortalama Çalışma Süresi (sn);Standart Sapma
-FFD;84.2;0.81;1.5
-Best-Fit;86.5;1.03;1.2
-GA;91.7;29.8;2.4
-SA;89.3;12.5;2.0
+5.5. Asenkron Hesaplama ve Web Workers Yönetimi
+JavaScript'in tek kanallı (single-threaded) yapısı nedeniyle, yoğun matematiksel işlemler arayüzü kilitleyebilmektedir. Bu darboğazı aşmak için:
+- İşçi Kanalı (Worker Thread): Paketleme algoritmaları ana kanaldan izole bir ortamda koşturulmaktadır.
+- UI Akıcılığı: Optimizasyon süresince arayüzün 60 FPS değerinde kalması sağlanarak kullanıcı deneyimi maksimize edilmiştir.
+- Süreç Akışı: Veriler JSON formatında serileştirilerek worker'a aktarılmakta, işlem sonunda koordinat listesi ana sisteme geri gönderilmektedir.
 
-5.3. Özel Durum Analizi: The Tetris Paradox
-[ŞEKİL 5.1: Sıralama Paradoksu ve Algoritma Karşılaştırması Görseli]
+5.6. Yerleşim Doğrulama Mantığı
+Yerleşim motoru, her adımda şu kritik kontrolleri gerçekleştirmektedir:
+- Sınır Kontrolü (Boundary Check): Kutuların konteyner boyutlarını aşmadığı doğrulanmaktadır.
+- Çarpışma Testi (Collision Detection): AABB (Axis-Aligned Bounding Box) yöntemiyle, kutuların uzayda çakışıp çakışmadığı kontrol edilmektedir.
+
+5.7. Uygulama Aşamaları (Fazlar)
+Sistemin çalışma prensibi üç ana fazda incelenmiştir:
+- Girdi Fazı: Kullanıcı konteyner boyutlarını girer, paket listesini tanımlar ve algoritma parametrelerini (popülasyon, mutasyon vb.) seçer.
+- Optimizasyon Fazı: "Başlat" komutuyla veriler worker'a iletilir ve binlerce iterasyonluk simülasyon koşturulur.
+- Görselleştirme Fazı: Hesaplanan veriler Three.js ile 3D sahneye dönüştürülür ve kullanıcıya interaktif inceleme imkanı sunulur.
+
+
+6.2. Algoritma Karşılaştırması
+
+
+Algoritma	Ortalama Doluluk (%)	Ortalama Çalışma Süresi (sn)	Standart Sapma
+FFD	84.2	0.81	1.5
+Best-Fit	86.5	1.03	1.2
+GA	91.7	29.8	2.4
+SA	89.3	12.5	2.0
+
+6.3. Özel Durum Analizi: The Tetris Paradox
+[ŞEKİL 6.1: Sıralama Paradoksu ve Algoritma Karşılaştırması Görseli]
 
 Problem Tanımı:
 "The Tetris Paradox", paket sıralamasının optimizasyon sonucuna olan kritik etkisini gösteren klasik bir test senaryosudur. 100x100x100 cm'lik bir konteyner ve 4 dikdörtgen blok (60x40x100 cm gibi boyutlarda) kullanılmıştır.
@@ -254,30 +599,55 @@ Algoritma Davranışları:
 - Açgözlü Algoritmalar (FFD, Best-Fit): Hatalı sıralama sonucu blokları parçalı yerleştirerek boşluk bırakır. Sonuçta 2 konteyner gerekir ve doluluk %50 olur.
 - Meta-Sezgisel Algoritmalar (GA, SA): Evrimsel süreçle doğru "Tetris" sırasını (A, D, C, B gibi) bulur. Tüm bloklar 1 konteynere sığar ve doluluk %100 olur.
 
-5.4. İstatistiksel Analiz
+6.4. İstatistiksel Analiz
 GA ile FFD arasındaki doluluk farkı t-testi ile p < 0.01 seviyesinde istatistiksel olarak anlamlı bulunmuştur.
 
-5.5. Kod Yapısı ve Önemli Modüller
+6.5. Kod Yapısı ve Önemli Modüller
 - src/components/ContainerForm.tsx: Konteyner boyutlarını alır.
 - src/components/ItemManager.tsx: Paket yönetimi.
 - src/workers/packing.worker.ts: Arka plan algoritma işlemleri.
-- src/utils/genetic-algorithm.ts: Genetik algoritma mantığı.
+- src/utils/genetic-algorithm.ts: Genetik algoritma mantığı. 
+	BÖLÜM: SONUÇLAR VE ÖNERİLER
 
-BÖLÜM 6: SONUÇ VE GELECEK ÇALIŞMALAR
 
 Bu tez, 3-Boyutlu konteyner yükleme problemini web-tabanlı, etkileşimli bir karar-destek sistemiyle ele almıştır. Meta-sezgisel algoritmalar, özellikle "Sıralama Paradoksu" senaryosunda klasik yöntemlere göre belirgin avantaj sağlamıştır.
 
-6.1. Yol Haritası (Timeline)
+7.1. Yol Haritası (Timeline)
 - Q1-2025: Ağırlık dengesi (Load Stability) entegrasyonu
 - Q2-2025: Çoklu durak (Multi-Drop) lojistik kısıtları
 - Q3-2025: Fizik motoru ile gerçek-zamanlı simülasyon
-- Q4-2025: Akademik makale hazırlanması
-
+- Q4-2025: Akademik makale hazırlanması 
 KAYNAKÇA
-1. Dyckhoff, H. (1990). A typology of cutting and packing problems. European Journal of Operational Research, 44(2), 145-159.
-2. Wäscher, G., Haußner, H., & Schumann, H. (2007). An improved typology of cutting and packing problems. European Journal of Operational Research, 183(3), 1109-1130.
-3. Martello, S., & Toth, P. (1990). Knapsack problems: algorithms and computer implementations. John Wiley & Sons.
-4. Bortfeldt, A., & Wäscher, G. (2013). Constraints in container loading – A state-of-the-art review. European Journal of Operational Research, 229(1), 1-20.
-5. Lee, J., & Kim, S. (2021). Web-based 3-D bin packing visualization using Three.js. Computers & Industrial Engineering, 158, 107-118.
-6. Zhang, Y., Liu, X., & Wang, H. (2022). Deep learning for 3-D bin packing: A survey. International Journal of Production Research, 60(12), 3765-3784.
-7. Gonçalves, J. F., & Resende, M. G. (2011). A biased random-key genetic algorithm for 2D and 3D bin packing problems. International Journal of Production Economics, 130(1), 82-94.
+
+
+Altınalev, T. ve Fığlalı, A. (2024). Döngüsel taşıma sistemi yan kısıtlarına sahip konteyner yükleme problemi için bir model önerisi. (“Döngüsel Taşıma Sistemi Yan Kısıtlarına Sahip Konteyner Yükleme ...”) Mehmet Akif Ersoy Üniversitesi Fen Bilimleri Enstitüsü Dergisi, 15(2), 81-102.,
+
+Bortfeldt, A. ve Gehring, H. (2001). A hybrid genetic algorithm for the container loading problem. European Journal of Operational Research, 131(1), 143-161.
+
+Chen, C. S., Lee, S. M. ve Shen, Q. S. (1995). An analytical model for the container loading problem. European Journal of Operational Research, 80(1), 68-76.
+
+Daş, G. S. (2010). Solving the 3D container loading problem with metaheuristics [Doktora Tezi, Gaziantep Üniversitesi].
+
+Dereli, T. ve Das, G. S. (2010). "A hybrid simulated annealing algorithm for solving multi-objective container-loading problems." (“A HYBRID SIMULATED ANNEALING ALGORITHM FOR SOLVING MULTI-OBJECTIVE ...”) (“Sci-Hub | A HYBRID SIMULATED ANNEALING ALGORITHM FOR SOLVING MULTI ...”) Applied Artificial Intelligence, 24(5), 463-486.,
+Ensari, M. (2007). Konteynır yükleme problemine sezgisel bir yaklaşım [Yüksek Lisans Tezi, Gazi Üniversitesi].
+
+
+Gajda, M., Trivella, A., Mansini, R. ve Pisinger, D. (2022). An optimization approach for a complex real-life container loading problem. (“An optimization approach for a complex real-life container loading problem”) Omega, 107, 102559.
+
+Liang, S.-C., Lee, C.-Y. ve Huang, S.-W. (2007). A hybrid meta-heuristic for the container loading problem. Communications of the IIMA, 7(4), 73-84.,
+
+Pisinger, D. (2002). Heuristics for the container loading problem. European Journal of Operational Research, 141, 382-392.,
+
+Şen, A. (2023). Konteyner yükleme probleminin çözümü için genetik algoritma bazlı hibrit yaklaşım [Yüksek Lisans Tezi, Bursa Teknik Üniversitesi].
+
+Takahara, S. (2008). A multi-start local search approach to the multiple container loading problem. (“A Multi-start Local Search Approach to the Multiple Container Loading ...”) W. Bednorz (Ed.), Greedy Algorithms içinde (s. 56-68). InTech.,
+
+Tekil, S. ve Özkır, V. Ç. (t.y.). Konteyner yükleme problemlerinin incelenmesi ve lojistik sektöründe bir uygulama.
+
+Tian, T., Zhu, W., Lim, A. ve Wei, L. (2016). The multiple container loading problem with preference. European Journal of Operational Research, 248, 84-94.
+
+Tijjani, S. (2014). Reinforcement learning and evolutionary algorithms for container loading problem [Yüksek Lisans Tezi, Mevlana (Rumi) University].
+
+Wang, L. ve Zhu, X. (2019). "Container loading optimization in rail–truck intermodal terminals considering energy consumption." (“Container Loading Optimization in Rail–Truck Intermodal Terminals ...”) (“Good Practices - green-inland-ports.eu”) Sustainability, 11(8), 2383 
+ 
+
