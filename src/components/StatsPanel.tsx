@@ -85,7 +85,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
   if (!result) {
     return (
       <Card
-        className={`fixed bottom-4 left-4 w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
+        className={`fixed bottom-4 left-[26%] w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
         style={{
           zIndex: 40,
           transformOrigin: 'center center',
@@ -161,7 +161,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
   return (
     <Card
       ref={panelRef}
-      className={`fixed bottom-4 left-4 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
+      className={`fixed bottom-4 left-[26%] w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
       style={{
         zIndex: 40,
         userSelect: 'none',
