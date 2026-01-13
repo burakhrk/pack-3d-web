@@ -35,15 +35,20 @@ export const scenarios: Scenario[] = [
     },
 
     {
-        name: "The Tetris Paradox (Dual Modulo Trap)",
-        description: "Mixed Trap. Items are full-height slices. Set 1: [34, 33, 33]=100. Set 2: [40, 30, 30]=100. Greedy mixes them (40+34=74) leaving 26 gap. Solvable by Grouping.",
+        name: "The Tetris Paradox (Complex Trap)",
+        description: "Complex Geometric Trap. Set A (Square+Strip): [65x65, 35x100, 65x35]. Set B (Twin Rects): [55x100, 45x55, 45x45]. Varied shapes require perfect 2D layer planning. Greedy fails geometry.",
         data: {
-            container: { id: "cont-dual-trap", width: 100, height: 100, depth: 500 },
+            container: { id: "cont-complex-trap", width: 100, height: 100, depth: 500 },
             items: [
-                ...Array.from({ length: 9 }).map((_, i) => ({ id: `trap1-a-${i}`, name: "Trap1 A (34)", width: 34, height: 100, depth: 100, weight: 34, color: "#EF4444" })),
-                ...Array.from({ length: 18 }).map((_, i) => ({ id: `trap1-b-${i}`, name: "Trap1 B (33)", width: 33, height: 100, depth: 100, weight: 33, color: "#3B82F6" })),
-                ...Array.from({ length: 6 }).map((_, i) => ({ id: `trap2-c-${i}`, name: "Trap2 C (40)", width: 40, height: 100, depth: 100, weight: 40, color: "#10B981" })),
-                ...Array.from({ length: 12 }).map((_, i) => ({ id: `trap2-d-${i}`, name: "Trap2 D (30)", width: 30, height: 100, depth: 100, weight: 30, color: "#F59E0B" })),
+                // Set A (3 Layers): High-volume Square lead
+                ...Array.from({ length: 3 }).map((_, i) => ({ id: `trapA-sq-${i}`, name: "A-Square (65x65)", width: 65, height: 65, depth: 100, weight: 42, color: "#DC2626" })), // Red
+                ...Array.from({ length: 3 }).map((_, i) => ({ id: `trapA-col-${i}`, name: "A-Column (35x100)", width: 35, height: 100, depth: 100, weight: 35, color: "#F87171" })), // Light Red
+                ...Array.from({ length: 3 }).map((_, i) => ({ id: `trapA-row-${i}`, name: "A-Row (65x35)", width: 65, height: 35, depth: 100, weight: 22, color: "#FECACA" })), // Pale Red
+
+                // Set B (2 Layers): High-volume Rect lead
+                ...Array.from({ length: 2 }).map((_, i) => ({ id: `trapB-main-${i}`, name: "B-Main (55x100)", width: 55, height: 100, depth: 100, weight: 55, color: "#2563EB" })), // Blue
+                ...Array.from({ length: 2 }).map((_, i) => ({ id: `trapB-sub1-${i}`, name: "B-Sub1 (45x55)", width: 45, height: 55, depth: 100, weight: 24, color: "#60A5FA" })), // Light Blue
+                ...Array.from({ length: 2 }).map((_, i) => ({ id: `trapB-sub2-${i}`, name: "B-Sub2 (45x45)", width: 45, height: 45, depth: 100, weight: 20, color: "#BFDBFE" })), // Pale Blue
             ],
             parameters: { containerCount: 1 }
         }
