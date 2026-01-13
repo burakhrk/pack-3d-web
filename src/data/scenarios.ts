@@ -36,9 +36,9 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox",
-        description: "The 'Bad Shelf' Trap. 16 layers of perfectly fitting items (A+B+C). However, items are sorted by type. Greedy algorithms will pack two Bs (35+35=70) into the space meant for B+C (35+65=100), leaving a useless 30-width gap. The displaced Cs will then overflow to a 2nd container. Only global optimization can solve this.",
+        description: "The 'Bad Shelf' Trap. 16 layers of perfectly fitting items (A+B+C). Greedy algorithms will double-pack Bs into the shelf, wasting space and overflowing large Cs. Requires Global Optimization (GA) to utilize the 1750 depth (1600 needed, ~10% slack).",
         data: {
-            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1600 },
+            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1750 },
             items: [
                 ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
                 ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
