@@ -46,15 +46,15 @@ export const scenarios: Scenario[] = [
     },
     {
         name: "The Tetris Paradox",
-        description: "A classic packing problem where greedy placement leaves a hole that's too small for the final item, but a 'Tetris' arrangement fits everything into one container.",
+        description: "Scaled-up version with 48 items. Classic packing problem where greedy placement fails, but an optimal 'Tetris' arrangement fits everything efficiently.",
         data: {
-            container: { id: "cont-100", width: 100, height: 100, depth: 100 },
-            items: [
-                ...generateItems("block-a", "Tetris Block A", 1, 60, 40, 100, 10, "#1E293B"),
-                ...generateItems("block-b", "Tetris Block B", 1, 40, 60, 100, 10, "#334155"),
-                ...generateItems("block-c", "Tetris Block C", 1, 60, 40, 100, 10, "#475569"),
-                ...generateItems("block-d", "Tetris Block D", 1, 40, 60, 100, 10, "#64748B"),
-            ],
+            container: { id: "cont-tetris-large", width: 100, height: 100, depth: 1200 },
+            items: Array.from({ length: 12 }).flatMap((_, i) => [
+                { id: `block-a-${i}`, name: "Tetris Block A", width: 60, height: 40, depth: 100, weight: 10, color: "#1E293B" },
+                { id: `block-b-${i}`, name: "Tetris Block B", width: 40, height: 60, depth: 100, weight: 10, color: "#334155" },
+                { id: `block-c-${i}`, name: "Tetris Block C", width: 60, height: 40, depth: 100, weight: 10, color: "#475569" },
+                { id: `block-d-${i}`, name: "Tetris Block D", width: 40, height: 60, depth: 100, weight: 10, color: "#64748B" },
+            ]),
             parameters: { containerCount: 2 }
         }
     }
