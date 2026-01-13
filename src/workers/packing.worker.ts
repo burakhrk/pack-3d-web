@@ -77,23 +77,20 @@ self.onmessage = (event: MessageEvent<WorkerInput>) => {
       }
 
       results.sort((a, b) => {
+        // En çok alanı kullanan (Highest Utilization) wins
+        const utilA = a.totalUtilization ?? a.utilization;
+        const utilB = b.totalUtilization ?? b.utilization;
+        if (Math.abs(utilA - utilB) > 0.01) return utilB - utilA; // Higher is better
+
+        // If utilization is effectively equal, prefer fewer unpacked items
         const leftA = a.unpackedItems.length;
         const leftB = b.unpackedItems.length;
-        if (leftA !== leftB) return leftA - leftB; // Fewer items left is better
+        if (leftA !== leftB) return leftA - leftB; // Fewer is better
 
-        // Fewer boxes used is better
+        // Fewer boxes used is better as final tie breaker
         const boxesUsedA = a.containers?.filter(c => c.packedItems.length > 0).length || 1;
         const boxesUsedB = b.containers?.filter(c => c.packedItems.length > 0).length || 1;
-        if (boxesUsedA !== boxesUsedB) return boxesUsedA - boxesUsedB;
-
-        // If items left and boxes used are equal, prioritize more items packed in first container
-        const countA = a.packedItems.length;
-        const countB = b.packedItems.length;
-        if (countA !== countB) return countB - countA;
-
-        const utilA = a.totalUtilization || a.utilization;
-        const utilB = b.totalUtilization || b.utilization;
-        return utilB - utilA; // Higher total utilization as tie-breaker
+        return boxesUsedA - boxesUsedB;
       });
 
       const comparisonResult: ComparisonResult = {

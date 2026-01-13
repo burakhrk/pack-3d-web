@@ -37,12 +37,16 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
             return (
               <div
                 key={result.algorithmName}
-                className={`p-4 rounded-lg border-2 transition-all ${isSelected
+                className={`p-4 rounded-lg border-2 transition-all relative ${isSelected
                   ? "border-primary bg-primary/5 ring-1 ring-primary"
                   : "border-border bg-background hover:bg-muted/50"
                   }`}
               >
-                <div className="flex items-center justify-between mb-3">
+                <div className="absolute top-4 right-4 text-xs font-bold text-muted-foreground/30">
+                  #{index + 1}
+                </div>
+
+                <div className="flex items-center justify-between mb-3 pr-6">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-sm">
                       {result.algorithmName}
@@ -119,6 +123,6 @@ export function ComparisonPanel({ comparison, onShowResult, selectedAlgorithm }:
           </p>
         </div>
       </div>
-    </Card>
+    </Card >
   );
 }
