@@ -36,9 +36,9 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox",
-        description: "The 'Bad Shelf' Trap (Final). 10 layers. Depth 1150. This is the 'Sweet Spot': Too tight for Greedy (which failed at 1150 before), but passable for the Upgraded Genetic Algorithm (which was boosted to succeed here).",
+        description: "The 'Bad Shelf' Trap (Final). 10 layers. Depth 1275. This is the 'Sweet Spot': Too tight for Greedy (failed at 1250), but passable for the Upgraded Genetic Algorithm (which failed at 1250).",
         data: {
-            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1150 },
+            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1275 },
             items: [
                 ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
                 ...Array.from({ length: 10 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),

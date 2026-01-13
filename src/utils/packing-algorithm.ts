@@ -34,7 +34,9 @@ export function packItems(container: Container, items: Item[], gridResolution: n
     return volumeB - volumeA;
   });
 
-  return packPreSortedItems(container, sortedItems, gridResolution);
+  const result = packPreSortedItems(container, sortedItems, gridResolution);
+  console.log(`[Greedy FFD] Packed ${result.packedItems.length}/${items.length} items. Utilization: ${result.utilization.toFixed(2)}%`);
+  return result;
 }
 
 /**
@@ -57,12 +59,9 @@ export function packPreSortedItems(container: Container, items: Item[], gridReso
         color: ITEM_COLORS[i % ITEM_COLORS.length],
       });
     } else {
-      console.warn(`[Greedy] Failed to pack item ${item.name} (${item.width}x${item.height}x${item.depth}). Container full?`);
       unpackedItems.push(item);
     }
   }
-
-  console.log(`[Greedy] Finished. Packed ${packedItems.length}/${items.length} items.`);
 
   // Calculate utilization
   const containerVolume = calculateVolume(container);
