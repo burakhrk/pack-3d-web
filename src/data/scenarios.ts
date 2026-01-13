@@ -55,15 +55,16 @@ export const scenarios: Scenario[] = [
     },
 
     {
-        name: "The Heavyweight Stress Test",
-        description: "Fewer but much larger items. 'Titans' and 'Colossi' dominate space. Inefficiency leads to massive Unpacked chunks. Total 26 items.",
+        name: "The Diversity Stress Test",
+        description: "High Variance. Mix of Giants, Bars, and true 3D Small Cubes. Tests ability to pack small items into gaps left by large ones. Approx 100 items.",
         data: {
-            container: { id: "cont-heavy", width: 100, height: 100, depth: 1200 },
+            container: { id: "cont-diversity", width: 100, height: 100, depth: 1200 },
             items: [
-                ...Array.from({ length: 5 }).map((_, i) => ({ id: `titan-${i}`, name: "Titan (65)", width: 65, height: 100, depth: 100, weight: 65, color: "#991B1B" })),
-                ...Array.from({ length: 5 }).map((_, i) => ({ id: `colossus-${i}`, name: "Colossus (55)", width: 55, height: 100, depth: 100, weight: 55, color: "#B91C1C" })),
-                ...Array.from({ length: 8 }).map((_, i) => ({ id: `heavy-${i}`, name: "Heavy (45)", width: 45, height: 100, depth: 100, weight: 45, color: "#D97706" })),
-                ...Array.from({ length: 8 }).map((_, i) => ({ id: `medium-${i}`, name: "Medium (35)", width: 35, height: 100, depth: 100, weight: 35, color: "#F59E0B" })),
+                ...Array.from({ length: 4 }).map((_, i) => ({ id: `giant-${i}`, name: "Giant (70x60)", width: 70, height: 60, depth: 100, weight: 100, color: "#7F1D1D" })),
+                ...Array.from({ length: 8 }).map((_, i) => ({ id: `big-${i}`, name: "Big (45x45)", width: 45, height: 45, depth: 100, weight: 50, color: "#C2410C" })),
+                ...Array.from({ length: 15 }).map((_, i) => ({ id: `bar-${i}`, name: "Bar (20x20)", width: 20, height: 20, depth: 100, weight: 15, color: "#15803D" })),
+                ...Array.from({ length: 40 }).map((_, i) => ({ id: `cube-${i}`, name: "Cube (25)", width: 25, height: 25, depth: 25, weight: 5, color: "#047857" })),
+                ...Array.from({ length: 30 }).map((_, i) => ({ id: `tiny-${i}`, name: "Tiny (10)", width: 10, height: 10, depth: 10, weight: 1, color: "#0E7490" })),
             ],
             parameters: { containerCount: 1 }
         }
