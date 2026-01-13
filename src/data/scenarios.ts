@@ -58,7 +58,7 @@ export const scenarios: Scenario[] = [
         name: "The Diversity Stress Test",
         description: "High Variance. Mix of Giants, Bars, and true 3D Small Cubes. Tests ability to pack small items into gaps left by large ones. Approx 100 items.",
         data: {
-            container: { id: "cont-diversity", width: 100, height: 100, depth: 1200 },
+            container: { id: "cont-diversity", width: 100, height: 100, depth: 500 },
             items: [
                 ...Array.from({ length: 4 }).map((_, i) => ({ id: `giant-${i}`, name: "Giant (70x60)", width: 70, height: 60, depth: 100, weight: 100, color: "#7F1D1D" })),
                 ...Array.from({ length: 8 }).map((_, i) => ({ id: `big-${i}`, name: "Big (45x45)", width: 45, height: 45, depth: 100, weight: 50, color: "#C2410C" })),

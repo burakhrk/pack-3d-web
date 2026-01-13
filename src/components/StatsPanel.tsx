@@ -190,6 +190,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
     <Card
       ref={panelRef}
       className={`w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
+      onMouseDown={handleMouseDown}
       style={{
         position: 'fixed',
         left: position.x,
@@ -206,10 +207,9 @@ export function StatsPanel({ result }: StatsPanelProps) {
         className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
         onClick={isCollapsed ? toggleCollapse : undefined}
       >
-        {/* Drag Handle (Move) - Center */}
+        {/* Drag Handle (Icon only, logic on parent) - Center */}
         <div
-          className="p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group mx-auto"
-          onMouseDown={handleMouseDown}
+          className="p-1.5 hover:bg-muted rounded-md transition-colors group mx-auto"
           title="Drag position"
         >
           <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
