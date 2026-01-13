@@ -9,31 +9,17 @@ interface StatsPanelProps {
 }
 
 export function StatsPanel({ result }: StatsPanelProps) {
-  // Drag and Scale functionality states
-  const [position, setPosition] = useState({ x: 20, y: window.innerHeight - 450 });
+  // Only Scale and Collapse functionality (no drag)
   const [scale, setScale] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
-  const dragStartOffset = useRef({ x: 0, y: 0 });
   const resizeStart = useRef({ initialScale: 1, initialDistance: 0, centerX: 0, centerY: 0 });
-
-  // Handle window resize to keep panel on screen if needed, or just initial init
-  useEffect(() => {
-    // Ensure initial position is reasonably visible
-    setPosition({ x: 20, y: window.innerHeight - 450 });
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        setPosition({
-          x: e.clientX - dragStartOffset.current.x,
-          y: e.clientY - dragStartOffset.current.y
-        });
-      } else if (isResizing) {
+      if (isResizing) {
         // Calculate distance from center
         const dx = e.clientX - resizeStart.current.centerX;
         const dy = e.clientY - resizeStart.current.centerY;
@@ -54,11 +40,10 @@ export function StatsPanel({ result }: StatsPanelProps) {
     };
 
     const handleMouseUp = () => {
-      setIsDragging(false);
       setIsResizing(false);
     };
 
-    if (isDragging || isResizing) {
+    if (isResizing) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     }
@@ -67,17 +52,7 @@ export function StatsPanel({ result }: StatsPanelProps) {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    // Only allow dragging from the handle or header area
-    setIsDragging(true);
-    dragStartOffset.current = {
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    };
-    e.preventDefault(); // Prevent text selection
-  };
+  }, [isResizing]);
 
   const handleResizeMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent drag start
@@ -110,33 +85,21 @@ export function StatsPanel({ result }: StatsPanelProps) {
   if (!result) {
     return (
       <Card
-        className={`w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
+        className={`fixed bottom-4 left-4 w-80 shadow-lg backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
         style={{
-          position: 'fixed',
-          left: position.x,
-          top: position.y,
           zIndex: 40,
           transformOrigin: 'center center',
           transform: `scale(${scale})`
         }}
       >
-        {/* Header / Remote Control Area */}
+        {/* Header / Collapse Toggle Area */}
         <div
-          className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+          className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-end px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
           onClick={isCollapsed ? toggleCollapse : undefined}
         >
-          {/* Drag Handle (Move) - Center */}
-          <div
-            className="p-1.5 cursor-grab active:cursor-grabbing hover:bg-muted rounded-md transition-colors group mx-auto"
-            onMouseDown={handleMouseDown}
-            title="Drag position"
-          >
-            <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-          </div>
-
           {/* Collapse Toggle - Right */}
           <div
-            className="absolute right-2 top-2 p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
+            className="p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
             onClick={toggleCollapse}
             title={isCollapsed ? "Expand" : "Collapse"}
           >
@@ -198,35 +161,22 @@ export function StatsPanel({ result }: StatsPanelProps) {
   return (
     <Card
       ref={panelRef}
-      className={`w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
-      onMouseDown={handleMouseDown}
+      className={`fixed bottom-4 left-4 w-80 shadow-xl border-primary/20 backdrop-blur-sm bg-background/95 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isCollapsed ? 'h-12 overflow-hidden bg-background/80' : 'p-6'}`}
       style={{
-        position: 'fixed',
-        left: position.x,
-        top: position.y,
         zIndex: 40,
-        cursor: isDragging ? 'grabbing' : 'auto',
         userSelect: 'none',
         transformOrigin: 'center center',
         transform: `scale(${scale})`
       }}
     >
-      {/* Header / Remote Control Area */}
+      {/* Header / Collapse Toggle Area */}
       <div
-        className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+        className={`absolute top-0 left-0 right-0 h-10 flex items-center justify-end px-2 ${isCollapsed ? 'cursor-pointer hover:bg-muted/50' : ''}`}
         onClick={isCollapsed ? toggleCollapse : undefined}
       >
-        {/* Drag Handle (Icon only, logic on parent) - Center */}
-        <div
-          className="p-1.5 hover:bg-muted rounded-md transition-colors group mx-auto"
-          title="Drag position"
-        >
-          <Move className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-        </div>
-
         {/* Collapse Toggle - Right */}
         <div
-          className="absolute right-2 top-2 p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
+          className="p-1.5 cursor-pointer hover:bg-muted rounded-md transition-colors group z-50"
           onClick={toggleCollapse}
           title={isCollapsed ? "Expand" : "Collapse"}
         >
