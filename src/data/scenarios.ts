@@ -36,14 +36,13 @@ export const scenarios: Scenario[] = [
 
     {
         name: "The Tetris Paradox",
-        description: "Hard Mode. 64 items theoretically fit in 1 container (1600 depth needed, 1650 available). Items are sorted by type to trick greedy algorithms into inefficient layering. Only global optimization (GA) should succeed in 1 container.",
+        description: "The 'Bad Shelf' Trap. 16 layers of perfectly fitting items (A+B+C). However, items are sorted by type. Greedy algorithms will pack two Bs (35+35=70) into the space meant for B+C (35+65=100), leaving a useless 30-width gap. The displaced Cs will then overflow to a 2nd container. Only global optimization can solve this.",
         data: {
-            container: { id: "cont-tetris-large", width: 100, height: 100, depth: 1650 },
+            container: { id: "cont-tetris-trap", width: 100, height: 100, depth: 1600 },
             items: [
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-a-${i}`, name: "Tetris Block A", width: 60, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-b-${i}`, name: "Tetris Block B", width: 40, height: 60, depth: 100, weight: 10, color: "#334155" })),
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-c-${i}`, name: "Tetris Block C", width: 60, height: 40, depth: 100, weight: 10, color: "#475569" })),
-                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-d-${i}`, name: "Tetris Block D", width: 40, height: 40, depth: 100, weight: 10, color: "#64748B" })),
+                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-a-${i}`, name: "Base Block A (100x60)", width: 100, height: 60, depth: 100, weight: 10, color: "#1E293B" })),
+                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-b-${i}`, name: "Filler Block B (35x40)", width: 35, height: 40, depth: 100, weight: 10, color: "#334155" })),
+                ...Array.from({ length: 16 }).map((_, i) => ({ id: `block-c-${i}`, name: "Filler Block C (65x40)", width: 65, height: 40, depth: 100, weight: 10, color: "#475569" })),
             ],
             parameters: { containerCount: 2 }
         }
