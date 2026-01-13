@@ -80,12 +80,29 @@ function findBestFitPosition(
   let bestFit: { position: { x: number; y: number; z: number }; item: Item } | null = null;
   let minWaste = Infinity;
 
+  // Helper function to find lowest valid Y (gravity)
+  const findLowestValidY = (x: number, z: number, width: number, depth: number): number => {
+    let maxY = 0;
+    for (const packed of packedItems) {
+      const xOverlap = x < packed.position.x + packed.width && x + width > packed.position.x;
+      const zOverlap = z < packed.position.z + packed.depth && z + depth > packed.position.z;
+      if (xOverlap && zOverlap) {
+        maxY = Math.max(maxY, packed.position.y + packed.height);
+      }
+    }
+    return maxY;
+  };
+
   const orientations = getAllOrientations(item);
 
   for (const orientation of orientations) {
-    for (let y = 0; y <= container.height - orientation.height; y += step) {
-      for (let z = 0; z <= container.depth - orientation.depth; z += step) {
-        for (let x = 0; x <= container.width - orientation.width; x += step) {
+    // Try positions on X-Z plane (footprint)
+    for (let z = 0; z <= container.depth - orientation.depth; z += step) {
+      for (let x = 0; x <= container.width - orientation.width; x += step) {
+        // Find lowest valid Y using gravity
+        const y = findLowestValidY(x, z, orientation.width, orientation.depth);
+
+        if (y + orientation.height <= container.height) {
           const position = { x, y, z };
 
           if (
