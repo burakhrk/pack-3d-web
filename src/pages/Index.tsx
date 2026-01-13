@@ -349,11 +349,7 @@ const Index = () => {
 
               {/* Overlay Stats */}
               {result && (
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="pointer-events-auto inline-block">
-                    <StatsPanel result={result} />
-                  </div>
-                </div>
+                <StatsPanel result={result} />
               )}
             </div>
           </ResizablePanel>
