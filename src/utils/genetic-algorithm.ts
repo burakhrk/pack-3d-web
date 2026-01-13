@@ -25,11 +25,11 @@ export function packItemsGenetic(
   container: Container,
   items: Item[],
   gridResolution: number = 5,
-  generations: number = 50,
+  generations: number = 100,
   mutationRate: number = 0.1,
   onProgress?: (percent: number) => void
 ): PackingResult {
-  const POPULATION_SIZE = 50;
+  const POPULATION_SIZE = 100;
 
   let population = initializePopulation(items.length, POPULATION_SIZE);
 
