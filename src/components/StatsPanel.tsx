@@ -297,6 +297,56 @@ export function StatsPanel({ result }: StatsPanelProps) {
               </span>
             </div>
           )}
+
+          {/* Detailed Item Breakdown */}
+          <div className="pt-4 border-t border-border/50">
+            <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Item Details</h4>
+            <div className="max-h-48 overflow-y-auto pr-2 space-y-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+              {Object.values(
+                [...packedItems, ...unpackedItems].reduce((acc, item) => {
+                  if (!acc[item.name]) {
+                    acc[item.name] = {
+                      name: item.name,
+                      width: item.width,
+                      height: item.height,
+                      depth: item.depth,
+                      total: 0,
+                      packed: 0
+                    };
+                  }
+                  acc[item.name].total++;
+                  return acc;
+                  // @ts-ignore
+                }, {} as Record<string, { name: string, width: number, height: number, depth: number, total: number, packed: number }>)
+              ).map((stat: any) => {
+                // Calculate packed count for this specific group
+                stat.packed = packedItems.filter(p => p.name === stat.name).length;
+                const isComplete = stat.packed === stat.total;
+
+                return (
+                  <div key={stat.name} className="bg-muted/30 p-2 rounded text-xs">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-medium truncate max-w-[120px]" title={stat.name}>{stat.name}</span>
+                      <span className="text-muted-foreground font-mono">
+                        {stat.width}x{stat.height}x{stat.depth}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${isComplete ? 'bg-green-500' : 'bg-primary'}`}
+                          style={{ width: `${(stat.packed / stat.total) * 100}%` }}
+                        />
+                      </div>
+                      <span className={`font-mono font-medium ${isComplete ? 'text-green-500' : 'text-foreground'}`}>
+                        {stat.packed}/{stat.total}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </Card>
